@@ -92,8 +92,8 @@
     "stability": "stable",
     "difficulty": { "steps": 2, "specialization": 1, "distractors": 2 },
     "prompt": {
-      "en": "A model that predicts 30-day hospital readmission reaches an AUC of 0.97 in validation but 0.62 in production. Its most important feature is the number of follow-up appointments in the patient's record, which the hospital fills in during the weeks after discharge. What is the most likely cause?",
-      "es": "Un modelo que predice el reingreso hospitalario a 30 días logra un AUC de 0,97 en validación pero de 0,62 en producción. Su atributo más importante es el número de controles registrados en la ficha del paciente, que el hospital completa durante las semanas posteriores al alta. ¿Cuál es la causa más probable?"
+      "en": "A model that predicts 30-day hospital readmission reaches an AUC of 0.97 in validation but 0.62 from its first week in production. Its most important feature is the number of follow-up appointments in the patient's record, which the hospital fills in during the weeks after discharge. What is the most likely cause?",
+      "es": "Un modelo que predice el reingreso hospitalario a 30 días logra un AUC de 0,97 en validación pero de 0,62 desde su primera semana en producción. Su atributo más importante es el número de consultas de seguimiento registradas en la historia clínica del paciente, que el hospital completa durante las semanas posteriores al alta. ¿Cuál es la causa más probable?"
     },
     "options": [
       {
@@ -104,14 +104,14 @@
         },
         "rationale": {
           "en": "Historical records were complete, so the count included appointments scheduled because of the problems that led to readmission. At discharge the field is mostly empty, so the signal disappears in production.",
-          "es": "Los registros históricos estaban completos, así que el conteo incluía controles agendados por los problemas que llevaron al reingreso. Al momento del alta el campo está casi vacío, y la señal desaparece en producción."
+          "es": "Los registros históricos estaban completos, así que el conteo incluía consultas programadas por los problemas que llevaron al reingreso. Al momento del alta el campo está casi vacío, y la señal desaparece en producción."
         }
       },
       {
         "id": "b",
         "text": {
-          "en": "Concept drift: the relationship between appointments and readmission changed after deployment.",
-          "es": "Concept drift: la relación entre controles y reingreso cambió después de poner el modelo en producción."
+          "en": "Concept drift: the relationship between follow-up appointments and readmission changed after deployment.",
+          "es": "Concept drift: la relación entre consultas de seguimiento y reingreso cambió después de poner el modelo en producción."
         },
         "rationale": {
           "en": "Drift could lower performance gradually, but a collapse right at deployment, driven by a feature filled in after the event, points to leakage.",
@@ -144,7 +144,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "The test for leakage is temporal: for each feature, ask whether its value would be available, with the same content, at the moment the prediction is made. Building training data from snapshots taken at prediction time, rather than from the final state of each record, prevents this whole class of errors.",
-      "es": "La prueba para detectar fugas es temporal: para cada atributo, preguntar si su valor estaría disponible, con el mismo contenido, en el momento en que se hace la predicción. Construir los datos de entrenamiento con fotos tomadas al momento de predecir, y no con el estado final de cada registro, evita toda esta clase de errores."
+      "es": "La prueba para detectar fugas es temporal: para cada atributo, preguntar si su valor estaría disponible, con el mismo contenido, en el momento en que se hace la predicción. Construir los datos de entrenamiento con instantáneas tomadas al momento de predecir, y no con el estado final de cada registro, evita toda esta clase de errores."
     },
     "sources": [
       {

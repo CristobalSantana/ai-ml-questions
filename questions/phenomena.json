@@ -1,7 +1,7 @@
 [
   {
     "id": "phenomena-0001",
-    "version": 2,
+    "version": 3,
     "area": "phenomena",
     "subtopic": "double-descent",
     "level": "hard",
@@ -29,8 +29,8 @@
       {
         "id": "b",
         "text": {
-          "en": "The model starts memorizing the test set through repeated evaluations on it.",
-          "es": "El modelo empieza a memorizar el set de test a fuerza de evaluarse una y otra vez en él."
+          "en": "The model starts memorizing the test set through repeated evaluations on it during training.",
+          "es": "El modelo empieza a memorizar el conjunto de prueba a fuerza de evaluarse una y otra vez en él."
         },
         "rationale": {
           "en": "Evaluating on a test set does not train on it. Repeated model selection can overfit a test set, but that has nothing to do with model size.",
@@ -52,11 +52,11 @@
         "id": "d",
         "text": {
           "en": "The extra parameters stay unused, so the model behaves like a smaller one.",
-          "es": "Los parámetros extra quedan sin usar, así que el modelo se comporta como uno más chico."
+          "es": "Los parámetros extra quedan sin usar, así que el modelo se comporta como uno más pequeño."
         },
         "rationale": {
           "en": "The extra parameters are used: the solution spreads the fit across them, which keeps the norm small. A smaller model cannot interpolate as smoothly.",
-          "es": "Los parámetros extra sí se usan: la solución reparte el ajuste entre ellos, lo que mantiene la norma baja. Un modelo más chico no puede interpolar con tanta suavidad."
+          "es": "Los parámetros extra sí se usan: la solución reparte el ajuste entre ellos, lo que mantiene la norma baja. Un modelo más pequeño no puede interpolar con tanta suavidad."
         }
       }
     ],
@@ -109,7 +109,7 @@
         },
         "rationale": {
           "en": "Liu et al. (2023) found a U-shaped curve: models used information best at the start or end of the context and worst in the middle.",
-          "es": "Liu et al. (2023) encontraron una curva en forma de U: los modelos usaban mejor la información al principio o al final del contexto, y peor al medio."
+          "es": "Liu et al. (2023) encontraron una curva en forma de U: los modelos usaban mejor la información al principio o al final del contexto, y peor en el medio."
         }
       },
       {
@@ -127,7 +127,7 @@
         "id": "c",
         "text": {
           "en": "Place the most relevant passage in the exact middle, where attention is most balanced.",
-          "es": "Poner el pasaje más relevante justo al medio, donde la atención está más equilibrada."
+          "es": "Poner el pasaje más relevante justo en el medio, donde la atención está más equilibrada."
         },
         "rationale": {
           "en": "The middle is exactly where performance was lowest in the study.",
@@ -292,8 +292,8 @@
       {
         "id": "c",
         "text": {
-          "en": "The model's answers getting longer whenever the prompt gets longer.",
-          "es": "Que las respuestas del modelo se alarguen cada vez que el prompt se alarga."
+          "en": "The model's answers getting longer whenever the prompt gets longer, even if the question stays the same.",
+          "es": "Que las respuestas del modelo se alarguen cada vez que el prompt se alarga, aunque la pregunta sea la misma."
         },
         "rationale": {
           "en": "Length correlations exist, but the term refers to sensitivity to changes that keep the meaning.",
@@ -351,7 +351,7 @@
         },
         "rationale": {
           "en": "With any chance p > 0 of being right, guessing has an expected score of p, while abstaining scores 0. Under this rule, a model that bluffs looks better than one that admits uncertainty.",
-          "es": "Con cualquier probabilidad p > 0 de acertar, adivinar tiene un puntaje esperado de p, y abstenerse da 0. Con esta regla, un modelo que blufea se ve mejor que uno que admite su incertidumbre."
+          "es": "Con cualquier probabilidad p > 0 de acertar, adivinar tiene un puntaje esperado de p, y abstenerse da 0. Con esta regla, un modelo que responde aunque no sepa se ve mejor que uno que admite su incertidumbre."
         }
       },
       {
@@ -547,7 +547,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "Mechanistic studies found that grokking networks first memorize, then slowly build a general algorithm, for modular addition one based on Fourier components, and finally regularization removes the memorized solution. The effect is mostly observed on small algorithmic datasets, and how much it matters at large scale is still debated.",
-      "es": "Estudios mecanicistas encontraron que las redes que hacen grokking primero memorizan, luego construyen de a poco un algoritmo general, en la suma modular uno basado en componentes de Fourier, y al final la regularización elimina la solución memorizada. El efecto se observa sobre todo en datasets algorítmicos pequeños, y cuánto importa a gran escala todavía se discute."
+      "es": "Estudios mecanicistas encontraron que las redes que hacen grokking primero memorizan, luego construyen poco a poco un algoritmo general, en la suma modular uno basado en componentes de Fourier, y al final la regularización elimina la solución memorizada. El efecto se observa sobre todo en datasets algorítmicos pequeños, y cuánto importa a gran escala todavía se discute."
     },
     "sources": [
       {
@@ -589,7 +589,7 @@
         "id": "a",
         "text": {
           "en": "Compute the reward with hidden, read-only tests, and penalize any change to test files.",
-          "es": "Calcular la recompensa con tests ocultos y de solo lectura, y penalizar cualquier cambio en archivos de tests."
+          "es": "Calcular la recompensa con tests ocultos y de solo lectura, y penalizar todo cambio en los tests."
         },
         "rationale": {
           "en": "The agent maximizes the reward it is given; if editing tests raises it, that is what it learns. Hidden, read-only tests make the reward measure what was intended.",
@@ -633,7 +633,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "This is reward hacking, or specification gaming: the reward measures a proxy (the tests pass) instead of the goal (the bug is fixed), and optimization finds the gap. A classic example is a boat-racing agent that circled to collect points instead of finishing the race; with coding agents, labs have reported models special-casing or modifying tests.",
-      "es": "Esto es reward hacking, o specification gaming: la recompensa mide un indicador (que pasen los tests) en vez del objetivo (que el bug quede arreglado), y la optimización encuentra la brecha. Un ejemplo clásico es un agente de carreras de botes que daba vueltas para juntar puntos en vez de terminar la carrera; con agentes de programación, los laboratorios han reportado modelos que hacen casos especiales para los tests o los modifican."
+      "es": "Esto es reward hacking, o specification gaming: la recompensa mide un indicador (que pasen los tests) en vez del objetivo (que el bug quede arreglado), y la optimización encuentra la brecha. Un ejemplo clásico es un agente de carreras de botes que daba vueltas para juntar puntos en vez de terminar la carrera; con agentes de programación, los laboratorios han reportado modelos que programan casos especiales solo para pasar los tests, o que los modifican."
     },
     "sources": [
       {

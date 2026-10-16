@@ -1,7 +1,7 @@
 [
   {
     "id": "architectures-0001",
-    "version": 2,
+    "version": 3,
     "area": "architectures",
     "subtopic": "physics-informed",
     "level": "hard",
@@ -40,8 +40,8 @@
       {
         "id": "c",
         "text": {
-          "en": "A neural ODE, which integrates the learned field exactly; it hurts only when the integration step is too large.",
-          "es": "Una neural ODE, que integra el campo aprendido de forma exacta; perjudica solo si el paso de integración es muy grande."
+          "en": "A neural ODE, which integrates the learned vector field exactly; it hurts only when the solver's integration step is too large.",
+          "es": "Una neural ODE, que integra el campo vectorial aprendido de forma exacta; perjudica solo si el paso de integración del solver es muy grande."
         },
         "rationale": {
           "en": "A neural ODE learns a vector field and integrates it numerically. Nothing in it conserves energy unless the field is built to do so.",
@@ -194,18 +194,18 @@
         "id": "a",
         "text": {
           "en": "A gated cell state updated by addition, so gradients can flow back without shrinking each step.",
-          "es": "Un estado de celda con compuertas que se actualiza por suma, así los gradientes vuelven sin achicarse."
+          "es": "Un estado de celda con compuertas, actualizado por suma, que deja volver los gradientes sin achicarlos en cada paso."
         },
         "rationale": {
-          "en": "The forget, input and output gates decide what to keep, write and expose. Because the cell state is updated additively, the gradient along it is not multiplied by a small factor at every step.",
-          "es": "Las compuertas de olvido, entrada y salida deciden qué conservar, escribir y exponer. Como el estado de celda se actualiza sumando, el gradiente a lo largo de él no se multiplica por un factor pequeño en cada paso."
+          "en": "The forget, input and output gates decide what to keep, write and expose. Because the cell state is updated additively, the gradient along it is scaled only by the forget gate, which the network can keep near 1, instead of passing through a weight matrix and an activation derivative at every step.",
+          "es": "Las compuertas de olvido, entrada y salida deciden qué conservar, escribir y exponer. Como el estado de celda se actualiza sumando, el gradiente a lo largo de él solo se multiplica por la compuerta de olvido, que la red puede mantener cerca de 1, en vez de pasar por una matriz de pesos y la derivada de una activación en cada paso."
         }
       },
       {
         "id": "b",
         "text": {
-          "en": "Attention over all past time steps, so the network can look back at any earlier input.",
-          "es": "Atención sobre todos los pasos anteriores, para que la red pueda mirar cualquier entrada pasada."
+          "en": "Attention over all of its past hidden states, so the network can look back directly at any earlier input.",
+          "es": "Atención sobre todos sus estados ocultos anteriores, para que la red pueda mirar directamente cualquier entrada pasada."
         },
         "rationale": {
           "en": "Attention came later, first in sequence-to-sequence models and then in transformers; an LSTM does not use it by itself.",
@@ -237,11 +237,17 @@
     ],
     "answer": ["a"],
     "explanation": {
-      "en": "Hochreiter and Schmidhuber (1997) designed the LSTM to fix the vanishing gradients that kept simple RNNs from learning dependencies longer than about 10 steps. LSTMs dominated sequence modeling, including speech recognition and machine translation, until transformers replaced them for most tasks after 2017.",
-      "es": "Hochreiter y Schmidhuber (1997) diseñaron la LSTM para resolver el desvanecimiento del gradiente que impedía a las RNN simples aprender dependencias de más de unos 10 pasos. Las LSTM dominaron el modelado de secuencias, incluidos el reconocimiento de voz y la traducción automática, hasta que los transformers las reemplazaron en la mayoría de las tareas después de 2017."
+      "en": "Hochreiter and Schmidhuber (1997) designed the LSTM to fix the vanishing gradients that kept simple RNNs from learning dependencies longer than about 10 steps; the forget gate came later, from Gers, Schmidhuber and Cummins (2000). LSTMs dominated sequence modeling, including speech recognition and machine translation, until transformers replaced them for most tasks after 2017.",
+      "es": "Hochreiter y Schmidhuber (1997) diseñaron la LSTM para resolver el desvanecimiento del gradiente que impedía a las RNN simples aprender dependencias de más de unos 10 pasos; la compuerta de olvido llegó después, con Gers, Schmidhuber y Cummins (2000). Las LSTM dominaron el modelado de secuencias, incluidos el reconocimiento de voz y la traducción automática, hasta que los transformers las reemplazaron en la mayoría de las tareas después de 2017."
     },
     "sources": [
-      { "kind": "paper", "title": "Long Short-Term Memory", "authors": "Sepp Hochreiter & Jürgen Schmidhuber", "year": 1997 }
+      { "kind": "paper", "title": "Long Short-Term Memory", "authors": "Sepp Hochreiter & Jürgen Schmidhuber", "year": 1997 },
+      {
+        "kind": "paper",
+        "title": "Learning to Forget: Continual Prediction with LSTM",
+        "authors": "Felix A. Gers, Jürgen Schmidhuber & Fred Cummins",
+        "year": 2000
+      }
     ],
     "tags": ["lstm", "rnn", "vanishing-gradients"],
     "origin": "llm_draft",
@@ -394,7 +400,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "These numbers match Mixtral 8x7B, which has 46.7B parameters and 12.9B active per token. MoE lets a model store more knowledge for the same compute per token; the costs are memory, communication between devices that hold different experts, and training tricks to stop the router from overusing a few experts.",
-      "es": "Estos números corresponden a Mixtral 8x7B, que tiene 46,7 mil millones de parámetros y 12,9 mil millones activos por token. MoE permite guardar más conocimiento con el mismo cómputo por token; los costos son la memoria, la comunicación entre dispositivos que tienen expertos distintos y trucos de entrenamiento para que el router no sobreuse a unos pocos expertos."
+      "es": "Estos números corresponden a Mixtral 8x7B, que tiene 46,7 mil millones de parámetros y 12,9 mil millones activos por token. MoE permite guardar más conocimiento con el mismo cómputo por token; los costos son la memoria, la comunicación entre dispositivos que tienen expertos distintos y trucos de entrenamiento para que el router no use en exceso a unos pocos expertos."
     },
     "sources": [
       { "kind": "paper", "title": "Mixtral of Experts", "authors": "Albert Q. Jiang et al.", "year": 2024, "url": "https://arxiv.org/abs/2401.04088" },
@@ -424,7 +430,7 @@
     "difficulty": { "steps": 1, "specialization": 1, "distractors": 2 },
     "prompt": {
       "en": "You have 20,000 rows of tabular data with 40 numeric and categorical columns, some skewed and some irrelevant, and must deliver a strong baseline this week. Which model should you try first?",
-      "es": "Tienes 20.000 filas de datos tabulares con 40 columnas numéricas y categóricas, algunas sesgadas y otras irrelevantes, y debes entregar una buena línea base esta semana. ¿Qué modelo conviene probar primero?"
+      "es": "Tienes 20.000 filas de datos tabulares con 40 columnas numéricas y categóricas, algunas con distribuciones asimétricas y otras irrelevantes, y debes entregar una buena línea base esta semana. ¿Qué modelo conviene probar primero?"
     },
     "options": [
       {
@@ -435,7 +441,7 @@
         },
         "rationale": {
           "en": "Trees handle mixed types, skewed values and irrelevant columns with little preprocessing, and Grinsztajn et al. (2022) found them ahead of deep models on medium-sized tabular benchmarks.",
-          "es": "Los árboles manejan tipos mixtos, valores sesgados y columnas irrelevantes con poco preprocesamiento, y Grinsztajn et al. (2022) los encontraron por delante de los modelos profundos en benchmarks tabulares de tamaño medio."
+          "es": "Los árboles manejan tipos mixtos, valores asimétricos y columnas irrelevantes con poco preprocesamiento, y Grinsztajn et al. (2022) los encontraron por delante de los modelos profundos en benchmarks tabulares de tamaño medio."
         }
       },
       {
@@ -468,7 +474,7 @@
         },
         "rationale": {
           "en": "kNN suffers from irrelevant and skewed features, since all of them enter the distance.",
-          "es": "kNN sufre con atributos irrelevantes y sesgados, porque todos entran en la distancia."
+          "es": "kNN sufre con atributos irrelevantes y asimétricos, porque todos entran en la distancia."
         }
       }
     ],

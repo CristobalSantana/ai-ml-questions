@@ -166,8 +166,8 @@
     "stability": "stable",
     "difficulty": { "steps": 1, "specialization": 1, "distractors": 1 },
     "prompt": {
-      "en": "A Gaussian process regression with an RBF kernel and zero prior mean is trained on data between x = 0 and x = 10. What does it predict at x = 50?",
-      "es": "Una regresión con procesos gaussianos, kernel RBF y media a priori cero se entrena con datos entre x = 0 y x = 10. ¿Qué predice en x = 50?"
+      "en": "A Gaussian process regression with an RBF kernel (lengthscale about 1) and zero prior mean is trained on data between x = 0 and x = 10. What does it predict at x = 50?",
+      "es": "Una regresión con procesos gaussianos, kernel RBF (escala de longitud cercana a 1) y media a priori cero se entrena con datos entre x = 0 y x = 10. ¿Qué predice en x = 50?"
     },
     "options": [
       {

@@ -178,8 +178,8 @@
         "id": "a",
         "text": { "en": "A word problem with several arithmetic steps.", "es": "Un problema de enunciado con varios pasos aritméticos." },
         "rationale": {
-          "en": "Writing intermediate steps lets the model spend more computation on the problem and condition each step on the previous ones. Wei et al. (2022) saw the largest gains on multi-step math benchmarks such as GSM8K.",
-          "es": "Escribir los pasos intermedios le permite al modelo dedicar más cómputo al problema y condicionar cada paso en los anteriores. Wei et al. (2022) vieron las mayores mejoras en benchmarks de matemáticas de varios pasos, como GSM8K."
+          "en": "Writing intermediate steps lets the model spend more computation on the problem and condition each step on the previous ones. Wei et al. (2022) found that the gains grew with the number of steps: on GSM8K, PaLM 540B went from 17.9% to 56.9%, while single-step problems improved little or not at all.",
+          "es": "Escribir los pasos intermedios le permite al modelo dedicar más cómputo al problema y condicionar cada paso a los anteriores. Wei et al. (2022) encontraron que las mejoras crecían con el número de pasos: en GSM8K, PaLM 540B pasó de 17,9% a 56,9%, mientras que los problemas de un solo paso mejoraron poco o nada."
         }
       },
       {
@@ -227,7 +227,8 @@
         "kind": "paper",
         "title": "To CoT or not to CoT? Chain-of-thought helps mainly on math and symbolic reasoning",
         "authors": "Zayne Sprague et al.",
-        "year": 2024
+        "year": 2024,
+        "url": "https://arxiv.org/abs/2409.12183"
       }
     ],
     "tags": ["chain-of-thought", "prompting", "reasoning"],
@@ -247,19 +248,19 @@
     "stability": "slow",
     "difficulty": { "steps": 2, "specialization": 2, "distractors": 1 },
     "prompt": {
-      "en": "A sentiment classifier built with a 4-example prompt reaches 88% accuracy with one ordering of the examples and 54% with another. Given the content-free input “N/A”, it predicts “positive” 70% of the time. Which explanation and fix fit both observations?",
-      "es": "Un clasificador de sentimiento hecho con un prompt de 4 ejemplos llega a 88% de exactitud con un orden de los ejemplos y a 54% con otro. Con la entrada sin contenido «N/A», predice «positivo» el 70% de las veces. ¿Qué explicación y qué solución calzan con ambas observaciones?"
+      "en": "A sentiment classifier built with a 4-example prompt reaches 88% accuracy with one ordering of the examples and 54% with another. Given the content-free input “N/A”, it assigns “positive” a probability of 0.70. Which explanation and fix fit both observations?",
+      "es": "Un clasificador de sentimiento hecho con un prompt de 4 ejemplos llega a 88% de exactitud con un orden de los ejemplos y a 54% con otro. Con la entrada sin contenido «N/A», le asigna a «positivo» una probabilidad de 0,70. ¿Qué explicación y qué solución concuerdan con ambas observaciones?"
     },
     "options": [
       {
         "id": "a",
         "text": {
-          "en": "The prompt biases the model toward some labels; estimate the bias with the content-free input and rescale the label probabilities.",
-          "es": "El prompt sesga al modelo hacia ciertas etiquetas; estimar el sesgo con la entrada sin contenido y reescalar las probabilidades."
+          "en": "The prompt biases the model toward some labels; measure it with “N/A” and rescale the probabilities.",
+          "es": "El prompt sesga al modelo hacia ciertas etiquetas; medirlo con «N/A» y reescalar las probabilidades."
         },
         "rationale": {
-          "en": "Zhao et al. (2021) traced this instability to biases toward the majority label, the most recent label and common tokens. Contextual calibration measures the bias with an input like “N/A” and corrects it, which raised accuracy and reduced the variance across orderings.",
-          "es": "Zhao et al. (2021) atribuyeron esta inestabilidad a sesgos hacia la etiqueta mayoritaria, hacia la más reciente y hacia tokens comunes. La calibración contextual mide el sesgo con una entrada como «N/A» y lo corrige, lo que subió la exactitud y redujo la variación entre órdenes."
+          "en": "Zhao et al. (2021) traced this instability to biases toward the majority label, the most recent label and common tokens. Contextual calibration measures the bias with an input like “N/A” and corrects it, which raised accuracy and reduced the variance across choices of prompt examples.",
+          "es": "Zhao et al. (2021) atribuyeron esta inestabilidad a sesgos hacia la etiqueta mayoritaria, hacia la más reciente y hacia tokens comunes. La calibración contextual mide el sesgo con una entrada como «N/A» y lo corrige, lo que subió la exactitud y redujo la variación entre distintas elecciones de ejemplos."
         }
       },
       {

@@ -1,7 +1,7 @@
 [
   {
     "id": "llm-0001",
-    "version": 2,
+    "version": 3,
     "area": "llm",
     "subtopic": "determinism",
     "level": "hard",
@@ -12,7 +12,7 @@
     "difficulty": { "steps": 2, "specialization": 2, "distractors": 1 },
     "prompt": {
       "en": "Run locally with one request at a time, the same prompt at temperature 0 always returns the same text. On a busy inference server, the same model and prompt occasionally return different text. Which explanation fits both observations?",
-      "es": "En tu computador, con una petición a la vez, el mismo prompt con temperatura 0 siempre devuelve el mismo texto. En un servidor de inferencia con mucha carga, el mismo modelo y el mismo prompt a veces devuelven textos distintos. ¿Qué explicación calza con ambas observaciones?"
+      "es": "En tu computadora, con una petición a la vez, el mismo prompt con temperatura 0 siempre devuelve el mismo texto. En un servidor de inferencia con mucha carga, el mismo modelo y el mismo prompt a veces devuelven textos distintos. ¿Qué explicación concuerda con ambas observaciones?"
     },
     "options": [
       {
@@ -29,8 +29,8 @@
       {
         "id": "b",
         "text": {
-          "en": "The server runs a quantized copy of the weights, so its logits are rounded differently from your local ones.",
-          "es": "El servidor usa una copia cuantizada de los pesos, así que sus logits se redondean distinto que los de tu computador."
+          "en": "The server runs a quantized copy of the weights, so its logits are rounded differently from those on your own machine.",
+          "es": "El servidor usa una copia cuantizada de los pesos, así que sus logits se redondean distinto que los de tu computadora."
         },
         "rationale": {
           "en": "Quantization is deterministic: it would make the server's output consistently different from your local one, not different from one call to the next.",
@@ -124,19 +124,19 @@
           "es": "Los prompts más frecuentes y sus respuestas, para responder al instante si se repiten."
         },
         "rationale": {
-          "en": "That is a response cache, a separate serving optimization. The KV cache lives inside a single generation.",
-          "es": "Eso es una caché de respuestas, otra optimización del servidor. La KV cache existe dentro de una sola generación."
+          "en": "That is a response cache, a separate serving optimization. The KV cache holds the key and value vectors of tokens already processed, not finished answers.",
+          "es": "Eso es una caché de respuestas, otra optimización del servidor. La KV cache guarda los vectores de clave y valor de los tokens ya procesados, no respuestas terminadas."
         }
       },
       {
         "id": "d",
         "text": {
-          "en": "The gradients of the last forward pass, so the model can adapt during generation.",
-          "es": "Los gradientes de la última pasada, para que el modelo se adapte mientras genera."
+          "en": "The key and value projection weights of each layer, so they are not reloaded from memory at each step.",
+          "es": "Los pesos de proyección de claves y valores de cada capa, para no volver a leerlos de memoria en cada paso."
         },
         "rationale": {
-          "en": "Inference computes no gradients, and the weights stay fixed while the model generates.",
-          "es": "En inferencia no se calculan gradientes, y los pesos quedan fijos mientras el modelo genera."
+          "en": "Those are fixed weights, and decoding does read them from memory at every step; the cache stores the per-token key and value vectors they produce.",
+          "es": "Son pesos fijos, y el decode sí los lee de memoria en cada paso; la caché guarda los vectores de clave y valor que producen para cada token."
         }
       }
     ],
@@ -246,7 +246,7 @@
     "difficulty": { "steps": 2, "specialization": 1, "distractors": 1 },
     "prompt": {
       "en": "In a chat app, doubling the length of the prompt roughly doubles the time until the first token appears, but the speed at which the rest of the answer is written barely changes. Which explanation fits both observations?",
-      "es": "En una app de chat, duplicar el largo del prompt casi duplica el tiempo hasta que aparece el primer token, pero la velocidad con que se escribe el resto de la respuesta casi no cambia. ¿Qué explicación calza con ambas observaciones?"
+      "es": "En una app de chat, duplicar el largo del prompt casi duplica el tiempo hasta que aparece el primer token, pero la velocidad con que se escribe el resto de la respuesta casi no cambia. ¿Qué explicación concuerda con ambas observaciones?"
     },
     "options": [
       {
@@ -424,8 +424,8 @@
       {
         "id": "a",
         "text": {
-          "en": "Dot products grow with the dimension, and large scores saturate the softmax, leaving tiny gradients.",
-          "es": "Los productos punto crecen con la dimensión y, si son grandes, saturan el softmax y anulan los gradientes."
+          "en": "Dot products grow with the dimension; large ones saturate the softmax and shrink gradients.",
+          "es": "Los productos punto crecen con la dimensión; si son grandes, saturan el softmax y achican los gradientes."
         },
         "rationale": {
           "en": "If query and key components have variance 1, their dot product has variance d_k. Dividing by √d_k brings it back to variance 1, so the softmax stays in a range with useful gradients.",
@@ -457,8 +457,8 @@
       {
         "id": "d",
         "text": {
-          "en": "It makes attention ignore tokens that are far apart, which works as a position signal.",
-          "es": "Hace que la atención ignore tokens lejanos, lo que funciona como una señal de posición."
+          "en": "It makes attention ignore tokens that are far apart, which works as a kind of position signal.",
+          "es": "Hace que la atención ignore los tokens que están lejos, lo que funciona como una especie de señal de posición."
         },
         "rationale": {
           "en": "The scaling applies equally to every pair of tokens, so it carries no information about their distance.",
@@ -667,11 +667,11 @@
         "id": "c",
         "text": {
           "en": "Keep the model small and train it on as many tokens as the budget allows.",
-          "es": "Mantener el modelo chico y entrenarlo con tantos tokens como permita el presupuesto."
+          "es": "Mantener el modelo pequeño y entrenarlo con tantos tokens como permita el presupuesto."
         },
         "rationale": {
           "en": "Past the optimum, adding tokens to a small model gives diminishing returns; both quantities need to grow together.",
-          "es": "Pasado el óptimo, agregar tokens a un modelo chico rinde cada vez menos; ambas cantidades deben crecer juntas."
+          "es": "Pasado el óptimo, agregar tokens a un modelo pequeño rinde cada vez menos; ambas cantidades deben crecer juntas."
         }
       },
       {
@@ -689,7 +689,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "The rule minimizes training compute for a given loss. Many recent models are trained far past 20 tokens per parameter on purpose: a smaller model trained for longer costs more to train but less to run, which pays off when it will serve many requests.",
-      "es": "La regla minimiza el cómputo de entrenamiento para una pérdida dada. Muchos modelos recientes se entrenan a propósito con mucho más de 20 tokens por parámetro: un modelo más chico entrenado por más tiempo cuesta más de entrenar pero menos de usar, lo que conviene cuando atenderá muchas peticiones."
+      "es": "La regla minimiza el cómputo de entrenamiento para una pérdida dada. Muchos modelos recientes se entrenan a propósito con mucho más de 20 tokens por parámetro: un modelo más pequeño entrenado por más tiempo cuesta más de entrenar pero menos de usar, lo que conviene cuando atenderá muchas peticiones."
     },
     "sources": [
       {
@@ -724,7 +724,7 @@
     "difficulty": { "steps": 2, "specialization": 0, "distractors": 1 },
     "prompt": {
       "en": "About how much memory do the weights of a 70-billion-parameter model take when quantized to 4 bits, ignoring overhead?",
-      "es": "¿Cuánta memoria ocupan aproximadamente los pesos de un modelo de 70 mil millones de parámetros cuantizado a 4 bits, sin contar sobrecostos?"
+      "es": "¿Cuánta memoria ocupan aproximadamente los pesos de un modelo de 70 mil millones de parámetros cuantizado a 4 bits, sin contar la memoria adicional (overhead)?"
     },
     "options": [
       {

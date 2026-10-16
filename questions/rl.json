@@ -1,7 +1,7 @@
 [
   {
     "id": "rl-0001",
-    "version": 2,
+    "version": 3,
     "area": "rl",
     "subtopic": "td-q-learning",
     "level": "medium",
@@ -29,8 +29,8 @@
       {
         "id": "b",
         "text": {
-          "en": "Its update uses the value of the action that the exploring policy actually takes next.",
-          "es": "Actualiza con el valor de la acción que la política que explora toma de verdad a continuación."
+          "en": "Its update uses the value of the action that the exploring policy actually takes at the next step.",
+          "es": "Actualiza con el valor de la acción que la política que explora efectivamente toma en el paso siguiente."
         },
         "rationale": {
           "en": "That is SARSA's update, which is on-policy: it learns the value of the policy it actually follows.",

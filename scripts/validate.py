@@ -196,6 +196,31 @@ def check_question(q, path, areas, seen_ids, errors, warnings):
     check_writing(q, where, errors, warnings)
 
 
+def length_cues(questions):
+    """Qué tan seguido la correcta es la alternativa más larga o la más corta, en todo el banco.
+
+    Al azar, con cuatro alternativas, cada caso pasa en un 25% de las preguntas. Una cifra muy
+    alta en «más larga» es una pista que se aprende; una muy baja en «más corta», también.
+    """
+    parts = []
+    for lang in ("en", "es"):
+        n = longest = shortest = expected = 0
+        for q in questions:
+            if q.get("keep_order") or len(q["answer"]) != 1:
+                continue
+            key = q["answer"][0]
+            lens = {o["id"]: len(o["text"].get(lang, o["text"]["en"])) for o in q["options"]}
+            others = [v for k, v in lens.items() if k != key]
+            n += 1
+            longest += lens[key] > max(others)
+            shortest += lens[key] < min(others)
+            expected += 1 / len(lens)
+        if n:
+            name = {"en": "inglés", "es": "español"}[lang]
+            parts.append(f"{name}, la correcta es la más larga en {longest / n:.0%} y la más corta en {shortest / n:.0%}")
+    return "; ".join(parts) + f" (al azar, {expected / n:.0%} cada una)" if parts else "sin preguntas"
+
+
 def print_summary(questions, taxonomy, group_of, total_bytes, drafts):
     total = len(questions)
     print(f"Preguntas: {total} en {len({q['area'] for q in questions})} de {len(group_of)} áreas")
@@ -213,6 +238,7 @@ def print_summary(questions, taxonomy, group_of, total_bytes, drafts):
     print(f"Rúbrica:   coincide con el nivel en {agree} de {total}")
     spanish = sum("es" in q["prompt"] for q in questions)
     print(f"Idiomas:   inglés {total}, español {spanish}")
+    print("Largo:     " + length_cues(questions))
     print(f"Tamaño:    {total_bytes / 1024:.1f} KB en total, {total_bytes / total / 1024:.2f} KB por pregunta")
     print(f"Borradores sin revisar (llm_draft): {len(drafts)}")
     print()

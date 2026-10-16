@@ -103,8 +103,8 @@
       {
         "id": "b",
         "text": {
-          "en": "The original target, using a different random sample of the training data.",
-          "es": "El objetivo original, usando otra muestra aleatoria de los datos de entrenamiento."
+          "en": "The original target, using a different random sample of the training data for each tree.",
+          "es": "El objetivo original, usando otra muestra aleatoria de los datos de entrenamiento para cada árbol."
         },
         "rationale": {
           "en": "Training independent trees on bootstrap samples is bagging, as in random forests; boosting trees depend on the previous ones.",
@@ -137,7 +137,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "Friedman (2001) generalized the idea to any differentiable loss: each tree fits the negative gradient of the loss with respect to the current predictions. That is why boosting reduces bias step by step, while random forests mainly reduce variance by averaging independent trees.",
-      "es": "Friedman (2001) generalizó la idea a cualquier pérdida diferenciable: cada árbol ajusta el gradiente negativo de la pérdida respecto de las predicciones actuales. Por eso el boosting reduce el sesgo paso a paso, mientras que random forests reduce sobre todo la varianza al promediar árboles independientes."
+      "es": "Friedman (2001) generalizó la idea a cualquier pérdida diferenciable: cada árbol ajusta el gradiente negativo de la pérdida respecto de las predicciones actuales. Por eso el boosting reduce el sesgo paso a paso, mientras que los random forests reducen sobre todo la varianza al promediar árboles independientes."
     },
     "sources": [
       { "kind": "paper", "title": "Greedy Function Approximation: A Gradient Boosting Machine", "authors": "Jerome H. Friedman", "year": 2001 },
@@ -209,8 +209,8 @@
           "es": "Multiplicar la edad por 1.000 para que ambos atributos estén en miles."
         },
         "rationale": {
-          "en": "An arbitrary multiplier would just make age dominate instead; the scale should come from the data, as standardization does.",
-          "es": "Un multiplicador arbitrario solo haría que dominara la edad; la escala debe salir de los datos, como hace la estandarización."
+          "en": "An arbitrary multiplier only swaps one arbitrary weighting for another; depending on the spreads, either feature could still dominate. The scale should come from the data, as standardization does.",
+          "es": "Un multiplicador arbitrario solo cambia una ponderación arbitraria por otra; según las dispersiones, cualquiera de los dos atributos podría seguir dominando. La escala debe salir de los datos, como hace la estandarización."
         }
       }
     ],

@@ -68,7 +68,7 @@
   },
   {
     "id": "evaluation-0002",
-    "version": 2,
+    "version": 3,
     "area": "evaluation",
     "subtopic": "baselines",
     "level": "hard",
@@ -107,8 +107,8 @@
       {
         "id": "c",
         "text": {
-          "en": "Its mean absolute percentage error, which is easier to compare across solar plants.",
-          "es": "Su error porcentual absoluto medio, que es más fácil de comparar entre plantas solares."
+          "en": "Its mean absolute percentage error, which is easier to compare across solar plants of different sizes.",
+          "es": "Su error porcentual absoluto medio, que es más fácil de comparar entre plantas solares de distinto tamaño."
         },
         "rationale": {
           "en": "MAPE is undefined when generation is zero at night and, like R², it does not compare against a baseline.",
@@ -279,8 +279,8 @@
       {
         "id": "c",
         "text": {
-          "en": "Raise the decision threshold from 0.5 to 0.9 so only confident predictions count.",
-          "es": "Subir el umbral de decisión de 0,5 a 0,9 para que solo cuenten las predicciones confiadas."
+          "en": "Raise the decision threshold from 0.5 to 0.9, so that only the confident predictions count.",
+          "es": "Subir el umbral de decisión de 0,5 a 0,9, para que solo cuenten las predicciones hechas con más confianza."
         },
         "rationale": {
           "en": "A higher threshold changes which predictions are made, but the probabilities stay miscalibrated.",
@@ -418,8 +418,8 @@
           "es": "Mostrar las respuestas en un orden fijo, para que el sesgo sea al menos igual para ambos sistemas."
         },
         "rationale": {
-          "en": "A fixed order does not make the bias equal: whichever system is always shown first gets the advantage.",
-          "es": "Un orden fijo no iguala el sesgo: el sistema que siempre aparece primero se lleva la ventaja."
+          "en": "A fixed order does not make the bias equal: whichever system always sits in the position the judge favors gets the advantage.",
+          "es": "Un orden fijo no iguala el sesgo: el sistema que siempre ocupa la posición que el juez favorece se lleva la ventaja."
         }
       },
       {
@@ -448,7 +448,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "Zheng et al. (2023) documented position, verbosity and self-enhancement biases in LLM judges, and proposed swapping positions as a mitigation. Before trusting a judge, measure its agreement with human labels on a sample; a judge that flips 35% of the time when answers are swapped needs that check more than most.",
-      "es": "Zheng et al. (2023) documentaron sesgos de posición, de verbosidad y de autopreferencia en los jueces LLM, y propusieron invertir las posiciones para mitigarlos. Antes de confiar en un juez, conviene medir su acuerdo con etiquetas humanas en una muestra; un juez que se invierte el 35% de las veces al cambiar el orden necesita esa revisión más que ninguno."
+      "es": "Zheng et al. (2023) documentaron sesgos de posición, de verbosidad y de autopreferencia en los jueces LLM, y propusieron invertir las posiciones para mitigarlos. Antes de confiar en un juez, conviene medir su acuerdo con etiquetas humanas en una muestra; un juez cuyo veredicto se invierte el 35% de las veces al cambiar el orden necesita esa revisión más que la mayoría."
     },
     "sources": [
       {
@@ -483,8 +483,8 @@
       {
         "id": "a",
         "text": {
-          "en": "The gap is within noise; a paired McNemar test on the disagreements would settle it.",
-          "es": "La diferencia está dentro del ruido; un test pareado de McNemar sobre los desacuerdos lo aclararía."
+          "en": "The gap is within noise; a paired McNemar test is the right way to check it.",
+          "es": "La diferencia está dentro del ruido; lo correcto es verificarlo con un test pareado de McNemar."
         },
         "rationale": {
           "en": "0.6 points is 3 examples out of 500, while the standard error of each accuracy is about 1.6 points. A paired test uses the cases where the models disagree, which is the right comparison on the same data.",
@@ -506,7 +506,7 @@
         "id": "c",
         "text": {
           "en": "A is better, since a difference this small can only come from overfitting by B.",
-          "es": "A es mejor, porque una diferencia tan pequeña solo puede venir de sobreajuste de B."
+          "es": "A es mejor, porque una diferencia tan pequeña solo puede deberse a que el modelo B está sobreajustado."
         },
         "rationale": {
           "en": "A small difference is not evidence of overfitting; for now it is not evidence of anything.",
@@ -527,8 +527,8 @@
     ],
     "answer": ["a"],
     "explanation": {
-      "en": "With 500 examples, the 95% confidence interval for an accuracy near 85% spans about ±3 points. Here, if the models disagree on 21 examples, B wins 12 of them and A wins 9, a split that chance explains easily (McNemar p ≈ 0.66); a split of 18 to 3, a 3-point gap, would be strong evidence (p < 0.01). Detecting gains under a point takes thousands of examples.",
-      "es": "Con 500 ejemplos, el intervalo de confianza de 95% para una exactitud cercana a 85% abarca unos ±3 puntos. Aquí, si los modelos discrepan en 21 ejemplos, B gana 12 y A gana 9, un reparto que el azar explica sin problema (McNemar p ≈ 0,66); un reparto de 18 a 3, una diferencia de 3 puntos, sería evidencia fuerte (p < 0,01). Detectar mejoras menores a un punto requiere miles de ejemplos."
+      "en": "With 500 examples, the 95% confidence interval for an accuracy near 85% spans about ±3 points. A paired test is sharper, but here B's net gain is only 3 examples: even the most lopsided split of the disagreements, 3 to 0, gives an exact McNemar p-value of 0.25, and with 21 disagreements the split would be 12 to 9 (p ≈ 0.66). Detecting gains under a point takes thousands of examples.",
+      "es": "Con 500 ejemplos, el intervalo de confianza de 95% para una exactitud cercana a 85% abarca unos ±3 puntos. Un test pareado es más fino, pero aquí la ganancia neta de B es de solo 3 ejemplos: incluso el reparto más desigual de los desacuerdos, 3 a 0, da un valor p exacto de McNemar de 0,25, y con 21 desacuerdos el reparto sería de 12 a 9 (p ≈ 0,66). Detectar mejoras menores a un punto requiere miles de ejemplos."
     },
     "sources": [
       {

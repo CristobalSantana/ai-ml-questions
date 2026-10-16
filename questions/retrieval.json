@@ -161,7 +161,7 @@
   },
   {
     "id": "retrieval-0003",
-    "version": 2,
+    "version": 3,
     "area": "retrieval",
     "subtopic": "vector-databases",
     "level": "medium",
@@ -189,7 +189,7 @@
       {
         "id": "b",
         "text": {
-          "en": "A dedicated distributed vector database, since vector search needs its own storage engine.",
+          "en": "A dedicated distributed vector database, since vector search at any scale needs its own storage engine.",
           "es": "Una base vectorial dedicada y distribuida, porque la búsqueda vectorial necesita su propio motor."
         },
         "rationale": {
@@ -384,8 +384,8 @@
     ],
     "answer": ["a"],
     "explanation": {
-      "en": "Chunk size trades precision against context: small chunks match queries precisely but lose the surrounding information, while large ones dilute the embedding with unrelated content. Alternatives include retrieving a small chunk and passing its parent section to the model, or adding a short summary of the document to each chunk before embedding it.",
-      "es": "El tamaño del chunk equilibra precisión y contexto: los chunks chicos calzan con precisión con las consultas pero pierden la información que los rodea, y los grandes diluyen el embedding con contenido ajeno. Hay alternativas como recuperar un chunk chico y pasarle al modelo su sección completa, o agregar a cada chunk un breve resumen del documento antes de calcular su embedding."
+      "en": "Chunk size trades precision against context: small chunks match queries precisely but lose the surrounding information, while large ones dilute the embedding with unrelated content. Alternatives include retrieving a small chunk and passing its parent section to the model, or prepending to each chunk a short context, written for that chunk from the whole document, before embedding and indexing it (contextual retrieval).",
+      "es": "El tamaño del chunk equilibra precisión y contexto: los chunks pequeños coinciden con precisión con las consultas pero pierden la información que los rodea, y los grandes diluyen el embedding con contenido ajeno. Hay alternativas como recuperar un chunk pequeño y pasarle al modelo su sección completa, o anteponer a cada chunk un breve contexto, redactado para ese chunk a partir del documento completo, antes de calcular su embedding e indexarlo (contextual retrieval)."
     },
     "sources": [
       {
@@ -395,7 +395,13 @@
         "year": 2020,
         "url": "https://arxiv.org/abs/2005.11401"
       },
-      { "kind": "post", "title": "Introducing Contextual Retrieval", "authors": "Anthropic", "year": 2024 }
+      {
+        "kind": "post",
+        "title": "Introducing Contextual Retrieval",
+        "authors": "Anthropic",
+        "year": 2024,
+        "url": "https://www.anthropic.com/news/contextual-retrieval"
+      }
     ],
     "tags": ["chunking", "rag", "context-window"],
     "origin": "llm_draft",
@@ -501,8 +507,8 @@
       {
         "id": "a",
         "text": {
-          "en": "It reads query and document together: more accurate, but too slow for the whole collection.",
-          "es": "Lee la consulta y el documento juntos: es más preciso, pero muy lento para toda la colección."
+          "en": "The cross-encoder reads both texts together: more accurate, but too slow for the whole collection.",
+          "es": "El cross-encoder lee consulta y documento juntos: más preciso, pero demasiado lento para toda la colección."
         },
         "rationale": {
           "en": "A bi-encoder embeds documents once and compares vectors, which scales to millions. A cross-encoder runs the model on each query-document pair, so its attention compares them word by word, at a cost that only works for a short list.",
@@ -523,8 +529,8 @@
       {
         "id": "c",
         "text": {
-          "en": "The bi-encoder can only return 50 results, so a second model is needed for the rest.",
-          "es": "El bi-encoder solo puede devolver 50 resultados, así que hace falta un segundo modelo para el resto."
+          "en": "The bi-encoder can only return 50 results per query, so a second model is needed to search the rest.",
+          "es": "El bi-encoder solo puede devolver 50 resultados por consulta, así que hace falta un segundo modelo para el resto."
         },
         "rationale": {
           "en": "A bi-encoder can return any number of results; 50 is a choice that balances recall against the cost of reranking.",
@@ -545,8 +551,8 @@
     ],
     "answer": ["a"],
     "explanation": {
-      "en": "This two-stage design aims the first stage at recall and the second at precision. Reranking often brings large gains for little engineering effort, since it only changes the order of the passages the generator sees.",
-      "es": "Este diseño en dos etapas apunta la primera al recall y la segunda a la precisión. Reordenar suele traer mejoras grandes con poco esfuerzo de ingeniería, porque solo cambia el orden de los pasajes que ve el generador."
+      "en": "This two-stage design aims the first stage at recall and the second at precision. Reranking often brings large gains for little engineering effort, since it slots in after retrieval with no re-indexing and decides which few candidates reach the generator.",
+      "es": "Este diseño en dos etapas apunta la primera al recall y la segunda a la precisión. Reordenar suele traer mejoras grandes con poco esfuerzo de ingeniería, porque se agrega después de la recuperación sin reindexar y decide qué pocos candidatos llegan al generador."
     },
     "sources": [
       {
@@ -603,8 +609,8 @@
           "es": "Sube el recall y crece el uso de memoria, porque el índice guarda más enlaces por nodo."
         },
         "rationale": {
-          "en": "Links per node are set by M and ef_construction when the index is built; ef_search does not change the index's memory.",
-          "es": "Los enlaces por nodo los fijan M y ef_construction al construir el índice; ef_search no cambia la memoria del índice."
+          "en": "The number of links per node is set by M when the index is built (ef_construction affects build time and link quality, not memory); ef_search does not change the index's memory.",
+          "es": "El número de enlaces por nodo lo fija M al construir el índice (ef_construction afecta el tiempo de construcción y la calidad de los enlaces, no la memoria); ef_search no cambia la memoria del índice."
         }
       },
       {
@@ -629,8 +635,8 @@
     ],
     "answer": ["a"],
     "explanation": {
-      "en": "Approximate indexes trade a little recall for large speedups over exact search. In HNSW, M and ef_construction set the quality and memory of the graph when it is built, and ef_search tunes the recall-latency trade-off for each query, which makes it the first knob to try when recall is too low.",
-      "es": "Los índices aproximados ceden un poco de recall a cambio de grandes aceleraciones respecto de la búsqueda exacta. En HNSW, M y ef_construction fijan la calidad y la memoria del grafo al construirlo, y ef_search ajusta el equilibrio entre recall y latencia en cada consulta, lo que lo vuelve la primera perilla a mover cuando el recall es bajo."
+      "en": "Approximate indexes trade a little recall for large speedups over exact search. In HNSW, M sets the graph's memory and, with ef_construction, its quality when it is built, and ef_search tunes the recall-latency trade-off for each query, which makes it the first knob to try when recall is too low.",
+      "es": "Los índices aproximados ceden un poco de recall a cambio de grandes aceleraciones respecto de la búsqueda exacta. En HNSW, M fija la memoria del grafo y, junto con ef_construction, su calidad al construirlo, y ef_search ajusta el equilibrio entre recall y latencia en cada consulta, lo que lo vuelve la primera perilla a mover cuando el recall es bajo."
     },
     "sources": [
       {
@@ -675,12 +681,12 @@
       {
         "id": "b",
         "text": {
-          "en": "At retrieval: switch to a better embedding model to push the correct passage to first place.",
+          "en": "At retrieval: switch to a better embedding model, to push the correct passage up to first place more often.",
           "es": "En la recuperación: cambiar a un mejor modelo de embeddings para subir el pasaje correcto al primer lugar."
         },
         "rationale": {
-          "en": "Retrieval already finds the passage 95% of the time; even a perfect retriever could fix at most 5 of the 30 points of error.",
-          "es": "La recuperación ya encuentra el pasaje el 95% de las veces; incluso un recuperador perfecto podría corregir como mucho 5 de los 30 puntos de error."
+          "en": "Retrieval already finds the passage 95% of the time, so missing passages explain at most 5 of the 30 points of error; better ranking within the top 5 may help a little, but most failures happen with the answer already in the context.",
+          "es": "La recuperación ya encuentra el pasaje el 95% de las veces, así que los pasajes faltantes explican como mucho 5 de los 30 puntos de error; ordenar mejor dentro de los 5 primeros puede ayudar algo, pero la mayoría de las fallas ocurren con la respuesta ya en el contexto."
         }
       },
       {
@@ -795,8 +801,8 @@
     ],
     "answer": ["a"],
     "explanation": {
-      "en": "Many RAG failures are data problems rather than model problems: outdated, duplicated or conflicting documents in the index. Keeping metadata such as version, date, owner and access permissions, and filtering on it, fixes them more reliably than changing prompts or models.",
-      "es": "Muchas fallas de RAG son problemas de datos más que de modelos: documentos obsoletos, duplicados o contradictorios en el índice. Mantener metadatos como versión, fecha, responsable y permisos de acceso, y filtrar con ellos, los resuelve de forma más confiable que cambiar prompts o modelos."
+      "en": "Many RAG failures are data problems rather than model problems: outdated, duplicated or conflicting documents in the index, and Barnett et al. (2024) found that contradictory information in the context is one reason models miss the right answer. Keeping metadata such as version, date, owner and access permissions, and filtering on it, fixes them more reliably than changing prompts or models.",
+      "es": "Muchas fallas de RAG son problemas de datos más que de modelos: documentos obsoletos, duplicados o contradictorios en el índice, y Barnett et al. (2024) encontraron que la información contradictoria en el contexto es una de las razones por las que los modelos no dan con la respuesta correcta. Mantener metadatos como versión, fecha, responsable y permisos de acceso, y filtrar con ellos, los resuelve de forma más confiable que cambiar prompts o modelos."
     },
     "sources": [
       {
@@ -805,7 +811,8 @@
         "authors": "Scott Barnett et al.",
         "year": 2024,
         "url": "https://arxiv.org/abs/2401.05856"
-      }
+      },
+      { "kind": "docs", "title": "Filtering", "authors": "Qdrant", "url": "https://qdrant.tech/documentation/search/filtering/" }
     ],
     "tags": ["rag-failures", "metadata", "filtering"],
     "origin": "llm_draft",

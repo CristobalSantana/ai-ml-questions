@@ -114,7 +114,7 @@
     "answer": ["c"],
     "explanation": {
       "en": "PCA can be computed from the SVD of the centered data, X = UΣVᵀ: the right singular vectors are the principal directions, and the variance along each one is σᵢ²/(n − 1). Because of the squares, a few large singular values usually dominate, which is why a handful of components often captures most of the variance.",
-      "es": "El PCA se puede calcular a partir de la SVD de los datos centrados, X = UΣVᵀ: los vectores singulares derechos son las direcciones principales, y la varianza a lo largo de cada una es σᵢ²/(n − 1). Por los cuadrados, unos pocos valores singulares grandes suelen dominar, y por eso un puñado de componentes muchas veces captura casi toda la varianza."
+      "es": "El PCA se puede calcular a partir de la SVD de los datos centrados, X = UΣVᵀ: los vectores singulares derechos son las direcciones principales, y la varianza a lo largo de cada una es σᵢ²/(n − 1). Por los cuadrados, unos pocos valores singulares grandes suelen dominar, y por eso un puñado de componentes muchas veces captura la mayor parte de la varianza."
     },
     "sources": [
       {

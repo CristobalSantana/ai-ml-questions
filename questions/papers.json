@@ -79,8 +79,8 @@
       {
         "id": "a",
         "text": {
-          "en": "Residual connections, which add each block's input to its output.",
-          "es": "Conexiones residuales, que suman la entrada de cada bloque a su salida."
+          "en": "Shortcut connections that add each block's input to its output.",
+          "es": "Conexiones de atajo que suman la entrada de cada bloque a su salida."
         },
         "rationale": {
           "en": "Each block learns a residual F(x) and outputs F(x) + x. The identity path lets signals and gradients cross many layers, which made a 152-layer network trainable and won ILSVRC 2015.",
@@ -171,7 +171,7 @@
         },
         "rationale": {
           "en": "That is causal language modeling, used by GPT; BERT's point was to use context from both sides.",
-          "es": "Eso es modelado de lenguaje causal, el que usa GPT; la gracia de BERT fue usar el contexto de ambos lados."
+          "es": "Eso es modelado de lenguaje causal, el que usa GPT; lo novedoso de BERT fue usar el contexto de ambos lados."
         }
       },
       {
@@ -397,8 +397,8 @@
     "stability": "stable",
     "difficulty": { "steps": 1, "specialization": 1, "distractors": 1 },
     "prompt": {
-      "en": "During training, what does the network in a denoising diffusion model (DDPM) learn to predict?",
-      "es": "Durante el entrenamiento, ¿qué aprende a predecir la red de un modelo de difusión (DDPM)?"
+      "en": "During training, what does the network in DDPM, the diffusion model of Ho et al. (2020), learn to predict?",
+      "es": "Durante el entrenamiento, ¿qué aprende a predecir la red de DDPM, el modelo de difusión de Ho et al. (2020)?"
     },
     "options": [
       {
@@ -415,12 +415,12 @@
       {
         "id": "b",
         "text": {
-          "en": "Whether an image is real or generated, as a discriminator does.",
-          "es": "Si una imagen es real o generada, como hace un discriminador."
+          "en": "Which step t was used to noise the image, so it knows how much noise to remove.",
+          "es": "Qué paso t se usó para agregarle ruido a la imagen, para saber cuánto ruido quitar."
         },
         "rationale": {
-          "en": "That is the discriminator of a GAN; a diffusion model trains a single network with a regression loss and no adversary.",
-          "es": "Ese es el discriminador de una GAN; un modelo de difusión entrena una sola red con una pérdida de regresión y sin adversario."
+          "en": "The step t is an input to the network, not its target; the target is the added noise itself.",
+          "es": "El paso t es una entrada de la red, no su objetivo; el objetivo es el ruido agregado."
         }
       },
       {
@@ -491,7 +491,7 @@
         "id": "a",
         "text": {
           "en": "Less traffic to slow GPU memory, by computing in tiles that fit in fast on-chip memory.",
-          "es": "Menos tráfico con la memoria lenta de la GPU: calcula por bloques que caben en la memoria del chip."
+          "es": "Menos tráfico con la memoria lenta: calcula por bloques que caben en la memoria del chip."
         },
         "rationale": {
           "en": "Standard attention writes the full N×N score matrix to the GPU's high-bandwidth memory and reads it back. FlashAttention splits the work into tiles kept in on-chip SRAM and combines the softmax across tiles with running statistics, so the full matrix is not stored and the real bottleneck, memory traffic, drops.",
@@ -501,34 +501,34 @@
       {
         "id": "b",
         "text": {
-          "en": "It skips the attention scores that are close to zero, which are most of them.",
-          "es": "Se salta los puntajes de atención cercanos a cero, que en la práctica son la mayoría."
+          "en": "It cuts the floating-point operations that attention needs from quadratic to linear in sequence length.",
+          "es": "Reduce las operaciones de punto flotante de la atención, de cuadráticas a lineales en el largo de la secuencia."
         },
         "rationale": {
-          "en": "Skipping scores would be sparse attention, which approximates the result; FlashAttention computes every score.",
-          "es": "Saltarse puntajes sería atención dispersa, que aproxima el resultado; FlashAttention calcula todos los puntajes."
+          "en": "The operation count stays quadratic, and the backward pass even recomputes attention; the gain comes from memory traffic.",
+          "es": "La cantidad de operaciones sigue siendo cuadrática, y la pasada hacia atrás incluso recalcula la atención; la mejora viene del tráfico de memoria."
         }
       },
       {
         "id": "c",
         "text": {
-          "en": "It stores the queries, keys and values as 8-bit integers instead of floats.",
-          "es": "Guarda las queries, keys y values como enteros de 8 bits en vez de punto flotante."
+          "en": "It splits the attention heads across several GPUs that work in parallel.",
+          "es": "Reparte las cabezas de atención entre varias GPUs que trabajan en paralelo."
         },
         "rationale": {
-          "en": "Quantizing would change the numbers, so the result would not be exact; FlashAttention works in standard 16-bit floating point.",
-          "es": "Cuantizar cambiaría los números, así que el resultado no sería exacto; FlashAttention trabaja en punto flotante estándar de 16 bits."
+          "en": "Splitting heads across GPUs is tensor parallelism, a separate technique; FlashAttention speeds up attention on a single GPU.",
+          "es": "Repartir cabezas entre GPUs es paralelismo de tensores, una técnica distinta; FlashAttention acelera la atención en una sola GPU."
         }
       },
       {
         "id": "d",
         "text": {
-          "en": "It replaces the full attention matrix with a cheaper low-rank approximation of it.",
-          "es": "Reemplaza la matriz de atención completa por una aproximación más barata de bajo rango."
+          "en": "It caches the keys and values of earlier tokens, so they are not recomputed for each new token.",
+          "es": "Guarda en caché las claves y valores de los tokens anteriores, para no recalcularlos con cada token nuevo."
         },
         "rationale": {
-          "en": "Low-rank methods such as Linformer approximate attention; FlashAttention is exact.",
-          "es": "Los métodos de bajo rango como Linformer aproximan la atención; FlashAttention es exacta."
+          "en": "That is the KV cache, a separate technique for token-by-token generation; FlashAttention also speeds up training, where there is nothing to cache.",
+          "es": "Eso es la KV cache, una técnica distinta para generar token a token; FlashAttention también acelera el entrenamiento, donde no hay nada que guardar en caché."
         }
       }
     ],

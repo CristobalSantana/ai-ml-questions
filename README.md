@@ -92,6 +92,8 @@ Las preguntas siguen las pautas de Haladyna, Downing y Rodriguez (2002), una rev
 | La pregunta está en positivo: sin not ni except; sin no, excepto ni salvo | Aviso |
 | Una pregunta `hard` es `analyze` o `evaluate` | Error |
 
+Además, el resumen del validador muestra en qué porcentaje del banco la correcta es la alternativa más larga y en cuál es la más corta. Con cuatro alternativas, lo esperable al azar es cerca de 25% en cada caso; una cifra muy alta en «más larga» es una pista que se aprende aunque cada pregunta pase la regla de 1,2 veces. En la revisión de octubre de 2026 bajó de 46% a 20% en inglés.
+
 **La verificación con otro modelo revisa** lo que depende del significado ([`prompts/verificar.md`](prompts/verificar.md)):
 
 - **Pistas en las alternativas (paso 0):** el modelo ve solo las alternativas, sin el enunciado, y apuesta por una. Si acierta con confianza en dos órdenes distintos, la redacción delata la respuesta y se reescribe.

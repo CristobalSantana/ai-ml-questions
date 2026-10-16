@@ -1,7 +1,7 @@
 [
   {
     "id": "deep-learning-0001",
-    "version": 2,
+    "version": 3,
     "area": "deep-learning",
     "subtopic": "residual-connections",
     "level": "easy",
@@ -19,7 +19,7 @@
         "id": "a",
         "text": {
           "en": "Deeper networks reached higher training error, and the shortcut let each block learn a correction to the identity.",
-          "es": "Las redes más profundas llegaban a más error de entrenamiento, y el atajo permitió que cada bloque aprendiera una corrección a la identidad."
+          "es": "Las redes más profundas llegaban a más error de entrenamiento, y el atajo dejó que cada bloque aprendiera una corrección a la identidad."
         },
         "rationale": {
           "en": "He et al. saw deeper plain networks reach higher training error than shallower ones. With y = F(x) + x, a block that adds nothing can stay close to the identity, and gradients flow through the shortcut.",
@@ -29,8 +29,8 @@
       {
         "id": "b",
         "text": {
-          "en": "Deeper networks overfit their training data, and the shortcut acted as a regularizer that limited their capacity.",
-          "es": "Las redes más profundas sobreajustaban los datos de entrenamiento, y el atajo actuó como un regularizador que limitó su capacidad."
+          "en": "Deeper networks overfit their training data, and the shortcut acted as a regularizer that limited their effective capacity.",
+          "es": "Las redes más profundas sobreajustaban los datos de entrenamiento, y el atajo actuó como un regularizador que limitó su capacidad efectiva."
         },
         "rationale": {
           "en": "The problem was higher training error, which overfitting does not explain, and an identity shortcut adds no constraint on capacity.",
@@ -135,7 +135,7 @@
         },
         "rationale": {
           "en": "The point of backpropagation is to assign error to every layer, the first ones included, not only the last.",
-          "es": "La gracia de backpropagation es repartir el error a todas las capas, incluidas las primeras, no solo a la última."
+          "es": "Lo central de backpropagation es repartir el error a todas las capas, incluidas las primeras, no solo a la última."
         }
       }
     ],
@@ -185,8 +185,8 @@
         "id": "b",
         "text": { "en": "2.5 × 10⁻²", "es": "2,5 × 10⁻²" },
         "rationale": {
-          "en": "This divides 0.25 by the number of layers; the factors multiply, they are not averaged.",
-          "es": "Esto divide 0,25 por el número de capas; los factores se multiplican, no se promedian."
+          "en": "This divides 0.25 by the number of layers; the per-layer factors multiply instead.",
+          "es": "Esto divide 0,25 por el número de capas; en realidad, los factores de cada capa se multiplican."
         }
       },
       {
@@ -279,8 +279,8 @@
       {
         "id": "d",
         "text": {
-          "en": "Weight decay and an L2 penalty are identical in Adam; AdamW only changes the default values.",
-          "es": "El weight decay y la penalización L2 son idénticos en Adam; AdamW solo cambia los valores por defecto."
+          "en": "Weight decay and an L2 penalty are mathematically identical in Adam; AdamW only changes the default values.",
+          "es": "El weight decay y la penalización L2 son matemáticamente idénticos en Adam; AdamW solo cambia los valores por defecto."
         },
         "rationale": {
           "en": "They are equivalent for plain SGD but not for Adam; that difference is the paper's main point.",
@@ -354,8 +354,8 @@
       {
         "id": "c",
         "text": {
-          "en": "Batch normalization with a larger momentum, so its running averages adapt faster.",
-          "es": "Batch normalization con un momentum mayor, para que sus promedios móviles se adapten más rápido."
+          "en": "Batch normalization with running averages that update faster.",
+          "es": "Batch normalization con promedios móviles que se actualicen más rápido."
         },
         "rationale": {
           "en": "Faster-adapting averages do not fix the noise of estimating statistics from 2 examples.",

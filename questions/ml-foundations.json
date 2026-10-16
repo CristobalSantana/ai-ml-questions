@@ -102,8 +102,8 @@
       {
         "id": "b",
         "text": {
-          "en": "Collect more training data, so the model sees more varied examples.",
-          "es": "Juntar más datos de entrenamiento, para que el modelo vea ejemplos más variados."
+          "en": "Collect more training data, so the model sees more varied examples of the patterns it must learn.",
+          "es": "Reunir más datos de entrenamiento, para que el modelo vea ejemplos más variados de los patrones que debe aprender."
         },
         "rationale": {
           "en": "More data helps with high variance. Here training and validation error are almost equal, so extra data would barely move them.",
@@ -159,7 +159,7 @@
     "difficulty": { "steps": 2, "specialization": 1, "distractors": 2 },
     "prompt": {
       "en": "A k-nearest-neighbors classifier works well with 10 features. After 990 features of random noise are added, its accuracy drops close to chance, even though the original 10 features are still there. What best explains this?",
-      "es": "Un clasificador de k vecinos más cercanos funciona bien con 10 atributos. Después de agregar 990 atributos de ruido aleatorio, su exactitud cae casi al azar, aunque los 10 atributos originales siguen ahí. ¿Qué lo explica mejor?"
+      "es": "Un clasificador de k vecinos más cercanos funciona bien con 10 atributos. Después de agregar 990 atributos de ruido aleatorio, su exactitud cae casi al nivel del azar, aunque los 10 atributos originales siguen ahí. ¿Qué lo explica mejor?"
     },
     "options": [
       {

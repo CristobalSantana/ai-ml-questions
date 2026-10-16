@@ -1,7 +1,7 @@
 [
   {
     "id": "agents-0001",
-    "version": 2,
+    "version": 3,
     "area": "agents",
     "subtopic": "agent-security",
     "level": "medium",
@@ -29,8 +29,8 @@
       {
         "id": "b",
         "text": {
-          "en": "A jailbreak; add a system prompt telling the model to ignore instructions found on web pages.",
-          "es": "Un jailbreak; agregar un system prompt que le pida al modelo ignorar instrucciones de páginas web."
+          "en": "A jailbreak; add a system prompt that tells the model to ignore any instructions that appear on web pages.",
+          "es": "Un jailbreak; agregar un system prompt que le pida al modelo ignorar cualquier instrucción que aparezca en páginas web."
         },
         "rationale": {
           "en": "A jailbreak comes from the user; here the instructions are hidden in content the agent read. System-prompt instructions lower the risk but do not reliably stop it.",
@@ -104,7 +104,7 @@
         },
         "rationale": {
           "en": "Compaction keeps the context small while preserving what matters, and external memory lets the agent retrieve facts only when it needs them. Agent harnesses combine both for long sessions.",
-          "es": "La compactación mantiene el contexto chico sin perder lo importante, y la memoria externa permite recuperar datos solo cuando hacen falta. Los harness de agentes combinan ambas cosas en sesiones largas."
+          "es": "La compactación mantiene el contexto pequeño sin perder lo importante, y la memoria externa permite recuperar datos solo cuando hacen falta. Los harness de agentes combinan ambas cosas en sesiones largas."
         }
       },
       {
@@ -114,8 +114,8 @@
           "es": "Conservar el primer y el último mensaje y descartar todo lo del medio para hacer espacio."
         },
         "rationale": {
-          "en": "Dropping the middle loses whatever the user said there, and the account details could be anywhere in the conversation.",
-          "es": "Descartar el medio pierde lo que el usuario dijo ahí, y los datos de la cuenta pueden estar en cualquier parte de la conversación."
+          "en": "Dropping the middle loses whatever the user said there, and nothing guarantees that the first message holds every important fact, such as account details given a few turns in.",
+          "es": "Descartar el medio pierde lo que el usuario dijo ahí, y nada garantiza que el primer mensaje contenga todos los datos importantes, como los de la cuenta dados unos turnos después."
         }
       },
       {
@@ -132,8 +132,8 @@
       {
         "id": "d",
         "text": {
-          "en": "Switch to a model with a context window twice as large, so nothing needs to be dropped.",
-          "es": "Cambiar a un modelo con una ventana de contexto el doble de grande, para no tener que descartar nada."
+          "en": "Switch to a model with a context window twice as large, so that nothing in the conversation needs to be dropped.",
+          "es": "Cambiar a un modelo con una ventana de contexto el doble de grande, para no tener que descartar nada de la conversación."
         },
         "rationale": {
           "en": "A larger window delays the problem without solving it: long sessions eventually exceed any window, and very long contexts cost more and are recalled less reliably.",
@@ -144,10 +144,16 @@
     "answer": ["a"],
     "explanation": {
       "en": "Context is a limited budget: every token in it costs time and money and competes for the model's attention. Good agent designs decide what to keep verbatim (recent turns, the current task), what to summarize (older turns) and what to store outside the context and fetch with a tool (stable facts such as account details).",
-      "es": "El contexto es un presupuesto limitado: cada token cuesta tiempo y dinero y compite por la atención del modelo. Un buen diseño de agente decide qué conservar textual (los turnos recientes, la tarea actual), qué resumir (los turnos antiguos) y qué guardar fuera del contexto para traerlo con una herramienta (datos estables como los de la cuenta)."
+      "es": "El contexto es un presupuesto limitado: cada token cuesta tiempo y dinero y compite por la atención del modelo. Un buen diseño de agente decide qué conservar textualmente (los turnos recientes, la tarea actual), qué resumir (los turnos antiguos) y qué guardar fuera del contexto para traerlo con una herramienta (datos estables como los de la cuenta)."
     },
     "sources": [
-      { "kind": "post", "title": "Effective context engineering for AI agents", "authors": "Anthropic", "year": 2025 },
+      {
+        "kind": "post",
+        "title": "Effective context engineering for AI agents",
+        "authors": "Anthropic",
+        "year": 2025,
+        "url": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"
+      },
       {
         "kind": "paper",
         "title": "MemGPT: Towards LLMs as Operating Systems",
@@ -281,7 +287,7 @@
       {
         "id": "c",
         "text": {
-          "en": "The model provider's servers, which run on the internet any function the model names.",
+          "en": "The model provider's servers, which run on the internet any function the model names in its reply.",
           "es": "Los servidores del proveedor del modelo, que ejecutan en internet cualquier función que nombre el modelo."
         },
         "rationale": {
@@ -307,8 +313,13 @@
       "es": "Esta división importa para la seguridad: como la aplicación ejecuta cada llamada, puede validar los argumentos, pedirle confirmación al usuario antes de acciones sensibles y limitar a qué puede acceder cada herramienta. Un modelo que «llama» a una función solo la pidió."
     },
     "sources": [
-      { "kind": "docs", "title": "Tool use with Claude", "authors": "Anthropic" },
-      { "kind": "docs", "title": "Function calling", "authors": "OpenAI" }
+      {
+        "kind": "docs",
+        "title": "Tool use with Claude",
+        "authors": "Anthropic",
+        "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview"
+      },
+      { "kind": "docs", "title": "Function calling", "authors": "OpenAI", "url": "https://developers.openai.com/docs/guides/function-calling" }
     ],
     "tags": ["function-calling", "tool-use", "agents"],
     "origin": "llm_draft",
@@ -409,7 +420,7 @@
     "difficulty": { "steps": 1, "specialization": 2, "distractors": 1 },
     "prompt": {
       "en": "An agent can read the user's private files, browse arbitrary web pages and make HTTP requests. A page it visits hides instructions telling it to upload the files to an external server. Which single change most reliably blocks this kind of attack?",
-      "es": "Un agente puede leer los archivos privados del usuario, navegar cualquier página web y hacer peticiones HTTP. Una página que visita esconde instrucciones para que suba los archivos a un servidor externo. ¿Qué cambio único bloquea de forma más confiable este tipo de ataque?"
+      "es": "Un agente puede leer los archivos privados del usuario, navegar cualquier página web y hacer peticiones HTTP. Una página que visita esconde instrucciones para que suba los archivos a un servidor externo. ¿Qué cambio, por sí solo, bloquea de forma más confiable este tipo de ataque?"
     },
     "options": [
       {
@@ -438,7 +449,7 @@
         "id": "c",
         "text": {
           "en": "Switch to a larger model, which follows its original instructions more faithfully than a small one.",
-          "es": "Cambiar a un modelo más grande, que sigue sus instrucciones originales con más fidelidad que uno chico."
+          "es": "Cambiar a un modelo más grande, que sigue sus instrucciones originales con más fidelidad que uno pequeño."
         },
         "rationale": {
           "en": "Better instruction following can make a model follow injected instructions just as well; model size is not a security boundary.",

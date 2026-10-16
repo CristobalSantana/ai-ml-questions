@@ -1,7 +1,7 @@
 [
   {
     "id": "vision-0001",
-    "version": 2,
+    "version": 3,
     "area": "vision",
     "subtopic": "convolution",
     "level": "easy",
@@ -56,14 +56,14 @@
         },
         "rationale": {
           "en": "CNN filters are learned with backpropagation; hand-designed filters belong to computer vision before deep learning.",
-          "es": "Los filtros de una CNN se aprenden con backpropagation; los filtros diseñados a mano eran propios de la visión por computador antes del deep learning."
+          "es": "Los filtros de una CNN se aprenden con backpropagation; los filtros diseñados a mano eran propios de la visión por computadora antes del deep learning."
         }
       }
     ],
     "answer": ["a"],
     "explanation": {
       "en": "Computer vision is about making machines interpret images and video, and from AlexNet (2012) on, CNNs were its dominant architecture. A dense layer on a 224×224×3 image connects each output to 150,528 inputs, while a 3×3×3 filter has 27 weights reused at every position. That economy and translation equivariance are the inductive bias that made CNNs work.",
-      "es": "La visión por computador busca que las máquinas interpreten imágenes y video, y desde AlexNet (2012) las CNN fueron su arquitectura dominante. Una capa densa sobre una imagen de 224×224×3 conecta cada salida con 150.528 entradas, mientras que un filtro de 3×3×3 tiene 27 pesos que se reutilizan en cada posición. Esa economía y la equivariancia a traslaciones son el sesgo inductivo que hizo funcionar a las CNN."
+      "es": "La visión por computadora busca que las máquinas interpreten imágenes y video, y desde AlexNet (2012) las CNN fueron su arquitectura dominante. Una capa densa sobre una imagen de 224×224×3 conecta cada salida con 150.528 entradas, mientras que un filtro de 3×3×3 tiene 27 pesos que se reutilizan en cada posición. Esa economía y la equivariancia a traslaciones son el sesgo inductivo que hizo funcionar a las CNN."
     },
     "sources": [
       { "kind": "book", "title": "Deep Learning", "authors": "Ian Goodfellow, Yoshua Bengio & Aaron Courville", "year": 2016 },
@@ -267,8 +267,8 @@
       {
         "id": "d",
         "text": {
-          "en": "A depth value for each pixel, showing which car is closer.",
-          "es": "Un valor de profundidad para cada píxel, que muestra qué auto está más cerca."
+          "en": "A depth value for each pixel, showing which of the cars is closer to the camera.",
+          "es": "Un valor de profundidad para cada píxel, que muestra cuál de los autos está más cerca de la cámara."
         },
         "rationale": {
           "en": "Depth estimation is a different task; segmentation assigns labels, not distances.",
@@ -380,8 +380,8 @@
         "id": "a",
         "text": { "en": "Random horizontal flips of the images.", "es": "Voltear las imágenes horizontalmente al azar." },
         "rationale": {
-          "en": "A mirrored digit is not a valid digit: a flipped 2 or 5 stops looking like itself, and flipped 3s and 7s look like nothing a person would write. The label no longer matches the image.",
-          "es": "Un dígito reflejado no es un dígito válido: un 2 o un 5 volteados dejan de parecerse a sí mismos, y un 3 o un 7 volteados no se parecen a nada que alguien escribiría. La etiqueta ya no corresponde a la imagen."
+          "en": "Most mirrored digits are not valid digits: a flipped 2 or 5 stops looking like itself, and flipped 3s and 7s look like nothing a person would write. Only near-symmetric ones such as 0, 1 and 8 survive, so for most images the label no longer matches.",
+          "es": "La mayoría de los dígitos reflejados no son dígitos válidos: un 2 o un 5 volteados dejan de parecerse a sí mismos, y un 3 o un 7 volteados no se parecen a nada que alguien escribiría. Solo los casi simétricos, como el 0, el 1 y el 8, se salvan, así que en la mayoría de las imágenes la etiqueta ya no corresponde."
         }
       },
       {
@@ -404,8 +404,8 @@
         "id": "d",
         "text": { "en": "Random changes in stroke thickness.", "es": "Cambios aleatorios en el grosor del trazo." },
         "rationale": {
-          "en": "Pens and writers vary in thickness, so this variation is realistic.",
-          "es": "Los lápices y las personas varían en grosor, así que esta variación es realista."
+          "en": "Stroke thickness varies with the pen and the writer, so this variation is realistic.",
+          "es": "El grosor del trazo varía según el lápiz y la persona, así que esta variación es realista."
         }
       }
     ],
@@ -447,11 +447,11 @@
         "id": "a",
         "text": {
           "en": "It finds most objects, but its boxes are loose, so they fail the stricter thresholds.",
-          "es": "Encuentra casi todos los objetos, pero con cajas poco ajustadas que fallan los umbrales estrictos."
+          "es": "Encuentra la mayoría de los objetos, pero con cajas holgadas que fallan los umbrales estrictos."
         },
         "rationale": {
-          "en": "At an IoU of 0.5 a roughly placed box counts as a hit; at 0.75 or 0.9 it must fit closely. A big drop means the detections are right in class and location but imprecise in extent.",
-          "es": "Con IoU de 0,5 una caja ubicada a grandes rasgos cuenta como acierto; con 0,75 o 0,9 tiene que calzar bien. Una caída grande significa que las detecciones aciertan en clase y ubicación, pero son imprecisas en su extensión."
+          "en": "At an IoU of 0.5 a roughly placed box counts as a hit; at 0.75 or 0.9 it must fit closely. A big drop means the detections have the right class and roughly the right place, but imprecise boxes.",
+          "es": "Con IoU de 0,5 una caja ubicada a grandes rasgos cuenta como acierto; con 0,75 o 0,9 tiene que ajustarse bien. Una caída grande significa que las detecciones aciertan en la clase y en la ubicación aproximada, pero con cajas imprecisas."
         }
       },
       {
@@ -473,14 +473,14 @@
         },
         "rationale": {
           "en": "Class confusion also hurts every threshold alike; a stricter IoU only changes how closely a box must fit.",
-          "es": "La confusión de clases también perjudica a todos los umbrales por igual; un IoU más estricto solo cambia qué tan bien debe calzar una caja."
+          "es": "La confusión de clases también perjudica a todos los umbrales por igual; un IoU más estricto solo cambia qué tan bien debe ajustarse una caja."
         }
       },
       {
         "id": "d",
         "text": {
-          "en": "It is overfitting, since both metrics should match for a well-trained model.",
-          "es": "Está sobreajustado, porque en un modelo bien entrenado ambas métricas deberían coincidir."
+          "en": "It is overfitting, since both metrics should give the same number for a well-trained detector.",
+          "es": "Está sobreajustado, porque en un detector bien entrenado ambas métricas deberían dar el mismo número."
         },
         "rationale": {
           "en": "The averaged metric is lower than the one at 0.5 for any model, since it includes harder thresholds; the gap itself says nothing about overfitting.",
@@ -551,8 +551,8 @@
       {
         "id": "c",
         "text": {
-          "en": "It fine-tunes a small classification head on a few examples of each new class.",
-          "es": "Ajusta una pequeña capa de clasificación con algunos ejemplos de cada clase nueva."
+          "en": "It fine-tunes a small classification head on a few labeled examples of each new class it must recognize.",
+          "es": "Ajusta una pequeña capa de clasificación con algunos ejemplos etiquetados de cada clase nueva que debe reconocer."
         },
         "rationale": {
           "en": "That is few-shot linear probing, which needs labeled examples; zero-shot uses only the class names.",
