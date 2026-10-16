@@ -1,0 +1,10 @@
+// Cloudflare Workers: publishes the site/ folder as static assets.
+// Workers Builds runs `npx wrangler deploy` on every push to main.
+// The name must match the Worker's name in the Cloudflare dashboard.
+{
+  "name": "ai-ml-questions",
+  "compatibility_date": "2025-09-01",
+  "assets": {
+    "directory": "./site"
+  }
+}

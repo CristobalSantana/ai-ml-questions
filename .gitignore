@@ -2,3 +2,5 @@ __pycache__/
 *.pyc
 .og-template.html
 .DS_Store
+.wrangler/
+node_modules/

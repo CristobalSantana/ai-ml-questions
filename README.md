@@ -397,17 +397,13 @@ python scripts/make_assets.py                 # íconos y og-image.png (pip inst
 
 El service worker solo funciona en `localhost` o con HTTPS.
 
-### Publicar en Cloudflare Pages
+### Publicar en Cloudflare
 
-El repositorio es [CristobalSantana/ai-ml-questions](https://github.com/CristobalSantana/ai-ml-questions). `site/` se publica tal cual, sin paso de compilación, porque `site/data` ya viene generado en el repositorio.
+El repositorio es [CristobalSantana/ai-ml-questions](https://github.com/CristobalSantana/ai-ml-questions). El sitio se publica como un Worker de Cloudflare llamado `ai-ml-questions`, conectado al repositorio con Workers Builds. [`wrangler.jsonc`](wrangler.jsonc) le dice que publique la carpeta `site/` tal cual, como archivos estáticos, sin paso de compilación, porque `site/data` ya viene generado en el repositorio.
 
-1. En el panel de Cloudflare: **Workers & Pages** → **Create application** → **Pages** → **Connect to Git**.
-2. Elige **GitHub**, autoriza y selecciona `CristobalSantana/ai-ml-questions` → **Begin setup**.
-3. Nombre del proyecto: `ai-ml-questions` (la dirección queda en `ai-ml-questions.pages.dev`). Rama de producción: `main`.
-4. Build command: vacío. Build output directory: `site`.
-5. **Save and Deploy**.
-
-Desde ahí, cada push a `main` publica el sitio solo. Si la dirección que da Cloudflare es otra (porque el nombre estaba tomado) o se agrega un dominio propio en **Custom domains**, hay que actualizar `CONFIG.siteUrl` en `site/app.js` y las etiquetas `og:url` y `og:image` en `site/index.html`, porque LinkedIn necesita URLs absolutas.
+- Cada push a `main` vuelve a publicar el sitio solo; el estado de cada publicación se ve en el panel de Cloudflare, en el Worker, pestaña **Deployments** o **Builds**.
+- El `name` de `wrangler.jsonc` debe coincidir con el nombre del Worker en el panel.
+- La dirección pública tiene la forma `ai-ml-questions.<subdominio de la cuenta>.workers.dev`. Si cambia, o si se agrega un dominio propio en **Domains & Routes**, hay que actualizar `CONFIG.siteUrl` en `site/app.js` y las etiquetas `og:url` y `og:image` en `site/index.html`, porque LinkedIn necesita URLs absolutas.
 
 Antes de cada push que cambie preguntas o el sitio, regenera `site/data` y la versión del service worker. Mientras las preguntas sigan como borradores (`llm_draft`), el sitio se publica con `python scripts/build_site.py --include-drafts`; cuando estén revisadas, sin esa opción.
 
@@ -433,6 +429,7 @@ Strange Machines y ml-toy-experiments están en inglés, lo que favorece al ingl
 ```
 README.md                    esta especificación
 LICENSE, LICENSE-QUESTIONS   licencias del código (MIT) y de las preguntas (CC BY-SA 4.0)
+wrangler.jsonc               configuración del Worker de Cloudflare que publica site/
 taxonomy.json                8 contenidos, 17 áreas y 203 subtemas, en inglés y español
 schema/question.schema.json  el formato de una pregunta (JSON Schema 2020-12)
 questions/<área>.json        las preguntas, un archivo por área
