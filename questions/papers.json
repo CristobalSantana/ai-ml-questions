@@ -1,0 +1,63 @@
+[
+  {
+    "id": "papers-0001",
+    "version": 2,
+    "area": "papers",
+    "subtopic": "transformer-2017",
+    "level": "easy",
+    "bloom": "remember",
+    "type": "concept",
+    "format": "single",
+    "stability": "stable",
+    "difficulty": { "steps": 0, "specialization": 0, "distractors": 1 },
+    "prompt": {
+      "en": "Compared with the sequence-to-sequence models of its time, what did the Transformer in 'Attention Is All You Need' remove?",
+      "es": "Respecto de los modelos seq2seq de su época, ¿qué eliminó el Transformer de 'Attention Is All You Need'?"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": { "en": "Recurrence and convolutions", "es": "La recurrencia y las convoluciones" },
+        "rationale": {
+          "en": "Without recurrence, all positions are processed in parallel during training, which made it much faster to train.",
+          "es": "Sin recurrencia, todas las posiciones se procesan en paralelo durante el entrenamiento, lo que lo hizo mucho más rápido de entrenar."
+        }
+      },
+      {
+        "id": "b",
+        "text": { "en": "The encoder-decoder structure", "es": "La estructura encoder-decoder" },
+        "rationale": {
+          "en": "The original Transformer is an encoder-decoder built for translation. Encoder-only (BERT) and decoder-only (GPT) variants came later.",
+          "es": "El Transformer original es un encoder-decoder pensado para traducción. Las variantes solo-encoder (BERT) y solo-decoder (GPT) vinieron después."
+        }
+      },
+      {
+        "id": "c",
+        "text": { "en": "The softmax output layer", "es": "La capa de salida softmax" },
+        "rationale": {
+          "en": "The Transformer uses softmax inside attention and in its output layer.",
+          "es": "El Transformer usa softmax dentro de la atención y en la capa de salida."
+        }
+      },
+      {
+        "id": "d",
+        "text": { "en": "Learned token embeddings", "es": "Los embeddings de tokens aprendidos" },
+        "rationale": {
+          "en": "Tokens still enter as learned embeddings, with a positional encoding added to them.",
+          "es": "Los tokens siguen entrando como embeddings aprendidos, a los que se suma una codificación posicional."
+        }
+      }
+    ],
+    "answer": ["a"],
+    "explanation": {
+      "en": "Vaswani et al. (2017) proposed an encoder-decoder built on multi-head scaled dot-product attention, plus sinusoidal positional encodings, because without recurrence the model does not know the order of the tokens. It beat the state of the art in WMT 2014 translation at a fraction of the earlier models' training cost, and became the basis of today's LLMs.",
+      "es": "Vaswani et al. (2017) propusieron una arquitectura encoder-decoder basada en scaled dot-product attention con múltiples cabezas, más codificaciones posicionales sinusoidales, porque sin recurrencia el modelo no conoce el orden de los tokens. Superó el estado del arte en traducción de WMT 2014 con una fracción del costo de entrenamiento de los modelos anteriores, y se convirtió en la base de los LLMs actuales."
+    },
+    "sources": [
+      { "kind": "paper", "title": "Attention Is All You Need", "authors": "Ashish Vaswani et al.", "year": 2017, "url": "https://arxiv.org/abs/1706.03762" }
+    ],
+    "tags": ["transformer", "attention", "encoder-decoder"],
+    "origin": "llm_draft",
+    "reviewed_at": "2026-10-15"
+  }
+]

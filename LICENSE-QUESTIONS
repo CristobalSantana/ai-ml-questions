@@ -1,0 +1,17 @@
+Questions and explanations: CC BY-SA 4.0
+
+The questions, options, explanations and taxonomy in this repository
+(questions/, taxonomy.json and their generated copies in site/data/)
+are by Cristobal Santana and are licensed under the Creative Commons
+Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0).
+
+You may share and adapt them, including commercially, as long as you
+give appropriate credit, link to the license, indicate if changes were
+made, and distribute your contributions under the same license.
+
+Full license text: https://creativecommons.org/licenses/by-sa/4.0/legalcode
+Summary: https://creativecommons.org/licenses/by-sa/4.0/
+
+The code (site/, scripts/) is under the MIT License (see LICENSE).
+The fonts in site/fonts/ are under the SIL Open Font License 1.1
+(see the OFL-*.txt files there).

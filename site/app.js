@@ -1,0 +1,920 @@
+"use strict";
+
+/* Fill these in before publishing the site. */
+const CONFIG = {
+  siteUrl: "https://ai-ml-questions.pages.dev/", // site domain, with a trailing slash
+  kofiUrl: "https://ko-fi.com/strangemachines", // your Ko-fi page
+  // Template for reporting mistakes; {title} and {body} are replaced. Empty hides the link.
+  reportUrl: "https://github.com/CristobalSantana/ai-ml-questions/issues/new?title={title}&body={body}",
+  ogTitle: "How much do you know about AI and machine learning?", // same as og:title in index.html
+  languages: ["en", "es"],
+  defaultLanguage: "en",
+  counts: [10, 25, 50, 100, 200],
+};
+
+const LEVELS = ["easy", "medium", "hard"];
+const LETTERS = "ABCDE";
+const EMOJI = { easy: "🟢", medium: "🟡", hard: "🔴" };
+const KEY = { lang: "aiml:lang", prefs: "aiml:prefs", quiz: "aiml:quiz", seen: "aiml:seen" };
+const SEEN_LIMIT = 3000;
+
+/* Interface text. Each language has the same keys; translating the site means editing this object. */
+const STRINGS = {
+  en: {
+    siteName: "AI/ML Questions",
+    home: "Home",
+    alpha: "alpha",
+    language: "Language",
+    loading: "Loading questions…",
+    loadError: "The questions could not be loaded. Check your connection and reload the page.",
+    headline: "How much do you know about AI and machine learning?",
+    purpose:
+      "The main goal is to learn AI and ML concepts, from the basics to niche topics. Every option explains why it is right or wrong. Free, no sign-up.",
+    difficulty: "Difficulty",
+    topics: "Topics",
+    all: "All",
+    none: "None",
+    count: "Questions",
+    mode: "Mode",
+    study: "Study",
+    studyHint: "See the explanation after each question.",
+    exam: "Exam",
+    examHint: "See your score and the explanations at the end.",
+    start: "Start",
+    continue: "Continue",
+    discard: "Discard",
+    quit: "Quit",
+    keys: "Shortcuts: 1–4 to choose, Enter to continue",
+    next: "Next",
+    finish: "See results",
+    kofiFoot: "☕ Support on Ko-fi",
+    level: { easy: "Easy", medium: "Medium", hard: "Hard" },
+    kind: { paper: "Paper", book: "Book", docs: "Docs", post: "Post", experiment: "Experiment", article: "Article" },
+    bankSize: (n, t) => `${n} ${n === 1 ? "question" : "questions"} · ${t} ${t === 1 ? "topic" : "topics"}`,
+    available: (n) => (n ? `${n} available with these filters` : "No questions match these filters"),
+    allCount: (n) => `All (${n})`,
+    notEnough: (n) => `Only ${n} match these filters`,
+    resume: (i, n) => `You have a quiz in progress: question ${i} of ${n}.`,
+    progress: (i, n) => `${i} of ${n}`,
+    levelTitle: "Estimated difficulty",
+    correct: "Correct.",
+    wrong: (letter) => `Incorrect. The correct answer is ${letter}.`,
+    explanation: "Explanation",
+    sources: "Sources",
+    reviewed: (date) => `Reviewed in ${date}`,
+    report: "Report a mistake",
+    reportTitle: (id) => `Mistake in ${id}`,
+    reportBody: (prompt) => `Question: ${prompt}\n\nWhat is wrong:\n`,
+    srCorrect: " (correct answer)",
+    srChosen: " (your answer)",
+    srRight: "Correct. ",
+    srWrong: "Incorrect. ",
+    yourAnswer: "Your answer",
+    rightAnswer: "Correct answer",
+    resultsTitle: "Result",
+    pct: (p) => `${p}% correct`,
+    byLevel: "By difficulty",
+    byTopic: (n) => `By topic, from lowest to highest score (${n})`,
+    share: "Share",
+    shareLabel: "Text to share",
+    shareLinkedIn: "Share on LinkedIn",
+    copy: "Copy text",
+    nativeShare: "Share…",
+    shareHint: "LinkedIn only accepts the link, so the button copies the text for you to paste into your post.",
+    copied: "Text copied. Paste it into your post.",
+    copyFailed: "Couldn't copy. Select the text and copy it by hand.",
+    shareScore: (n, k, pct) =>
+      `I answered ${n} AI and machine learning ${n === 1 ? "question" : "questions"} and got ${k} right (${pct}%).`,
+    shareTopics: (best, worst) => `Best topic: ${best}. Hardest for me: ${worst}.`,
+    shareCta: (url) => `How many can you get? ${url}`,
+    supportText: "Did it help? The site is free and runs on voluntary support.",
+    supportCta: "☕ Buy me a coffee on Ko-fi",
+    reviewWrong: (n) => `Review mistakes (${n})`,
+    reviewAll: "Review answers",
+    noErrors: "No mistakes. Try a harder level.",
+    again: "New quiz",
+    retryWrong: "Retry the mistakes",
+  },
+  es: {
+    siteName: "Preguntas IA/ML",
+    home: "Inicio",
+    alpha: "alfa",
+    language: "Idioma",
+    loading: "Cargando preguntas…",
+    loadError: "No se pudieron cargar las preguntas. Revisa la conexión y recarga la página.",
+    headline: "¿Cuánto sabes sobre inteligencia artificial y machine learning?",
+    purpose:
+      "El objetivo principal es aprender conceptos de IA y ML, de lo básico a lo de nicho. Cada alternativa explica por qué es correcta o no. Gratis y sin registro.",
+    difficulty: "Dificultad",
+    topics: "Contenidos",
+    all: "Todos",
+    none: "Ninguno",
+    count: "Preguntas",
+    mode: "Modo",
+    study: "Estudio",
+    studyHint: "Ves la explicación después de cada pregunta.",
+    exam: "Examen",
+    examHint: "Ves el resultado y las explicaciones al final.",
+    start: "Empezar",
+    continue: "Continuar",
+    discard: "Descartar",
+    quit: "Salir",
+    keys: "Atajos: 1–4 para elegir, Enter para seguir",
+    next: "Siguiente",
+    finish: "Ver resultado",
+    kofiFoot: "☕ Apoyar en Ko-fi",
+    level: { easy: "Fácil", medium: "Medio", hard: "Difícil" },
+    kind: { paper: "Paper", book: "Libro", docs: "Docs", post: "Post", experiment: "Experimento", article: "Artículo" },
+    bankSize: (n, t) => `${n} ${n === 1 ? "pregunta" : "preguntas"} · ${t} ${t === 1 ? "contenido" : "contenidos"}`,
+    available: (n) =>
+      n ? `${n} ${n === 1 ? "disponible" : "disponibles"} con estos filtros` : "No hay preguntas con estos filtros",
+    allCount: (n) => `Todas (${n})`,
+    notEnough: (n) => `Solo hay ${n} con estos filtros`,
+    resume: (i, n) => `Tienes un quiz a medias: vas en la pregunta ${i} de ${n}.`,
+    progress: (i, n) => `${i} de ${n}`,
+    levelTitle: "Dificultad estimada",
+    correct: "Correcto.",
+    wrong: (letter) => `Incorrecto. La respuesta correcta es la ${letter}.`,
+    explanation: "Explicación",
+    sources: "Fuentes",
+    reviewed: (date) => `Revisada en ${date}`,
+    report: "Reportar un error",
+    reportTitle: (id) => `Error en ${id}`,
+    reportBody: (prompt) => `Pregunta: ${prompt}\n\nQué está mal:\n`,
+    srCorrect: " (respuesta correcta)",
+    srChosen: " (tu respuesta)",
+    srRight: "Correcta. ",
+    srWrong: "Incorrecta. ",
+    yourAnswer: "Tu respuesta",
+    rightAnswer: "Respuesta correcta",
+    resultsTitle: "Resultado",
+    pct: (p) => `${p}% de aciertos`,
+    byLevel: "Por dificultad",
+    byTopic: (n) => `Por contenido, de menor a mayor acierto (${n})`,
+    share: "Compartir",
+    shareLabel: "Texto para compartir",
+    shareLinkedIn: "Compartir en LinkedIn",
+    copy: "Copiar texto",
+    nativeShare: "Compartir…",
+    shareHint: "LinkedIn solo recibe el enlace, así que el botón copia el texto para que lo pegues en tu publicación.",
+    copied: "Texto copiado. Pégalo en tu publicación.",
+    copyFailed: "No se pudo copiar. Selecciona el texto y cópialo a mano.",
+    shareScore: (n, k, pct) =>
+      `${n === 1 ? "Respondí 1 pregunta" : `Respondí ${n} preguntas`} de IA y machine learning y acerté ${k} (${pct}%).`,
+    shareTopics: (best, worst) => `Lo que mejor me fue: ${best}. Lo que más me costó: ${worst}.`,
+    shareCta: (url) => `¿Cuánto sacas tú? ${url}`,
+    supportText: "¿Te sirvió? El sitio es gratis y se mantiene con aportes voluntarios.",
+    supportCta: "☕ Invítame un café en Ko-fi",
+    reviewWrong: (n) => `Repasar errores (${n})`,
+    reviewAll: "Revisar respuestas",
+    noErrors: "Sin errores. Prueba con un nivel más difícil.",
+    again: "Otro quiz",
+    retryWrong: "Repetir los errores",
+  },
+};
+
+let lang = CONFIG.defaultLanguage;
+let T = STRINGS[lang];
+
+/* Helpers */
+const $ = (selector) => document.querySelector(selector);
+const tx = (obj) => (obj ? obj[lang] ?? obj.en ?? Object.values(obj)[0] ?? "" : "");
+const esc = (value) =>
+  String(value).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+const rich = (value) => esc(value).replace(/`([^`]+)`/g, "<code>$1</code>");
+const areaOf = (id) => id.replace(/-\d{4}$/, "");
+
+function shuffle(list) {
+  const out = [...list];
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+
+function formatMonth(isoDate) {
+  const [year, month] = isoDate.split("-").map(Number);
+  return new Date(year, month - 1, 1).toLocaleDateString(lang, { month: "long", year: "numeric" });
+}
+
+const optionOrder = (q) => (q.keep_order ? q.options.map((o) => o.id) : shuffle(q.options.map((o) => o.id)));
+const shareUrl = () => CONFIG.siteUrl + (lang === CONFIG.defaultLanguage ? "" : `#${lang}`);
+
+/* Local storage can be missing (private window, preview), so every access fails quietly. */
+const store = {
+  get(key, fallback) {
+    try {
+      const raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : fallback;
+    } catch {
+      return fallback;
+    }
+  },
+  set(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch {
+      /* without storage, the quiz lives in memory */
+    }
+  },
+  remove(key) {
+    try {
+      localStorage.removeItem(key);
+    } catch {
+      /* nothing to remove */
+    }
+  },
+};
+
+/* Data */
+const bank = {
+  groups: [], // topics with questions, in taxonomy order
+  groupById: new Map(),
+  groupOf: new Map(), // area -> topic id
+  subtopicName: new Map(),
+  counts: {},
+  total: 0,
+  questions: new Map(),
+  loaded: new Set(),
+};
+
+async function getJSON(path) {
+  const res = await fetch(path);
+  if (!res.ok) throw new Error(`${path}: ${res.status}`);
+  return res.json();
+}
+
+async function loadMeta() {
+  const [taxonomy, index] = await Promise.all([getJSON("data/taxonomy.json"), getJSON("data/index.json")]);
+  bank.counts = index.counts;
+  bank.total = index.total;
+  for (const area of taxonomy.areas) {
+    for (const sub of area.subtopics) bank.subtopicName.set(`${area.id}/${sub.id}`, sub.name);
+  }
+  for (const group of taxonomy.groups) {
+    const areas = group.areas.filter((a) => bank.counts[a]);
+    for (const area of group.areas) bank.groupOf.set(area, group.id);
+    if (!areas.length) continue;
+    const topic = { ...group, areas };
+    bank.groups.push(topic);
+    bank.groupById.set(group.id, topic);
+  }
+}
+
+async function loadAreas(ids) {
+  const missing = ids.filter((id) => !bank.loaded.has(id) && bank.counts[id]);
+  const lists = await Promise.all(missing.map((id) => getJSON(`data/questions/${id}.json`)));
+  lists.forEach((list, i) => {
+    for (const q of list) bank.questions.set(q.id, q);
+    bank.loaded.add(missing[i]);
+  });
+}
+
+/* Start-screen preferences */
+const prefs = { levels: [...LEVELS], groups: null, count: CONFIG.counts[0], mode: "study" };
+
+function loadPrefs() {
+  const saved = store.get(KEY.prefs, {});
+  if (Array.isArray(saved.levels)) prefs.levels = LEVELS.filter((l) => saved.levels.includes(l));
+  if (Array.isArray(saved.groups)) {
+    const ids = saved.groups.filter((id) => bank.groupById.has(id));
+    prefs.groups = ids.length === bank.groups.length ? null : ids;
+  }
+  if (CONFIG.counts.includes(saved.count)) prefs.count = saved.count;
+  if (saved.mode === "study" || saved.mode === "exam") prefs.mode = saved.mode;
+}
+
+const savePrefs = () => store.set(KEY.prefs, prefs);
+const selectedGroups = () => prefs.groups ?? bank.groups.map((g) => g.id);
+const areasOf = (groupIds) => groupIds.flatMap((id) => bank.groupById.get(id)?.areas ?? []);
+
+function countFor(groupIds, levels) {
+  let n = 0;
+  for (const area of areasOf(groupIds)) for (const level of levels) n += bank.counts[area]?.[level] ?? 0;
+  return n;
+}
+
+function countOptions(available) {
+  const options = CONFIG.counts.map((n) => ({ n, value: String(n), label: String(n), disabled: n > available }));
+  const max = CONFIG.counts.at(-1);
+  if (available > 0 && available < max && !CONFIG.counts.includes(available)) {
+    options.push({ n: available, value: "max", label: T.allCount(available), disabled: false });
+  }
+  return options.sort((a, b) => a.n - b.n);
+}
+
+function renderSetup() {
+  const groups = selectedGroups();
+  $("#levels").innerHTML = LEVELS.map((level) => {
+    const on = prefs.levels.includes(level);
+    return `<button type="button" class="chip" data-level="${level}" aria-pressed="${on}">
+      <span class="dot ${level}" aria-hidden="true"></span>${T.level[level]}
+      <span class="count">${countFor(groups, [level])}</span></button>`;
+  }).join("");
+
+  $("#topics").innerHTML = bank.groups
+    .map((group) => {
+      const on = groups.includes(group.id);
+      return `<button type="button" class="chip" data-group="${group.id}" aria-pressed="${on}">
+      <span class="tick" aria-hidden="true"></span>${esc(tx(group.name))}<span class="count">${countFor([group.id], prefs.levels)}</span></button>`;
+    })
+    .join("");
+
+  const available = countFor(groups, prefs.levels);
+  const effective = Math.min(prefs.count, available);
+  $("#counts").innerHTML = countOptions(available)
+    .map((o) => {
+      const pressed = !o.disabled && o.n === effective;
+      const extra = o.disabled ? ` disabled title="${esc(T.notEnough(available))}"` : "";
+      return `<button type="button" class="count-opt" data-count="${o.value}" aria-pressed="${pressed}"${extra}>${o.label}</button>`;
+    })
+    .join("");
+
+  $("#available").textContent = T.available(available);
+  $("#start").disabled = available === 0;
+  $(`#mode-${prefs.mode}`).checked = true;
+  renderResume();
+}
+
+function refocus(selector) {
+  const el = $(selector);
+  if (el && !el.disabled) el.focus();
+}
+
+/* Quiz */
+let quiz = null; // { v, mode, index, items: [{ id, order, choice }] }
+let lastResult = null;
+
+const saveQuiz = () => quiz && store.set(KEY.quiz, quiz);
+
+function markSeen(id) {
+  const seen = store.get(KEY.seen, {});
+  seen[id] = Date.now();
+  let entries = Object.entries(seen);
+  if (entries.length > SEEN_LIMIT) entries = entries.sort((a, b) => b[1] - a[1]).slice(0, SEEN_LIMIT);
+  store.set(KEY.seen, Object.fromEntries(entries));
+}
+
+/* Spreads the quiz across topic and level, preferring questions not seen recently. */
+function stratifiedSample(pool, n, seen) {
+  const groups = new Map();
+  for (const q of shuffle(pool)) {
+    // Por área y no por contenido: así reagrupar contenidos no cambia qué preguntas salen.
+    const key = `${q.area}|${q.level}`;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(q);
+  }
+  for (const list of groups.values()) list.sort((a, b) => (seen[a.id] ?? 0) - (seen[b.id] ?? 0));
+  const queues = shuffle([...groups.values()]);
+  const out = [];
+  while (out.length < n && queues.length) {
+    for (let i = 0; i < queues.length && out.length < n; ) {
+      out.push(queues[i].shift());
+      if (queues[i].length) i++;
+      else queues.splice(i, 1);
+    }
+  }
+  return shuffle(out);
+}
+
+async function startQuiz({ ids = null, mode = prefs.mode } = {}) {
+  const areas = ids ? [...new Set(ids.map(areaOf))] : areasOf(selectedGroups());
+  await loadAreas(areas);
+  let picked;
+  if (ids) {
+    picked = shuffle(ids.map((id) => bank.questions.get(id)).filter(Boolean));
+  } else {
+    const pool = [...bank.questions.values()].filter((q) => areas.includes(q.area) && prefs.levels.includes(q.level));
+    picked = stratifiedSample(pool, Math.min(prefs.count, pool.length), store.get(KEY.seen, {}));
+  }
+  if (!picked.length) return;
+  quiz = { v: 2, mode, index: 0, items: picked.map((q) => ({ id: q.id, order: optionOrder(q), choice: null })) };
+  saveQuiz();
+  showScreen("quiz");
+  renderQuestion(true);
+  window.scrollTo(0, 0);
+}
+
+function sourceHTML(source) {
+  let label = esc(source.title);
+  if (source.authors) label += ` · ${esc(source.authors)}`;
+  if (source.year) label += `, ${source.year}`;
+  const body = source.url ? `<a href="${esc(source.url)}" target="_blank" rel="noopener">${label}</a>` : label;
+  return `<li><span class="kind">${esc(T.kind[source.kind] ?? source.kind)}</span>${body}</li>`;
+}
+
+function reportLink(q) {
+  if (!CONFIG.reportUrl) return "";
+  const url = CONFIG.reportUrl
+    .replace("{title}", encodeURIComponent(T.reportTitle(q.id)))
+    .replace("{body}", encodeURIComponent(T.reportBody(tx(q.prompt))));
+  return `<a href="${esc(url)}" target="_blank" rel="noopener">${T.report}</a>`;
+}
+
+function verdictText(q, item) {
+  if (q.answer.includes(item.choice)) return T.correct;
+  return T.wrong(LETTERS[item.order.indexOf(q.answer[0])]);
+}
+
+function feedbackHTML(q, item) {
+  const ok = q.answer.includes(item.choice);
+  const foot = [`<span>${q.id}</span>`];
+  if (q.stability === "volatile") foot.push(`<span>${T.reviewed(formatMonth(q.reviewed_at))}</span>`);
+  const report = reportLink(q);
+  if (report) foot.push(report);
+  return `<section class="feedback">
+      <p class="verdict ${ok ? "ok" : "bad"}">${verdictText(q, item)}</p>
+      <div class="block"><h3 class="label">${T.explanation}</h3><p>${rich(tx(q.explanation))}</p></div>
+      <div class="block"><h3 class="label">${T.sources}</h3><ul class="sources">${q.sources.map(sourceHTML).join("")}</ul></div>
+      <div class="q-foot">${foot.join("")}</div>
+    </section>`;
+}
+
+function renderQuestion(focusPrompt) {
+  const item = quiz.items[quiz.index];
+  const q = bank.questions.get(item.id);
+  const total = quiz.items.length;
+  const answered = item.choice !== null;
+  const reveal = answered && quiz.mode === "study";
+
+  $("#progress-label").textContent = T.progress(quiz.index + 1, total);
+  $("#progress-bar").style.width = `${((quiz.index + (answered ? 1 : 0)) / total) * 100}%`;
+
+  const options = item.order
+    .map((oid, i) => {
+      const option = q.options.find((o) => o.id === oid);
+      const chosen = item.choice === oid;
+      const right = q.answer.includes(oid);
+      const classes = ["option"];
+      if (reveal && right) classes.push("is-correct");
+      if (reveal && chosen && !right) classes.push("is-wrong");
+      const mark = reveal && right ? "✓" : reveal && chosen ? "✗" : LETTERS[i];
+      const sr = reveal ? (right ? T.srCorrect : chosen ? T.srChosen : "") : "";
+      return `<li>
+        <button type="button" class="${classes.join(" ")}" data-oid="${oid}" aria-pressed="${chosen}"${reveal ? " disabled" : ""}>
+          <span class="bubble" aria-hidden="true">${mark}</span>
+          <span class="option-text"><span class="visually-hidden">${LETTERS[i]}. </span>${rich(tx(option.text))}<span class="visually-hidden">${sr}</span></span>
+        </button>
+        ${reveal ? `<p class="rationale">${rich(tx(option.rationale))}</p>` : ""}
+      </li>`;
+    })
+    .join("");
+
+  const topic = bank.groupById.get(bank.groupOf.get(q.area));
+  const subtopic = bank.subtopicName.get(`${q.area}/${q.subtopic}`);
+  $("#question").innerHTML = `
+    <div class="q-meta">
+      <span class="level-tag" title="${T.levelTitle}"><span class="dot ${q.level}" aria-hidden="true"></span>${T.level[q.level]}</span>
+      <span class="q-topic">${esc(tx(topic?.name))} · ${esc(tx(subtopic))}</span>
+    </div>
+    <h2 class="q-prompt" id="q-prompt" tabindex="-1">${rich(tx(q.prompt))}</h2>
+    ${q.code ? `<pre class="q-code"><code>${esc(q.code.source)}</code></pre>` : ""}
+    <ol class="options" aria-labelledby="q-prompt">${options}</ol>
+    ${reveal ? feedbackHTML(q, item) : ""}`;
+
+  const next = $("#next");
+  next.disabled = !answered;
+  next.textContent = quiz.index === total - 1 ? T.finish : T.next;
+  if (focusPrompt) $("#q-prompt").focus({ preventScroll: true });
+}
+
+function choose(oid) {
+  const item = quiz.items[quiz.index];
+  if (quiz.mode === "study" && item.choice !== null) return;
+  item.choice = oid;
+  markSeen(item.id);
+  saveQuiz();
+  renderQuestion(false);
+  if (quiz.mode === "study") announce(verdictText(bank.questions.get(item.id), item));
+  $("#next").focus({ preventScroll: true });
+}
+
+function goNext() {
+  const item = quiz.items[quiz.index];
+  if (item.choice === null) return;
+  if (quiz.index < quiz.items.length - 1) {
+    quiz.index++;
+    saveQuiz();
+    renderQuestion(true);
+    window.scrollTo(0, 0);
+  } else {
+    finish();
+  }
+}
+
+function resumable() {
+  const saved = quiz ?? store.get(KEY.quiz, null);
+  const ok = saved && saved.v === 2 && Array.isArray(saved.items) && saved.items.length > 0 && saved.index < saved.items.length;
+  return ok ? saved : null;
+}
+
+function renderResume() {
+  const saved = resumable();
+  $("#resume").hidden = !saved;
+  if (saved) $("#resume-text").textContent = T.resume(saved.index + 1, saved.items.length);
+}
+
+async function resume() {
+  const saved = resumable();
+  if (!saved) return;
+  await loadAreas([...new Set(saved.items.map((i) => areaOf(i.id)))]);
+  saved.items = saved.items.filter((i) => bank.questions.has(i.id));
+  for (const item of saved.items) {
+    // If the question changed since the quiz was saved, its options are laid out again.
+    const q = bank.questions.get(item.id);
+    const ids = q.options.map((o) => o.id);
+    if (item.order.length !== ids.length || !item.order.every((id) => ids.includes(id))) {
+      item.order = optionOrder(q);
+      item.choice = null;
+    }
+  }
+  if (!saved.items.length) {
+    discardQuiz();
+    return;
+  }
+  saved.index = Math.min(saved.index, saved.items.length - 1);
+  quiz = saved;
+  showScreen("quiz");
+  renderQuestion(true);
+  window.scrollTo(0, 0);
+}
+
+function discardQuiz() {
+  quiz = null;
+  store.remove(KEY.quiz);
+  renderSetup();
+}
+
+/* Results */
+function computeResult(qz) {
+  const byLevel = Object.fromEntries(LEVELS.map((l) => [l, { n: 0, k: 0 }]));
+  const topics = new Map();
+  const rows = [];
+  let correct = 0;
+  for (const item of qz.items) {
+    const q = bank.questions.get(item.id);
+    const ok = q.answer.includes(item.choice);
+    correct += ok ? 1 : 0;
+    byLevel[q.level].n++;
+    byLevel[q.level].k += ok ? 1 : 0;
+    const gid = bank.groupOf.get(q.area);
+    const row = topics.get(gid) ?? { id: gid, n: 0, k: 0 };
+    row.n++;
+    row.k += ok ? 1 : 0;
+    topics.set(gid, row);
+    rows.push({ item, q, ok });
+  }
+  const total = qz.items.length;
+  return { mode: qz.mode, total, correct, pct: Math.round((100 * correct) / total), byLevel, byTopic: [...topics.values()], rows };
+}
+
+const topicName = (id) => tx(bank.groupById.get(id)?.name);
+
+function sortedTopics(res) {
+  return [...res.byTopic].sort(
+    (a, b) => a.k / a.n - b.k / b.n || b.n - a.n || topicName(a.id).localeCompare(topicName(b.id), lang),
+  );
+}
+
+function buildShareText(res) {
+  const lines = [T.shareScore(res.total, res.correct, res.pct)];
+  const levels = LEVELS.filter((l) => res.byLevel[l].n).map(
+    (l) => `${EMOJI[l]} ${T.level[l]} ${res.byLevel[l].k}/${res.byLevel[l].n}`,
+  );
+  if (levels.length) lines.push(levels.join(" · "));
+  const ranked = res.byTopic.filter((t) => t.n >= 2);
+  if (ranked.length >= 2) {
+    const rate = (t) => t.k / t.n;
+    const best = ranked.reduce((b, t) => (rate(t) > rate(b) || (rate(t) === rate(b) && t.n > b.n) ? t : b));
+    const worst = ranked.reduce((w, t) => (rate(t) < rate(w) || (rate(t) === rate(w) && t.n > w.n) ? t : w));
+    if (rate(best) > rate(worst)) lines.push(T.shareTopics(topicName(best.id), topicName(worst.id)));
+  }
+  lines.push(T.shareCta(shareUrl()));
+  return lines.join("\n");
+}
+
+function barRow(name, k, n, cls) {
+  const pct = n ? Math.round((100 * k) / n) : 0;
+  return `<div class="bar-row">
+      <span class="name">${name}</span>
+      <span class="bar ${cls}" aria-hidden="true"><span style="width:${pct}%"></span></span>
+      <span class="val">${k}/${n}</span>
+    </div>`;
+}
+
+function reviewItem({ item, q, ok }) {
+  const letter = (oid) => LETTERS[item.order.indexOf(oid)];
+  const option = (oid) => q.options.find((o) => o.id === oid);
+  const chosen = option(item.choice);
+  const right = option(q.answer[0]);
+  return `<details>
+      <summary>
+        <span class="mini ${ok ? "ok" : "bad"}" aria-hidden="true">${ok ? "✓" : "✗"}</span>
+        <span><span class="visually-hidden">${ok ? T.srRight : T.srWrong}</span>${rich(tx(q.prompt))}</span>
+      </summary>
+      <div class="body">
+        ${ok ? "" : `<p><b>${T.yourAnswer}:</b> ${letter(chosen.id)}. ${rich(tx(chosen.text))}</p>`}
+        <p><b>${T.rightAnswer}:</b> ${letter(right.id)}. ${rich(tx(right.text))}</p>
+        <p>${rich(tx(q.explanation))}</p>
+        <div class="q-foot">
+          <span class="level-tag"><span class="dot ${q.level}" aria-hidden="true"></span>${T.level[q.level]}</span>
+          <span>${q.id}</span>
+        </div>
+      </div>
+    </details>`;
+}
+
+function renderResults(res) {
+  const wrong = res.rows.filter((r) => !r.ok);
+  const review = res.mode === "exam" ? [...wrong, ...res.rows.filter((r) => r.ok)] : wrong;
+  const levelRows = LEVELS.filter((l) => res.byLevel[l].n)
+    .map((l) => barRow(`<span class="dot ${l}" aria-hidden="true"></span>${T.level[l]}`, res.byLevel[l].k, res.byLevel[l].n, l))
+    .join("");
+  const topics = sortedTopics(res);
+  const topicRows = topics.map((t) => barRow(esc(topicName(t.id)), t.k, t.n, "topic")).join("");
+  const linkedin = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl())}`;
+
+  $("#results").innerHTML = `
+    <div>
+      <h1 class="label" id="results-title" tabindex="-1">${T.resultsTitle}</h1>
+      <p class="score">${res.correct}<small>/ ${res.total}</small></p>
+      <p class="score-sub">${T.pct(res.pct)}</p>
+    </div>
+
+    <section class="panel" aria-labelledby="r-levels">
+      <h2 class="label" id="r-levels">${T.byLevel}</h2>
+      <div class="bars">${levelRows}</div>
+    </section>
+
+    <details class="topics"${topics.length <= 4 ? " open" : ""}>
+      <summary><h2 class="label" id="r-topics">${T.byTopic(topics.length)}</h2></summary>
+      <div class="bars">${topicRows}</div>
+    </details>
+
+    <section class="panel share" aria-labelledby="r-share">
+      <h2 class="label" id="r-share">${T.share}</h2>
+      <label class="visually-hidden" for="share-text">${T.shareLabel}</label>
+      <textarea id="share-text" rows="5" spellcheck="false">${esc(buildShareText(res))}</textarea>
+      <div class="card-preview" aria-hidden="true">
+        <img src="og-image.png" alt="" width="1200" height="627" loading="lazy">
+        <div><span class="domain">${esc(new URL(CONFIG.siteUrl).host)}</span><span class="title">${esc(CONFIG.ogTitle)}</span></div>
+      </div>
+      <div class="actions">
+        <a class="btn primary" id="share-linkedin" href="${esc(linkedin)}" target="_blank" rel="noopener">${T.shareLinkedIn}</a>
+        <button type="button" class="btn" id="share-copy">${T.copy}</button>
+        <button type="button" class="btn" id="share-native" hidden>${T.nativeShare}</button>
+      </div>
+      <p class="hint">${T.shareHint}</p>
+    </section>
+
+    <section class="support" aria-label="Ko-fi">
+      <p>${T.supportText}</p>
+      <a class="btn" href="${esc(CONFIG.kofiUrl)}" target="_blank" rel="noopener">${T.supportCta}</a>
+    </section>
+
+    <section class="panel review" aria-labelledby="r-review">
+      <h2 class="label" id="r-review">${res.mode === "exam" ? T.reviewAll : T.reviewWrong(wrong.length)}</h2>
+      ${review.length ? review.map(reviewItem).join("") : `<p class="hint">${T.noErrors}</p>`}
+    </section>
+
+    <div class="actions">
+      <button type="button" class="btn primary" id="again">${T.again}</button>
+      ${wrong.length ? `<button type="button" class="btn" id="retry-wrong">${T.retryWrong}</button>` : ""}
+    </div>`;
+
+  if (typeof navigator.share === "function") $("#share-native").hidden = false;
+}
+
+function finish() {
+  lastResult = computeResult(quiz);
+  quiz = null;
+  store.remove(KEY.quiz);
+  renderResults(lastResult);
+  showScreen("results");
+  window.scrollTo(0, 0);
+  $("#results-title").focus({ preventScroll: true });
+}
+
+/* Sharing and notices */
+function announce(message) {
+  // Cleared first so a screen reader repeats a message identical to the previous one.
+  const el = $("#announcer");
+  el.textContent = "";
+  requestAnimationFrame(() => {
+    el.textContent = message;
+  });
+}
+
+let toastTimer = 0;
+function toast(message) {
+  const el = $("#toast");
+  el.textContent = message;
+  el.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    el.hidden = true;
+  }, 3500);
+}
+
+async function copyShareText() {
+  const area = $("#share-text");
+  try {
+    await navigator.clipboard.writeText(area.value);
+    toast(T.copied);
+  } catch {
+    area.focus();
+    area.select();
+    toast(T.copyFailed);
+  }
+}
+
+async function nativeShare() {
+  try {
+    await navigator.share({ title: T.siteName, text: $("#share-text").value });
+  } catch (err) {
+    if (err?.name !== "AbortError") copyShareText();
+  }
+}
+
+/* Language */
+function applyStaticText() {
+  document.documentElement.lang = lang;
+  document.title = T.siteName;
+  for (const el of document.querySelectorAll("[data-i18n]")) el.textContent = T[el.dataset.i18n];
+  for (const el of document.querySelectorAll("[data-i18n-aria]")) el.setAttribute("aria-label", T[el.dataset.i18nAria]);
+  for (const button of document.querySelectorAll("[data-lang]")) button.setAttribute("aria-pressed", String(button.dataset.lang === lang));
+  $("#brand").title = T.home;
+  $("#kofi-foot").href = CONFIG.kofiUrl;
+  if (bank.total) $("#bank-size").textContent = T.bankSize(bank.total, bank.groups.length);
+}
+
+function setLanguage(next, { save = true } = {}) {
+  if (!CONFIG.languages.includes(next)) return;
+  lang = next;
+  T = STRINGS[lang];
+  if (save) store.set(KEY.lang, lang);
+  try {
+    if (/^#(en|es)$/.test(location.hash)) history.replaceState(null, "", `#${lang}`);
+  } catch {
+    /* the frame does not allow changing the address */
+  }
+  applyStaticText();
+  if (!$("#screen-setup").hidden) renderSetup();
+  if (!$("#screen-quiz").hidden && quiz) renderQuestion(false);
+  if (!$("#screen-results").hidden && lastResult) renderResults(lastResult);
+}
+
+function initialLanguage() {
+  const fromHash = location.hash.replace("#", "");
+  if (CONFIG.languages.includes(fromHash)) return fromHash;
+  const saved = store.get(KEY.lang, null);
+  return CONFIG.languages.includes(saved) ? saved : CONFIG.defaultLanguage;
+}
+
+/* Screens and events */
+function showScreen(name) {
+  for (const screen of ["setup", "quiz", "results"]) $(`#screen-${screen}`).hidden = screen !== name;
+  $("#status").hidden = true;
+}
+
+function goHome() {
+  saveQuiz();
+  renderSetup();
+  showScreen("setup");
+  window.scrollTo(0, 0);
+}
+
+function wireEvents() {
+  $("#brand").addEventListener("click", (e) => {
+    e.preventDefault();
+    goHome();
+  });
+
+  for (const button of document.querySelectorAll("[data-lang]")) {
+    button.addEventListener("click", () => setLanguage(button.dataset.lang));
+  }
+
+  $("#levels").addEventListener("click", (e) => {
+    const chip = e.target.closest("[data-level]");
+    if (!chip) return;
+    const level = chip.dataset.level;
+    const on = prefs.levels.includes(level);
+    prefs.levels = LEVELS.filter((l) => (l === level ? !on : prefs.levels.includes(l)));
+    savePrefs();
+    renderSetup();
+    refocus(`[data-level="${level}"]`);
+  });
+
+  $("#topics").addEventListener("click", (e) => {
+    const chip = e.target.closest("[data-group]");
+    if (!chip) return;
+    const id = chip.dataset.group;
+    const current = selectedGroups();
+    const next = current.includes(id) ? current.filter((g) => g !== id) : [...current, id];
+    prefs.groups = next.length === bank.groups.length ? null : bank.groups.map((g) => g.id).filter((g) => next.includes(g));
+    savePrefs();
+    renderSetup();
+    refocus(`[data-group="${id}"]`);
+  });
+
+  $("#topics-all").addEventListener("click", () => {
+    prefs.groups = null;
+    savePrefs();
+    renderSetup();
+  });
+
+  $("#topics-none").addEventListener("click", () => {
+    prefs.groups = [];
+    savePrefs();
+    renderSetup();
+  });
+
+  $("#counts").addEventListener("click", (e) => {
+    const option = e.target.closest("[data-count]");
+    if (!option || option.disabled) return;
+    const value = option.dataset.count;
+    prefs.count = value === "max" ? CONFIG.counts.at(-1) : Number(value);
+    savePrefs();
+    renderSetup();
+    refocus(`[data-count="${value}"]`);
+  });
+
+  for (const input of document.querySelectorAll('input[name="mode"]')) {
+    input.addEventListener("change", () => {
+      prefs.mode = input.value;
+      savePrefs();
+    });
+  }
+
+  $("#setup").addEventListener("submit", (e) => {
+    e.preventDefault();
+    startQuiz();
+  });
+
+  $("#resume-go").addEventListener("click", resume);
+  $("#resume-drop").addEventListener("click", discardQuiz);
+
+  $("#question").addEventListener("click", (e) => {
+    const option = e.target.closest(".option");
+    if (option && !option.disabled) choose(option.dataset.oid);
+  });
+
+  $("#next").addEventListener("click", goNext);
+  $("#quit").addEventListener("click", goHome);
+
+  document.addEventListener("keydown", (e) => {
+    if ($("#screen-quiz").hidden || !quiz || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+    const item = quiz.items[quiz.index];
+    const key = e.key.toLowerCase();
+    let i = "12345".indexOf(key);
+    if (i < 0) i = "abcde".indexOf(key);
+    if (key.length === 1 && i >= 0 && i < item.order.length) {
+      e.preventDefault();
+      choose(item.order[i]);
+    } else if (e.key === "Enter" && !(e.target instanceof HTMLButtonElement) && !$("#next").disabled) {
+      e.preventDefault();
+      goNext();
+    }
+  });
+
+  $("#results").addEventListener("click", (e) => {
+    const target = e.target.closest("a, button");
+    if (!target) return;
+    if (target.id === "share-linkedin") copyShareText(); // the link still opens
+    else if (target.id === "share-copy") copyShareText();
+    else if (target.id === "share-native") nativeShare();
+    else if (target.id === "again") goHome();
+    else if (target.id === "retry-wrong" && lastResult) {
+      startQuiz({ ids: lastResult.rows.filter((r) => !r.ok).map((r) => r.q.id), mode: lastResult.mode });
+    }
+  });
+}
+
+function registerServiceWorker() {
+  try {
+    if (!window.isSecureContext || !("serviceWorker" in navigator)) return;
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  } catch {
+    /* this environment does not allow service workers */
+  }
+}
+
+async function boot() {
+  setLanguage(initialLanguage(), { save: false });
+  try {
+    await loadMeta();
+  } catch {
+    $("#status").textContent = T.loadError;
+    return;
+  }
+  loadPrefs();
+  applyStaticText();
+  wireEvents();
+  renderSetup();
+  showScreen("setup");
+  registerServiceWorker();
+}
+
+boot();

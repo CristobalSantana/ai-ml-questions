@@ -1,0 +1,82 @@
+[
+  {
+    "id": "adaptation-0001",
+    "version": 2,
+    "area": "adaptation",
+    "subtopic": "choosing-adaptation",
+    "level": "medium",
+    "bloom": "apply",
+    "type": "scenario",
+    "format": "single",
+    "stability": "slow",
+    "difficulty": { "steps": 1, "specialization": 1, "distractors": 1 },
+    "prompt": {
+      "en": "A company wants its assistant to answer from a 400-page internal manual that changes every week, and to cite where each answer comes from. What is the best first approach?",
+      "es": "Una empresa quiere que su asistente responda a partir de un manual interno de 400 páginas que cambia cada semana, y que cite de dónde saca cada respuesta. ¿Qué conviene como primera solución?"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "Retrieval-augmented generation over the manual, so updates only need reindexing and answers can cite passages.",
+          "es": "Retrieval-augmented generation sobre el manual: actualizarlo es reindexar, y cada respuesta puede citar pasajes."
+        },
+        "rationale": {
+          "en": "Updating the knowledge means reindexing the manual, not retraining, and each answer can point to the passage that supports it.",
+          "es": "Actualizar el conocimiento es reindexar el manual, no reentrenar, y cada respuesta puede apuntar al pasaje que la respalda."
+        }
+      },
+      {
+        "id": "b",
+        "text": {
+          "en": "Fine-tuning on the manual every week, so the model memorizes the content and can quote it when asked.",
+          "es": "Fine-tuning semanal con el manual, para que el modelo memorice el contenido y pueda citarlo cuando se le pida."
+        },
+        "rationale": {
+          "en": "Fine-tuning is good for behavior and format but unreliable for injecting facts that change weekly, and the model cannot point to where a memorized fact came from.",
+          "es": "El fine-tuning sirve para comportamiento y formato, pero no es confiable para inyectar hechos que cambian cada semana, y el modelo no puede indicar de dónde sacó lo que memorizó."
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "A system prompt that summarizes the manual, so every request carries the facts the assistant needs.",
+          "es": "Un system prompt que resuma el manual, para que cada petición lleve los datos que el asistente necesita."
+        },
+        "rationale": {
+          "en": "A summary of 400 pages leaves out most of the details, and it cannot point to the exact passage behind an answer.",
+          "es": "Un resumen de 400 páginas deja fuera la mayoría de los detalles y no puede apuntar al pasaje exacto detrás de una respuesta."
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "A larger model with a more recent training cutoff, so it already knows the latest version of the manual.",
+          "es": "Un modelo más grande con un corte de entrenamiento más reciente, que ya conozca la última versión del manual."
+        },
+        "rationale": {
+          "en": "An internal manual is not in any public training data, so no training cutoff will include it.",
+          "es": "Un manual interno no está en ningún dato de entrenamiento público, así que ningún corte de entrenamiento lo va a incluir."
+        }
+      }
+    ],
+    "answer": ["a"],
+    "explanation": {
+      "en": "RAG pairs a retriever with a generator: the retrieved passages go into the context and the model answers from them, without touching its weights. That makes it the first choice when knowledge changes or must be cited. Fine-tuning wins when what needs to change is behavior (format, tone, a specific task), and the two can be combined.",
+      "es": "RAG combina un recuperador con un generador: los pasajes recuperados entran al contexto y el modelo responde a partir de ellos, sin tocar sus pesos. Por eso es la primera opción cuando el conocimiento cambia o debe citarse. El fine-tuning gana cuando lo que hay que cambiar es el comportamiento (formato, tono, una tarea específica), y las dos técnicas se pueden combinar."
+    },
+    "sources": [
+      {
+        "kind": "paper",
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "authors": "Patrick Lewis et al.",
+        "year": 2020,
+        "url": "https://arxiv.org/abs/2005.11401"
+      }
+    ],
+    "tags": ["rag", "fine-tuning"],
+    "origin": "llm_draft",
+    "reviewed_at": "2026-10-15",
+    "review_by": "2027-10-15"
+  }
+]

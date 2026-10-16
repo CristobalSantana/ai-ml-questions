@@ -1,0 +1,162 @@
+[
+  {
+    "id": "evaluation-0001",
+    "version": 2,
+    "area": "evaluation",
+    "subtopic": "classification-metrics",
+    "level": "medium",
+    "bloom": "apply",
+    "type": "calculation",
+    "format": "single",
+    "stability": "stable",
+    "difficulty": { "steps": 1, "specialization": 0, "distractors": 2 },
+    "prompt": {
+      "en": "A fraud dataset contains 80 real frauds. Your model flags 50 transactions, and 40 of them are fraud. What are its precision and recall?",
+      "es": "En un problema de fraude hay 80 fraudes reales. Tu modelo marca 50 transacciones como fraude y 40 de ellas lo son. ¿Cuáles son su precision y su recall?"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": { "en": "Precision 0.50, recall 0.50", "es": "Precision 0,50 y recall 0,50" },
+        "rationale": {
+          "en": "Only recall is 0.50. Precision divides by the 50 flagged transactions, not by the 80 frauds.",
+          "es": "Solo el recall es 0,50. La precision divide por las 50 transacciones marcadas, no por los 80 fraudes."
+        }
+      },
+      {
+        "id": "b",
+        "text": { "en": "Precision 0.50, recall 0.80", "es": "Precision 0,50 y recall 0,80" },
+        "rationale": {
+          "en": "This swaps the definitions: precision looks at what the model flagged, recall at what actually exists.",
+          "es": "Invierte las definiciones: la precision mira lo que el modelo marcó; el recall, lo que existía."
+        }
+      },
+      {
+        "id": "c",
+        "text": { "en": "Precision 0.80, recall 0.50", "es": "Precision 0,80 y recall 0,50" },
+        "rationale": {
+          "en": "Precision = 40/50: of what was flagged, how much was fraud. Recall = 40/80: of the real frauds, how many were found.",
+          "es": "Precision = 40/50: de lo que marcó, cuánto era fraude. Recall = 40/80: de los fraudes reales, cuántos encontró."
+        }
+      },
+      {
+        "id": "d",
+        "text": { "en": "Precision 0.80, recall 0.80", "es": "Precision 0,80 y recall 0,80" },
+        "rationale": {
+          "en": "Precision is right, but recall divides by the 80 real frauds, not by the 50 flagged transactions.",
+          "es": "La precision está bien, pero el recall divide por los 80 fraudes reales, no por las 50 transacciones marcadas."
+        }
+      }
+    ],
+    "keep_order": true,
+    "answer": ["c"],
+    "explanation": {
+      "en": "There are 40 true positives, 10 false positives and 40 false negatives. Precision = TP/(TP+FP) = 0.8 and recall = TP/(TP+FN) = 0.5, so F1 = 2·0.8·0.5/(0.8+0.5) ≈ 0.62. In imbalanced problems such as fraud, these metrics and the precision-recall curve say much more than accuracy, which can be very high for a model that never flags anything.",
+      "es": "Hay 40 verdaderos positivos, 10 falsos positivos y 40 falsos negativos. Precision = TP/(TP+FP) = 0,8 y recall = TP/(TP+FN) = 0,5, así que F1 = 2·0,8·0,5/(0,8+0,5) ≈ 0,62. En problemas desbalanceados como el fraude, estas métricas y la curva precision-recall dicen mucho más que el accuracy, que puede ser altísimo con un modelo que nunca marca nada."
+    },
+    "sources": [
+      {
+        "kind": "paper",
+        "title": "The Precision-Recall Plot Is More Informative than the ROC Plot When Evaluating Binary Classifiers on Imbalanced Datasets",
+        "authors": "Takaya Saito & Marc Rehmsmeier",
+        "year": 2015
+      }
+    ],
+    "tags": ["precision", "recall", "imbalance"],
+    "origin": "llm_draft",
+    "reviewed_at": "2026-10-15"
+  },
+  {
+    "id": "evaluation-0002",
+    "version": 2,
+    "area": "evaluation",
+    "subtopic": "baselines",
+    "level": "hard",
+    "bloom": "evaluate",
+    "type": "evidence",
+    "format": "single",
+    "stability": "stable",
+    "difficulty": { "steps": 1, "specialization": 1, "distractors": 2 },
+    "prompt": {
+      "en": "A solar forecasting model reports R² = 0.92 for hourly generation over a held-out year. What would best show whether it actually forecasts the weather?",
+      "es": "Un modelo de pronóstico solar reporta R² = 0,92 para la generación horaria en un año de prueba. ¿Qué mostraría mejor si de verdad pronostica el clima?"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "Its error relative to a climatology baseline for the same hours, expressed as a skill score.",
+          "es": "Su error relativo a un baseline de climatología para las mismas horas, expresado como skill score."
+        },
+        "rationale": {
+          "en": "A skill score measures the improvement over a baseline that knows the time of day and year but not the weather, which is exactly what a forecast has to add.",
+          "es": "Un skill score mide la mejora sobre un baseline que conoce la hora y el día del año, pero no el clima, que es justamente lo que un pronóstico tiene que aportar."
+        }
+      },
+      {
+        "id": "b",
+        "text": {
+          "en": "Its R² on the training years, to confirm that it stays close to the held-out value.",
+          "es": "Su R² en los años de entrenamiento, para confirmar que se parece al del año de prueba."
+        },
+        "rationale": {
+          "en": "Comparing training and held-out R² checks for overfitting. Both can be high for a model that only learned the daily cycle.",
+          "es": "Comparar el R² de entrenamiento y de prueba detecta overfitting. Ambos pueden ser altos en un modelo que solo aprendió el ciclo diario."
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "Its mean absolute percentage error, which is easier to compare across solar plants.",
+          "es": "Su error porcentual absoluto medio, que es más fácil de comparar entre plantas solares."
+        },
+        "rationale": {
+          "en": "MAPE is undefined when generation is zero at night and, like R², it does not compare against a baseline.",
+          "es": "El MAPE se indefine cuando la generación es cero de noche y, como el R², no compara contra un baseline."
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "Its R² on daylight hours only, which removes the night hours that inflate the score.",
+          "es": "Su R² calculado solo en horas de luz, que quita las horas de noche que inflan el puntaje."
+        },
+        "rationale": {
+          "en": "Daylight hours still contain the rise and fall of the sun, so R² stays high even for a model that knows nothing about clouds.",
+          "es": "Las horas de luz siguen conteniendo la subida y bajada del sol, así que el R² sigue alto incluso para un modelo que no sabe nada de nubes."
+        }
+      }
+    ],
+    "answer": ["a"],
+    "explanation": {
+      "en": "R² compares against the overall mean, and in solar data most of the variance is the daily and seasonal cycle, which no one needs to forecast. In an experiment on five years of measured German solar generation, climatology (the average for that day of the year and hour) reached R² = 0.878 on the held-out year without any weather information. Scored by skill against their baseline, the same models spread from −5.75 to +0.89.",
+      "es": "El R² compara contra la media global, y en datos solares la mayor parte de la varianza es el ciclo diario y estacional, que nadie tiene que pronosticar. En un experimento con cinco años de generación solar alemana medida, la climatología (el promedio de ese día del año y esa hora) logró R² = 0,878 en el año de prueba sin ninguna información meteorológica. Medidos con skill score contra su baseline, los mismos modelos se separaron de −5,75 a +0,89."
+    },
+    "sources": [
+      {
+        "kind": "paper",
+        "title": "Skill Scores Based on the Mean Square Error and Their Relationships to the Correlation Coefficient",
+        "authors": "Allan H. Murphy",
+        "year": 1988
+      },
+      {
+        "kind": "post",
+        "title": "How Much of a Solar Forecast Is Just the Sunrise?",
+        "authors": "Cristobal Santana",
+        "year": 2026,
+        "url": "https://cristobalsantana.substack.com/p/solar-forecast-skill-r2"
+      },
+      {
+        "kind": "experiment",
+        "title": "solar-forecast-skill",
+        "authors": "Cristobal Santana",
+        "year": 2026,
+        "url": "https://github.com/CristobalSantana/ml-toy-experiments/tree/main/experiments/solar-forecast-skill"
+      }
+    ],
+    "tags": ["r2", "skill-score", "solar"],
+    "collection": "strange-machines",
+    "origin": "llm_draft",
+    "reviewed_at": "2026-10-15"
+  }
+]

@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI/ML Questions</title>
+<meta name="description" content="Learn AI and machine learning concepts with questions from the basics to niche topics. Every option explains why it is right or wrong. Free, no sign-up.">
+
+<!-- Card for sharing. LinkedIn needs absolute URLs: if the domain changes, update og:url, og:image and CONFIG.siteUrl in app.js. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AI/ML Questions">
+<meta property="og:url" content="https://ai-ml-questions.pages.dev/">
+<meta property="og:title" content="How much do you know about AI and machine learning?">
+<meta property="og:description" content="Easy, medium and hard questions, with an explanation for every option. Free, no sign-up.">
+<meta property="og:image" content="https://ai-ml-questions.pages.dev/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+<meta property="og:image:alt" content="Three dots, green, yellow and red, next to the question: How much do you know about AI and machine learning?">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="theme-color" content="#F5F6F8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1116" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="styles.css">
+<script src="app.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <div class="brand-row">
+      <a class="brand" href="./" id="brand">
+        <span class="mark" aria-hidden="true"><span class="dot easy"></span><span class="dot medium"></span><span class="dot hard"></span></span>
+        <span data-i18n="siteName">AI/ML Questions</span>
+      </a>
+      <span class="badge" data-i18n="alpha">alpha</span>
+    </div>
+    <div class="masthead-side">
+      <span class="bank-size" id="bank-size"></span>
+      <div class="lang" role="group" aria-label="Language" data-i18n-aria="language">
+        <button type="button" data-lang="en" aria-pressed="true" lang="en">EN</button>
+        <button type="button" data-lang="es" aria-pressed="false" lang="es">ES</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="app">
+    <p class="status" id="status" data-i18n="loading">Loading questions…</p>
+
+    <section class="screen" id="screen-setup" aria-labelledby="setup-title" hidden>
+      <div class="intro">
+        <h1 id="setup-title" data-i18n="headline">How much do you know about AI and machine learning?</h1>
+        <p data-i18n="purpose">The main goal is to learn AI and ML concepts, from the basics to niche topics. Every option explains why it is right or wrong. Free, no sign-up.</p>      </div>
+
+      <div class="resume" id="resume" hidden>
+        <p id="resume-text"></p>
+        <div class="actions">
+          <button type="button" class="btn primary" id="resume-go" data-i18n="continue">Continue</button>
+          <button type="button" class="btn" id="resume-drop" data-i18n="discard">Discard</button>
+        </div>
+      </div>
+
+      <form class="setup" id="setup" novalidate>
+        <section class="field" aria-labelledby="f-levels">
+          <h2 class="label" id="f-levels" data-i18n="difficulty">Difficulty</h2>
+          <div class="chips" id="levels"></div>
+        </section>
+
+        <section class="field" aria-labelledby="f-topics">
+          <div class="field-head">
+            <h2 class="label" id="f-topics" data-i18n="topics">Topics</h2>
+            <div class="field-actions">
+              <button type="button" class="linkish" id="topics-all" data-i18n="all">All</button>
+              <button type="button" class="linkish" id="topics-none" data-i18n="none">None</button>
+            </div>
+          </div>
+          <div class="chips" id="topics"></div>
+        </section>
+
+        <section class="field" aria-labelledby="f-count">
+          <h2 class="label" id="f-count" data-i18n="count">Questions</h2>
+          <div class="counts" id="counts"></div>
+        </section>
+
+        <section class="field" aria-labelledby="f-mode">
+          <h2 class="label" id="f-mode" data-i18n="mode">Mode</h2>
+          <div class="modes">
+            <label class="mode" for="mode-study">
+              <input type="radio" name="mode" value="study" id="mode-study">
+              <span><b data-i18n="study">Study</b><small data-i18n="studyHint">See the explanation after each question.</small></span>
+            </label>
+            <label class="mode" for="mode-exam">
+              <input type="radio" name="mode" value="exam" id="mode-exam">
+              <span><b data-i18n="exam">Exam</b><small data-i18n="examHint">See your score and the explanations at the end.</small></span>
+            </label>
+          </div>
+        </section>
+
+        <div class="start-row">
+          <button type="submit" class="btn primary" id="start" data-i18n="start">Start</button>
+          <span class="available" id="available"></span>
+        </div>
+      </form>
+    </section>
+
+    <section class="screen" id="screen-quiz" aria-label="Quiz" hidden>
+      <div class="quiz-head">
+        <div class="quiz-top">
+          <button type="button" class="linkish" id="quit" data-i18n="quit">Quit</button>
+          <span class="progress-label" id="progress-label"></span>
+        </div>
+        <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+      </div>
+      <article class="question" id="question"></article>
+      <div class="quiz-actions">
+        <span class="keys" aria-hidden="true" data-i18n="keys">Shortcuts: 1–4 to choose, Enter to continue</span>
+        <button type="button" class="btn primary" id="next" disabled>Next</button>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-results" aria-labelledby="results-title" hidden>
+      <div class="results" id="results"></div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <a id="kofi-foot" href="https://ko-fi.com/strangemachines" target="_blank" rel="noopener" data-i18n="kofiFoot">☕ Support on Ko-fi</a>
+  </footer>
+</div>
+
+<p class="visually-hidden" id="announcer" aria-live="polite"></p>
+<div class="toast" id="toast" role="status" hidden></div>
+</body>
+</html>

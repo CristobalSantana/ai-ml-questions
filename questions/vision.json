@@ -1,0 +1,81 @@
+[
+  {
+    "id": "vision-0001",
+    "version": 2,
+    "area": "vision",
+    "subtopic": "convolution",
+    "level": "easy",
+    "bloom": "understand",
+    "type": "concept",
+    "format": "single",
+    "stability": "stable",
+    "difficulty": { "steps": 0, "specialization": 0, "distractors": 1 },
+    "prompt": {
+      "en": "What key advantage does a convolutional layer have over a dense layer when processing images?",
+      "es": "¿Qué ventaja clave tiene una capa convolucional frente a una capa densa al procesar imágenes?"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "It reuses a small filter at every position, so it needs far fewer weights and detects a pattern anywhere.",
+          "es": "Reutiliza un filtro pequeño en cada posición: necesita muchos menos pesos y detecta un patrón donde esté."
+        },
+        "rationale": {
+          "en": "Local connectivity and shared weights build in two assumptions about images: nearby pixels are related, and an edge is an edge wherever it appears.",
+          "es": "La conectividad local y los pesos compartidos incorporan dos supuestos sobre las imágenes: los píxeles cercanos se relacionan y un borde es un borde en cualquier posición."
+        }
+      },
+      {
+        "id": "b",
+        "text": {
+          "en": "It connects each output to every pixel, so it captures relationships between distant regions at once.",
+          "es": "Conecta cada salida con todos los píxeles, así que capta relaciones entre regiones lejanas de una vez."
+        },
+        "rationale": {
+          "en": "That describes a dense layer or attention. A convolution connects each output only to a small neighborhood.",
+          "es": "Eso describe una capa densa o la atención. Una convolución conecta cada salida solo con un vecindario pequeño."
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "It reads pixels one at a time in sequence, so it remembers what it saw earlier in the image.",
+          "es": "Lee los píxeles uno a uno, en secuencia, así que recuerda lo que vio antes en la misma imagen."
+        },
+        "rationale": {
+          "en": "That describes a recurrent network; a convolution applies the same filter across the whole image in parallel.",
+          "es": "Eso describe una red recurrente; la convolución aplica el mismo filtro sobre toda la imagen en paralelo."
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "It fixes its filters before training, so it needs much less data than a dense layer does.",
+          "es": "Fija sus filtros antes de entrenar, así que necesita muchos menos datos que una capa densa."
+        },
+        "rationale": {
+          "en": "CNN filters are learned with backpropagation; hand-designed filters belong to computer vision before deep learning.",
+          "es": "Los filtros de una CNN se aprenden con backpropagation; los filtros diseñados a mano eran propios de la visión por computador antes del deep learning."
+        }
+      }
+    ],
+    "answer": ["a"],
+    "explanation": {
+      "en": "Computer vision is about making machines interpret images and video, and from AlexNet (2012) on, CNNs were its dominant architecture. A dense layer on a 224×224×3 image connects each output to 150,528 inputs, while a 3×3×3 filter has 27 weights reused at every position. That economy and translation equivariance are the inductive bias that made CNNs work.",
+      "es": "La visión por computador busca que las máquinas interpreten imágenes y video, y desde AlexNet (2012) las CNN fueron su arquitectura dominante. Una capa densa sobre una imagen de 224×224×3 conecta cada salida con 150.528 entradas, mientras que un filtro de 3×3×3 tiene 27 pesos que se reutilizan en cada posición. Esa economía y la equivariancia a traslaciones son el sesgo inductivo que hizo funcionar a las CNN."
+    },
+    "sources": [
+      { "kind": "book", "title": "Deep Learning", "authors": "Ian Goodfellow, Yoshua Bengio & Aaron Courville", "year": 2016 },
+      {
+        "kind": "paper",
+        "title": "Gradient-Based Learning Applied to Document Recognition",
+        "authors": "Yann LeCun, Léon Bottou, Yoshua Bengio & Patrick Haffner",
+        "year": 1998
+      }
+    ],
+    "tags": ["cnn", "weight-sharing", "inductive-bias"],
+    "origin": "llm_draft",
+    "reviewed_at": "2026-10-15"
+  }
+]

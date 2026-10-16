@@ -1,0 +1,83 @@
+[
+  {
+    "id": "production-0001",
+    "version": 2,
+    "area": "production",
+    "subtopic": "dataset-shift",
+    "level": "medium",
+    "bloom": "apply",
+    "type": "scenario",
+    "format": "single",
+    "stability": "stable",
+    "difficulty": { "steps": 1, "specialization": 1, "distractors": 2 },
+    "prompt": {
+      "en": "A credit-risk model was trained on 2019 data. Today applicants' incomes are distributed as they were then, but at the same income people default more often. What kind of dataset shift is this?",
+      "es": "Un modelo de riesgo de crédito se entrenó con datos de 2019. Hoy los ingresos de los solicitantes se distribuyen igual que entonces, pero con el mismo ingreso la gente incumple más. ¿Qué tipo de dataset shift es?"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "Covariate shift: the distribution of the inputs, P(x), changed.",
+          "es": "Covariate shift: cambió la distribución de las entradas, P(x)."
+        },
+        "rationale": {
+          "en": "P(x) did not change here: incomes are distributed as before.",
+          "es": "Aquí P(x) no cambió: los ingresos se distribuyen igual que antes."
+        }
+      },
+      {
+        "id": "b",
+        "text": {
+          "en": "Prior probability shift: P(y) changed while P(x|y) stayed fixed.",
+          "es": "Prior probability shift: cambió P(y) y se mantuvo P(x|y)."
+        },
+        "rationale": {
+          "en": "The default rate did rise, but as a consequence of a changed relationship. With P(x) fixed and P(y|x) different, P(x|y) changes too, so this is not prior shift.",
+          "es": "La tasa de incumplimiento sí subió, pero como consecuencia de un cambio en la relación. Con P(x) fija y P(y|x) distinta, P(x|y) también cambia, así que no es prior shift."
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "Concept shift: the relationship between inputs and output, P(y|x), changed.",
+          "es": "Concept shift: cambió la relación entre entradas y salida, P(y|x)."
+        },
+        "rationale": {
+          "en": "The same inputs now imply a different default probability. This is the kind of shift a monitor that only watches the inputs cannot see.",
+          "es": "Las mismas entradas ahora implican otra probabilidad de incumplimiento. Es el tipo de shift que un monitor que solo mira las entradas no puede ver."
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "Sample selection bias: the 2019 sample did not represent the population.",
+          "es": "Sesgo de selección: la muestra de 2019 no representaba a la población."
+        },
+        "rationale": {
+          "en": "Selection bias means the training sample was unrepresentative even in 2019; here the population's behavior changed after training.",
+          "es": "El sesgo de selección significa que la muestra no era representativa ni siquiera en 2019; aquí cambió el comportamiento de la población después del entrenamiento."
+        }
+      }
+    ],
+    "answer": ["c"],
+    "explanation": {
+      "en": "Dataset shift is classified by which part of the joint distribution changes: covariate shift (P(x)), prior probability shift (P(y)) and concept shift (P(y|x)). Concept shift is the most dangerous for monitoring because the inputs look normal; detecting it needs recent labels or a business metric that depends on the real outcome.",
+      "es": "El dataset shift se clasifica según qué parte de la distribución conjunta cambia: covariate shift (P(x)), prior probability shift (P(y)) y concept shift (P(y|x)). El concept shift es el más peligroso para el monitoreo porque las entradas se ven normales; detectarlo requiere etiquetas recientes o una métrica de negocio que dependa del resultado real."
+    },
+    "sources": [
+      { "kind": "paper", "title": "A unifying view on dataset shift in classification", "authors": "Jose G. Moreno-Torres et al.", "year": 2012 },
+      {
+        "kind": "post",
+        "title": "The Model Did Not Change. Everything Else Did.",
+        "authors": "Cristobal Santana",
+        "year": 2026,
+        "url": "https://cristobalsantana.substack.com/p/data-drift-dataset-shift-detection"
+      }
+    ],
+    "tags": ["concept-shift", "monitoring"],
+    "collection": "strange-machines",
+    "origin": "llm_draft",
+    "reviewed_at": "2026-10-15"
+  }
+]

@@ -1,0 +1,249 @@
+[
+  {
+    "id": "retrieval-0001",
+    "version": 2,
+    "area": "retrieval",
+    "subtopic": "embeddings-similarity",
+    "level": "easy",
+    "bloom": "understand",
+    "type": "concept",
+    "format": "single",
+    "stability": "stable",
+    "difficulty": { "steps": 0, "specialization": 0, "distractors": 1 },
+    "prompt": {
+      "en": "What does the cosine similarity between two embeddings measure?",
+      "es": "¿Qué mide la similitud coseno entre dos embeddings?"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "The angle between the two vectors, regardless of their lengths.",
+          "es": "El ángulo entre los dos vectores, sin importar su largo."
+        },
+        "rationale": {
+          "en": "cos θ = (a·b)/(‖a‖‖b‖). When the vectors are normalized to length 1, it equals the dot product.",
+          "es": "cos θ = (a·b)/(‖a‖‖b‖). Si los vectores están normalizados a largo 1, es igual al producto punto."
+        }
+      },
+      {
+        "id": "b",
+        "text": {
+          "en": "The straight-line distance between the tips of the two vectors.",
+          "es": "La distancia en línea recta entre las puntas de los vectores."
+        },
+        "rationale": {
+          "en": "That is Euclidean distance, which depends on the vectors' lengths. Only for normalized vectors does it rank results the same way as cosine.",
+          "es": "Esa es la distancia euclidiana, que depende del largo de los vectores. Solo con vectores normalizados ordena los resultados igual que el coseno."
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "The share of dimensions where both vectors are nonzero at once.",
+          "es": "La fracción de dimensiones en que ambos vectores no son cero."
+        },
+        "rationale": {
+          "en": "That is closer to an overlap of nonzero dimensions; cosine uses the values in every dimension.",
+          "es": "Eso se parece más a contar dimensiones distintas de cero en ambos; el coseno usa los valores de todas las dimensiones."
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "The probability that the two texts have the same meaning.",
+          "es": "La probabilidad de que los dos textos signifiquen lo mismo."
+        },
+        "rationale": {
+          "en": "Cosine ranges from −1 to 1 and is a geometric quantity, not a calibrated probability.",
+          "es": "El coseno va de −1 a 1 y es una medida geométrica, no una probabilidad calibrada."
+        }
+      }
+    ],
+    "answer": ["a"],
+    "explanation": {
+      "en": "With unit vectors, ‖a − b‖² = 2 − 2·cos θ, so cosine, dot product and Euclidean distance produce the same ranking. That is why embeddings are often normalized and compared with the dot product, which is cheaper to compute.",
+      "es": "Con vectores unitarios, ‖a − b‖² = 2 − 2·cos θ, así que el coseno, el producto punto y la distancia euclidiana producen el mismo ranking. Por eso es común normalizar los embeddings y usar el producto punto, que es más barato de calcular."
+    },
+    "sources": [
+      {
+        "kind": "book",
+        "title": "Introduction to Information Retrieval",
+        "authors": "Christopher D. Manning, Prabhakar Raghavan & Hinrich Schütze",
+        "year": 2008
+      }
+    ],
+    "tags": ["cosine-similarity", "embeddings"],
+    "origin": "llm_draft",
+    "reviewed_at": "2026-10-15"
+  },
+  {
+    "id": "retrieval-0002",
+    "version": 2,
+    "area": "retrieval",
+    "subtopic": "sparse-vs-dense",
+    "level": "medium",
+    "bloom": "apply",
+    "type": "scenario",
+    "format": "single",
+    "stability": "slow",
+    "difficulty": { "steps": 1, "specialization": 1, "distractors": 2 },
+    "prompt": {
+      "en": "In which case does sparse retrieval (BM25) usually beat dense retrieval with embeddings?",
+      "es": "¿En qué caso suele ganar la búsqueda sparse (BM25) a la búsqueda densa con embeddings?"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "When queries contain rare exact terms, such as product codes or legal article numbers.",
+          "es": "Cuando las consultas traen términos exactos y raros, como códigos de producto o números de ley."
+        },
+        "rationale": {
+          "en": "BM25 rewards exact matches on infrequent terms, while an embedding can blur a code like ISO-27001 into a vector of general meaning.",
+          "es": "BM25 premia la coincidencia exacta de términos poco frecuentes, mientras que un embedding puede diluir un código como ISO-27001 en un vector de significado general."
+        }
+      },
+      {
+        "id": "b",
+        "text": {
+          "en": "When queries paraphrase the documents, using synonyms and different wording throughout.",
+          "es": "Cuando las consultas parafrasean los documentos, con sinónimos y otra forma de decir lo mismo."
+        },
+        "rationale": {
+          "en": "That is where dense retrieval wins: it captures that 'car' and 'vehicle' mean the same thing without shared words.",
+          "es": "Ahí gana la búsqueda densa: captura que 'auto' y 'vehículo' significan lo mismo aunque no compartan palabras."
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "When queries and documents are written in different languages, such as Spanish and English.",
+          "es": "Cuando las consultas y los documentos están escritos en idiomas distintos, como español e inglés."
+        },
+        "rationale": {
+          "en": "BM25 needs the same words in the query and the document, so it cannot cross languages; multilingual embeddings can.",
+          "es": "BM25 necesita las mismas palabras en la consulta y en el documento, así que no cruza idiomas; los embeddings multilingües sí."
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "When queries are long natural-language questions about a concept rather than a keyword.",
+          "es": "Cuando las consultas son preguntas largas sobre un concepto, en vez de una palabra clave."
+        },
+        "rationale": {
+          "en": "Conceptual questions phrased differently from the documents favor dense retrieval, which matches meaning rather than words.",
+          "es": "Las preguntas conceptuales redactadas distinto que los documentos favorecen la búsqueda densa, que compara significados y no palabras."
+        }
+      }
+    ],
+    "answer": ["a"],
+    "explanation": {
+      "en": "A sparse vector has one dimension per vocabulary term and almost all of its values at zero; a dense one compresses meaning into hundreds or thousands of dimensions. Each fails where the other succeeds, which is why production systems often combine them (hybrid search) and then rerank. Models such as SPLADE learn sparse vectors that expand the query with related terms, halfway between the two.",
+      "es": "Un vector sparse tiene una dimensión por término del vocabulario y casi todos sus valores en cero; uno denso comprime el significado en cientos o miles de dimensiones. Cada uno falla donde el otro acierta, por eso en producción es común combinarlos (búsqueda híbrida) y después aplicar un reranker. Modelos como SPLADE aprenden vectores sparse que expanden la consulta con términos relacionados, a medio camino entre ambos."
+    },
+    "sources": [
+      { "kind": "paper", "title": "The Probabilistic Relevance Framework: BM25 and Beyond", "authors": "Stephen Robertson & Hugo Zaragoza", "year": 2009 },
+      {
+        "kind": "paper",
+        "title": "BEIR: A Heterogenous Benchmark for Zero-shot Evaluation of Information Retrieval Models",
+        "authors": "Nandan Thakur et al.",
+        "year": 2021,
+        "url": "https://arxiv.org/abs/2104.08663"
+      },
+      {
+        "kind": "paper",
+        "title": "SPLADE: Sparse Lexical and Expansion Model for First Stage Ranking",
+        "authors": "Thibault Formal, Benjamin Piwowarski & Stéphane Clinchant",
+        "year": 2021,
+        "url": "https://arxiv.org/abs/2107.05720"
+      }
+    ],
+    "tags": ["bm25", "sparse-vectors", "hybrid-search"],
+    "origin": "llm_draft",
+    "reviewed_at": "2026-10-15",
+    "review_by": "2027-10-15"
+  },
+  {
+    "id": "retrieval-0003",
+    "version": 2,
+    "area": "retrieval",
+    "subtopic": "vector-databases",
+    "level": "medium",
+    "bloom": "evaluate",
+    "type": "scenario",
+    "format": "single",
+    "stability": "volatile",
+    "difficulty": { "steps": 1, "specialization": 1, "distractors": 1 },
+    "prompt": {
+      "en": "You have 1 million embedding vectors, need to filter results by customer and date, and your team already runs PostgreSQL. What usually makes the most sense to start with?",
+      "es": "Tienes 1 millón de vectores, necesitas filtrar los resultados por cliente y fecha, y tu equipo ya opera PostgreSQL. ¿Qué suele tener más sentido para empezar?"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "The pgvector extension in your PostgreSQL, keeping the filters in SQL and a single system to run.",
+          "es": "La extensión pgvector en tu PostgreSQL, con los filtros en SQL y un solo sistema que operar."
+        },
+        "rationale": {
+          "en": "At this scale an HNSW index in pgvector is usually enough. The useful question is when it stops being enough, not whether a dedicated database is better in general.",
+          "es": "A esta escala, un índice HNSW en pgvector suele bastar. La pregunta útil es cuándo deja de bastar, no si una base dedicada es mejor en abstracto."
+        }
+      },
+      {
+        "id": "b",
+        "text": {
+          "en": "A dedicated distributed vector database, since vector search needs its own storage engine.",
+          "es": "Una base vectorial dedicada y distribuida, porque la búsqueda vectorial necesita su propio motor."
+        },
+        "rationale": {
+          "en": "That pays off with hundreds of millions of vectors, heavy traffic or large-scale multi-tenancy. To start, it adds another system to run and keep in sync.",
+          "es": "Eso se justifica con cientos de millones de vectores, mucho tráfico o multi-tenancy a gran escala. Para empezar, agrega otro sistema que operar y mantener sincronizado."
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "An in-memory FAISS index inside the application, rebuilt from the database every night.",
+          "es": "Un índice FAISS en memoria dentro de la aplicación, reconstruido desde la base de datos cada noche."
+        },
+        "rationale": {
+          "en": "It searches quickly, but filtering by customer and date has to be built by hand, and anything written since the last rebuild is missing.",
+          "es": "Busca rápido, pero el filtro por cliente y fecha hay que construirlo a mano, y falta todo lo escrito desde la última reconstrucción."
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "A graph database, since HNSW, the index behind fast vector search, is itself a graph.",
+          "es": "Una base de datos de grafos, porque HNSW, el índice detrás de la búsqueda vectorial rápida, es un grafo."
+        },
+        "rationale": {
+          "en": "HNSW is a graph inside the index; a graph database does not provide approximate nearest-neighbor search over embeddings.",
+          "es": "HNSW es un grafo dentro del índice; una base de grafos no ofrece búsqueda aproximada de vecinos cercanos sobre embeddings."
+        }
+      }
+    ],
+    "answer": ["a"],
+    "explanation": {
+      "en": "Choosing a vector database is a constraints problem: volume, latency, filters, update frequency, cost and what the team already knows how to run. One detail to watch: filtering after an approximate search can return fewer results than requested when the filter is very selective, so measure recall with your real filters. This question is volatile because each product's capabilities change quickly.",
+      "es": "Elegir una base vectorial es un problema de restricciones: volumen, latencia, filtros, frecuencia de actualización, costo y lo que el equipo ya sabe operar. Un detalle a vigilar: filtrar después de una búsqueda aproximada puede devolver menos resultados de los pedidos si el filtro es muy selectivo, así que conviene medir el recall con los filtros reales. La pregunta es volátil porque las capacidades de cada producto cambian rápido."
+    },
+    "sources": [
+      { "kind": "docs", "title": "pgvector: Open-source vector similarity search for Postgres", "authors": "pgvector", "url": "https://github.com/pgvector/pgvector" },
+      {
+        "kind": "paper",
+        "title": "Efficient and robust approximate nearest neighbor search using Hierarchical Navigable Small World graphs",
+        "authors": "Yu. A. Malkov & D. A. Yashunin",
+        "year": 2016,
+        "url": "https://arxiv.org/abs/1603.09320"
+      }
+    ],
+    "tags": ["vector-databases", "pgvector", "hnsw"],
+    "origin": "llm_draft",
+    "reviewed_at": "2026-10-15",
+    "review_by": "2027-04-15"
+  }
+]

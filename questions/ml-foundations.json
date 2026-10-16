@@ -1,0 +1,75 @@
+[
+  {
+    "id": "ml-foundations-0001",
+    "version": 2,
+    "area": "ml-foundations",
+    "subtopic": "generalization",
+    "level": "easy",
+    "bloom": "apply",
+    "type": "scenario",
+    "format": "single",
+    "stability": "stable",
+    "difficulty": { "steps": 0, "specialization": 0, "distractors": 1 },
+    "prompt": {
+      "en": "Your model has 2% error on the training set and 25% on the validation set. What is the most likely diagnosis, and what should you try first?",
+      "es": "Tu modelo tiene 2% de error en entrenamiento y 25% en validación. ¿Cuál es el diagnóstico más probable y qué conviene probar primero?"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "High variance (overfitting): add regularization or more training data.",
+          "es": "Alta varianza (overfitting): más regularización o más datos de entrenamiento."
+        },
+        "rationale": {
+          "en": "A large gap between training and validation error is the signature of high variance: the model fits the training data but does not generalize.",
+          "es": "Una brecha grande entre entrenamiento y validación es la firma de la alta varianza: el modelo se ajusta a los datos de entrenamiento, pero no generaliza."
+        }
+      },
+      {
+        "id": "b",
+        "text": {
+          "en": "High bias (underfitting): use a larger model or train for longer.",
+          "es": "Alto sesgo (underfitting): un modelo más grande o entrenar por más tiempo."
+        },
+        "rationale": {
+          "en": "Underfitting shows up as high error on the training set too. Here training error is low, and a bigger model would likely widen the gap.",
+          "es": "El underfitting también se ve como error alto en entrenamiento. Aquí ese error es bajo, y un modelo más grande probablemente agrandaría la brecha."
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "Leakage between the splits: remove the duplicates shared by both sets.",
+          "es": "Fuga entre los conjuntos: quitar los duplicados que comparten ambos."
+        },
+        "rationale": {
+          "en": "Leakage between splits makes validation look too good, not too bad: it would shrink the gap rather than create it.",
+          "es": "Una fuga entre conjuntos hace que la validación se vea demasiado bien, no demasiado mal: achicaría la brecha en vez de crearla."
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "Unstable optimization: lower the learning rate and train again.",
+          "es": "Optimización inestable: bajar el learning rate y volver a entrenar."
+        },
+        "rationale": {
+          "en": "Unstable optimization shows up as high or erratic training error, but this model reached 2% on the training set.",
+          "es": "Una optimización inestable se ve como error de entrenamiento alto o errático, pero este modelo llegó a 2% en entrenamiento."
+        }
+      }
+    ],
+    "answer": ["a"],
+    "explanation": {
+      "en": "The diagnosis compares two numbers: training error (bias) and the gap to validation error (variance). Low training error with a large gap points to high variance. Before concluding, check that both sets come from the same distribution, because a shift between them also produces a gap.",
+      "es": "El diagnóstico compara dos números: el error de entrenamiento (sesgo) y la brecha con validación (varianza). Error de entrenamiento bajo con brecha grande indica alta varianza. Antes de concluir, conviene verificar que ambos conjuntos vengan de la misma distribución, porque un shift entre ellos también produce una brecha."
+    },
+    "sources": [
+      { "kind": "book", "title": "Deep Learning", "authors": "Ian Goodfellow, Yoshua Bengio & Aaron Courville", "year": 2016 }
+    ],
+    "tags": ["overfitting", "bias-variance"],
+    "origin": "llm_draft",
+    "reviewed_at": "2026-10-15"
+  }
+]

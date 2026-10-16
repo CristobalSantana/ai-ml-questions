@@ -1,0 +1,194 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Pregunta del banco de IA y ML",
+  "description": "Una pregunta de opción múltiple. Cada archivo de questions/ es una lista de estos objetos. Los textos son mapas por idioma: el inglés es obligatorio y el español, opcional; si falta, el sitio muestra el inglés.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "version",
+    "area",
+    "subtopic",
+    "level",
+    "bloom",
+    "type",
+    "format",
+    "stability",
+    "difficulty",
+    "prompt",
+    "options",
+    "answer",
+    "explanation",
+    "sources",
+    "origin",
+    "reviewed_at"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z]+(-[a-z]+)*-[0-9]{4}$",
+      "description": "<área>-<número de 4 dígitos>, por ejemplo llm-0001. Es permanente: si la pregunta se retira, su id no se reutiliza."
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Sube cuando cambia el enunciado, las alternativas o la respuesta, para no mezclar estadísticas de versiones distintas."
+    },
+    "area": {
+      "type": "string",
+      "description": "Id de un área de taxonomy.json."
+    },
+    "subtopic": {
+      "type": "string",
+      "description": "Id de un subtema de esa área en taxonomy.json."
+    },
+    "level": {
+      "enum": ["easy", "medium", "hard"],
+      "description": "easy: recordar o comprender. medium: aplicar, comparar o calcular. hard: analizar o evaluar; nunca solo recordar algo de nicho."
+    },
+    "bloom": {
+      "enum": ["remember", "understand", "apply", "analyze", "evaluate"],
+      "description": "Proceso cognitivo que exige la pregunta, según la taxonomía de Bloom revisada (Anderson y Krathwohl, 2001). 'Crear' queda fuera porque la opción múltiple no puede evaluarlo."
+    },
+    "type": {
+      "enum": ["concept", "scenario", "calculation", "code", "evidence"],
+      "description": "concept: definición o mecanismo. scenario: caso con restricciones y una mejor decisión. calculation: cálculo corto. code: leer o corregir código. evidence: respuesta respaldada por un resultado experimental citado."
+    },
+    "format": {
+      "enum": ["single", "multiple"],
+      "description": "single: una alternativa correcta. multiple: marcar todas las correctas."
+    },
+    "stability": {
+      "enum": ["stable", "slow", "volatile"],
+      "description": "stable: no cambia (matemáticas, papers, definiciones). slow: cambia en años (buenas prácticas). volatile: cambia en meses (herramientas, productos, fenómenos nuevos)."
+    },
+    "difficulty": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["steps", "specialization", "distractors"],
+      "description": "Rúbrica de dificultad a priori. Cada criterio va de 0 a 2; se suma al puntaje del nivel de Bloom (remember y understand 0, apply 1, analyze y evaluate 2). La suma (0 a 8) sugiere el nivel: 0–2 easy, 3–5 medium, 6–8 hard.",
+      "properties": {
+        "steps": {
+          "enum": [0, 1, 2],
+          "description": "Pasos de razonamiento hasta la respuesta. 0: uno. 1: dos o tres. 2: cuatro o más."
+        },
+        "specialization": {
+          "enum": [0, 1, 2],
+          "description": "0: está en cualquier curso introductorio. 1: se aprende trabajando en el área. 2: nicho o investigación."
+        },
+        "distractors": {
+          "enum": [0, 1, 2],
+          "description": "0: se descartan con facilidad. 1: uno es plausible. 2: varios corresponden a errores frecuentes."
+        }
+      }
+    },
+    "prompt": { "$ref": "#/$defs/i18n" },
+    "code": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lang", "source"],
+      "properties": {
+        "lang": { "type": "string" },
+        "source": { "type": "string", "minLength": 1 }
+      }
+    },
+    "options": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 5,
+      "items": { "$ref": "#/$defs/option" }
+    },
+    "keep_order": {
+      "type": "boolean",
+      "description": "true si las alternativas tienen un orden natural (números, pasos). El sitio las muestra en el orden escrito en vez de barajarlas."
+    },
+    "answer": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "enum": ["a", "b", "c", "d", "e"] },
+      "description": "Ids de las alternativas correctas. Salvo con keep_order, el sitio baraja las alternativas al mostrarlas."
+    },
+    "explanation": { "$ref": "#/$defs/i18n" },
+    "hint": { "$ref": "#/$defs/i18n" },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/source" }
+    },
+    "tags": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" }
+    },
+    "collection": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Agrupa preguntas de una misma fuente, por ejemplo strange-machines."
+    },
+    "origin": {
+      "enum": ["human", "llm_draft", "llm_reviewed"],
+      "description": "Solo se publican human y llm_reviewed. llm_draft es un borrador generado que nadie ha revisado."
+    },
+    "reviewed_at": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "description": "Fecha de la última revisión (AAAA-MM-DD)."
+    },
+    "review_by": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "description": "Fecha límite para volver a revisarla. Obligatoria si la vigencia es slow o volatile."
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "stability": { "enum": ["slow", "volatile"] } }, "required": ["stability"] },
+      "then": { "required": ["review_by"] }
+    },
+    {
+      "if": { "properties": { "format": { "const": "single" } }, "required": ["format"] },
+      "then": { "properties": { "answer": { "maxItems": 1 } } }
+    },
+    {
+      "if": { "properties": { "type": { "const": "code" } }, "required": ["type"] },
+      "then": { "required": ["code"] }
+    }
+  ],
+  "$defs": {
+    "i18n": {
+      "type": "object",
+      "required": ["en"],
+      "additionalProperties": false,
+      "properties": {
+        "en": { "type": "string", "minLength": 1 },
+        "es": { "type": "string", "minLength": 1 }
+      }
+    },
+    "option": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "text", "rationale"],
+      "properties": {
+        "id": { "enum": ["a", "b", "c", "d", "e"] },
+        "text": { "$ref": "#/$defs/i18n" },
+        "rationale": {
+          "$ref": "#/$defs/i18n",
+          "description": "Por qué esta alternativa es correcta o incorrecta. Se muestra después de responder."
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "title"],
+      "properties": {
+        "kind": { "enum": ["paper", "book", "docs", "post", "experiment", "article"] },
+        "title": { "type": "string", "minLength": 1 },
+        "authors": { "type": "string" },
+        "year": { "type": "integer", "minimum": 1900 },
+        "url": { "type": "string", "pattern": "^https://" }
+      }
+    }
+  }
+}
