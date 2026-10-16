@@ -367,14 +367,14 @@ El mensaje se arma con el resultado, en el idioma elegido, y la persona puede ed
 I answered 22 AI and machine learning questions and got 19 right (86%).
 🟢 Easy 7/7 · 🟡 Medium 8/10 · 🔴 Hard 4/5
 Best topic: Neural networks. Hardest for me: Retrieval & RAG.
-How many can you get? https://ai-ml-questions.pages.dev/
+How many can you get? https://ai-ml-questions.cristobalsantana-ml.workers.dev/
 ```
 
 ```
 Respondí 22 preguntas de IA y machine learning y acerté 19 (86%).
 🟢 Fácil 7/7 · 🟡 Medio 8/10 · 🔴 Difícil 4/5
 Lo que mejor me fue: Redes neuronales. Lo que más me costó: Retrieval y RAG.
-¿Cuánto sacas tú? https://ai-ml-questions.pages.dev/#es
+¿Cuánto sacas tú? https://ai-ml-questions.cristobalsantana-ml.workers.dev/#es
 ```
 
 - La línea de contenidos aparece solo si el quiz tuvo al menos dos contenidos con dos o más preguntas cada uno, y con resultados distintos.
@@ -403,7 +403,7 @@ El repositorio es [CristobalSantana/ai-ml-questions](https://github.com/Cristoba
 
 - Cada push a `main` vuelve a publicar el sitio solo; el estado de cada publicación se ve en el panel de Cloudflare, en el Worker, pestaña **Deployments** o **Builds**.
 - El `name` de `wrangler.jsonc` debe coincidir con el nombre del Worker en el panel.
-- La dirección pública tiene la forma `ai-ml-questions.<subdominio de la cuenta>.workers.dev`. Si cambia, o si se agrega un dominio propio en **Domains & Routes**, hay que actualizar `CONFIG.siteUrl` en `site/app.js` y las etiquetas `og:url` y `og:image` en `site/index.html`, porque LinkedIn necesita URLs absolutas.
+- La dirección pública es https://ai-ml-questions.cristobalsantana-ml.workers.dev/. Si cambia, o si se agrega un dominio propio en **Domains & Routes**, hay que actualizar `CONFIG.siteUrl` en `site/app.js` y las etiquetas `og:url` y `og:image` en `site/index.html`, porque LinkedIn necesita URLs absolutas.
 
 Antes de cada push que cambie preguntas o el sitio, regenera `site/data` y la versión del service worker. Mientras las preguntas sigan como borradores (`llm_draft`), el sitio se publica con `python scripts/build_site.py --include-drafts`; cuando estén revisadas, sin esa opción.
 

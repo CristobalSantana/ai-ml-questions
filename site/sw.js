@@ -1,6 +1,6 @@
 /* Service worker: guarda el sitio y las preguntas para que funcione sin conexión.
    scripts/build_site.py reescribe VERSION cada vez que cambia algún archivo. */
-const VERSION = "dc01db2af364";
+const VERSION = "745a348a976e";
 const CACHE = `banco-ia-ml-${VERSION}`;
 
 self.addEventListener("install", (event) => {

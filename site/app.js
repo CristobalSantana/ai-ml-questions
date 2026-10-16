@@ -2,7 +2,7 @@
 
 /* Fill these in before publishing the site. */
 const CONFIG = {
-  siteUrl: "https://ai-ml-questions.pages.dev/", // site domain, with a trailing slash
+  siteUrl: "https://ai-ml-questions.cristobalsantana-ml.workers.dev/", // site domain, with a trailing slash
   kofiUrl: "https://ko-fi.com/strangemachines", // your Ko-fi page
   // Template for reporting mistakes; {title} and {body} are replaced. Empty hides the link.
   reportUrl: "https://github.com/CristobalSantana/ai-ml-questions/issues/new?title={title}&body={body}",
