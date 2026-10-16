@@ -56,14 +56,14 @@
         },
         "rationale": {
           "en": "CNN filters are learned with backpropagation; hand-designed filters belong to computer vision before deep learning.",
-          "es": "Los filtros de una CNN se aprenden con backpropagation; los filtros diseñados a mano eran propios de la visión por computadora antes del deep learning."
+          "es": "Los filtros de una CNN se aprenden con backpropagation; los filtros diseñados a mano eran propios de la visión por computador antes del deep learning."
         }
       }
     ],
     "answer": ["a"],
     "explanation": {
       "en": "Computer vision is about making machines interpret images and video, and from AlexNet (2012) on, CNNs were its dominant architecture. A dense layer on a 224×224×3 image connects each output to 150,528 inputs, while a 3×3×3 filter has 27 weights reused at every position. That economy and translation equivariance are the inductive bias that made CNNs work.",
-      "es": "La visión por computadora busca que las máquinas interpreten imágenes y video, y desde AlexNet (2012) las CNN fueron su arquitectura dominante. Una capa densa sobre una imagen de 224×224×3 conecta cada salida con 150.528 entradas, mientras que un filtro de 3×3×3 tiene 27 pesos que se reutilizan en cada posición. Esa economía y la equivariancia a traslaciones son el sesgo inductivo que hizo funcionar a las CNN."
+      "es": "La visión por computador busca que las máquinas interpreten imágenes y video, y desde AlexNet (2012) las CNN fueron su arquitectura dominante. Una capa densa sobre una imagen de 224×224×3 conecta cada salida con 150.528 entradas, mientras que un filtro de 3×3×3 tiene 27 pesos que se reutilizan en cada posición. Esa economía y la equivariancia a traslaciones son el sesgo inductivo que hizo funcionar a las CNN."
     },
     "sources": [
       { "kind": "book", "title": "Deep Learning", "authors": "Ian Goodfellow, Yoshua Bengio & Aaron Courville", "year": 2016 },

@@ -1,182 +1,184 @@
-# AI/ML Questions · Preguntas IA/ML
+# AI/ML Questions
 
-Especificación v2 · 15 de octubre de 2026 · versión alfa
+**English** · [Español](README.es.md)
 
-Un sitio gratuito para aprender conceptos de inteligencia artificial y machine learning con preguntas de opción múltiple, desde lo básico (qué es RAG) hasta lo de nicho (cuándo un LLM es determinista, KAN, PINN), en tres niveles. Está en inglés por defecto y se puede ver en español. No pide cuenta ni guarda datos personales; quien quiera puede donar por Ko-fi.
+Specification v2 · October 15, 2026 · alpha version
 
-Este documento define qué contiene el banco, cómo se escribe cada pregunta, dónde se guarda y cómo se produce a escala.
+A free site for learning artificial intelligence and machine learning concepts through multiple-choice questions, from the basics (what RAG is) to niche topics (when an LLM is deterministic, KAN, PINN), at three levels. It opens in English and can be switched to Spanish. It asks for no account and stores no personal data; anyone who wants to can donate on Ko-fi.
 
-**Cambios en v2**
+This document defines what the bank contains, how each question is written, where it is stored and how questions are produced at scale.
 
-- Inglés por defecto y español opcional, en la interfaz y en las preguntas (sección 14).
-- Nombre nuevo, AI/ML Questions / Preguntas IA/ML, con la insignia «alpha» (sección 13).
-- El sitio filtra por 8 contenidos que agrupan las 17 áreas (sección 6).
-- Cada pregunta declara su nivel en la taxonomía de Bloom, y una difícil debe exigir analizar o evaluar (sección 3).
-- Reglas de redacción de Haladyna, revisadas por el validador y por un paso nuevo de la verificación (sección 5).
-- La rúbrica de dificultad usa Bloom en lugar del criterio `cognitive` (sección 12).
-- `keep_order` para mostrar en orden las alternativas numéricas.
+**Changes in v2**
 
-## 1. Principios
+- English by default and Spanish as an option, in the interface and in the questions (section 14).
+- New name, AI/ML Questions / Preguntas IA/ML, with an "alpha" badge (section 13).
+- The site filters by 8 topics that group the 17 areas (section 6).
+- Each question states its level in Bloom's taxonomy, and a hard question must require analyzing or evaluating (section 3).
+- Haladyna's item-writing rules, checked by the validator and by a new step of the review (section 5).
+- The difficulty rubric uses Bloom instead of the `cognitive` criterion (section 12).
+- `keep_order` to show numeric options in order.
 
-- **Aprender es el objetivo.** Cada alternativa explica por qué es correcta o incorrecta, y una pregunta difícil exige razonar, no recordar un dato raro.
-- **Sin pistas en la redacción.** Se acierta por saber, no por cómo están escritas las alternativas.
-- **Conocimiento estable primero.** La mayor parte del banco sale de lo que no cambia: matemáticas, modelos clásicos, papers, arquitecturas y definiciones establecidas. Lo que sí cambia se marca y tiene fecha de revisión.
-- **Todo tiene fuente.** Un paper, un libro, documentación oficial, un post o un experimento reproducible.
-- **Strange Machines es una capa encima.** Las preguntas que salen de los posts y de [ml-toy-experiments](https://github.com/CristobalSantana/ml-toy-experiments) llevan `collection: "strange-machines"` y enlazan al post o al experimento.
-- **Gratis y sin cuentas.** El sitio no necesita saber quién responde.
+## 1. Principles
 
-## 2. Composición objetivo
+- **Learning is the goal.** Every option explains why it is right or wrong, and a hard question requires reasoning, not recalling an obscure fact.
+- **No clues in the wording.** You get a question right by knowing the answer, not by how the options are written.
+- **Stable knowledge first.** Most of the bank comes from what does not change: math, classical models, papers, architectures and established definitions. What does change is marked and has a review date.
+- **Everything has a source.** A paper, a book, official documentation, a post or a reproducible experiment.
+- **Strange Machines is a layer on top.** Questions that come from the posts and from [ml-toy-experiments](https://github.com/CristobalSantana/ml-toy-experiments) carry `collection: "strange-machines"` and link to the post or the experiment.
+- **Free and without accounts.** The site does not need to know who is answering.
 
-| Vigencia (`stability`) | Qué incluye | Parte del banco | Revisión |
+## 2. Target composition
+
+| Stability (`stability`) | What it includes | Share of the bank | Review |
 |---|---|---|---|
-| `stable` | Matemáticas, ML clásico, papers, arquitecturas, definiciones establecidas | ~80% | Solo si alguien reporta un error |
-| `slow` | Buenas prácticas y criterios de decisión: RAG o fine-tuning, sparse o dense | ~15% | Cada año (`review_by`) |
-| `volatile` | Herramientas, productos, bases vectoriales específicas, fenómenos recién descritos | ~5% | Cada 6 meses (`review_by`) |
+| `stable` | Math, classical ML, papers, architectures, established definitions | ~80% | Only if someone reports a mistake |
+| `slow` | Good practices and decision criteria: RAG or fine-tuning, sparse or dense | ~15% | Every year (`review_by`) |
+| `volatile` | Tools, products, specific vector databases, newly described phenomena | ~5% | Every 6 months (`review_by`) |
 
-La colección `strange-machines` es transversal: una pregunta suya puede ser de cualquier vigencia.
+The `strange-machines` collection cuts across these classes: any of its questions can have any stability.
 
-## 3. Niveles y taxonomía de Bloom
+## 3. Levels and Bloom's taxonomy
 
-| Nivel | Pelotita | Bloom | Qué exige | Ejemplo del banco |
+| Level | Dot | Bloom | What it requires | Example from the bank |
 |---|---|---|---|---|
-| `easy` | Verde | `remember`, `understand` | Definir, reconocer o explicar un concepto. Nivel de un curso introductorio. | ¿Qué mide la similitud coseno entre dos embeddings? |
-| `medium` | Amarilla | `understand`, `apply` | Aplicar un concepto, interpretar una métrica o hacer un cálculo corto. Nivel de alguien que trabaja con ML. | Calcular precision y recall en un problema de fraude. |
-| `hard` | Roja | `analyze`, `evaluate` | Analizar un escenario nuevo o decidir entre opciones con varias restricciones. Nivel senior o de investigación. | Con temperatura 0, un modelo responde siempre igual en tu computador y a veces distinto en un servidor con carga. ¿Qué explica las dos observaciones? |
+| `easy` | Green | `remember`, `understand` | Define, recognize or explain a concept. Introductory-course level. | What does the cosine similarity between two embeddings measure? |
+| `medium` | Yellow | `understand`, `apply` | Apply a concept, interpret a metric or do a short calculation. The level of someone who works with ML. | Compute precision and recall in a fraud problem. |
+| `hard` | Red | `analyze`, `evaluate` | Analyze a new scenario or choose between options under several constraints. Senior or research level. | At temperature 0, a model always gives the same answer on your computer and sometimes a different one on a busy server. What explains both observations? |
 
-El campo `bloom` usa la taxonomía de Bloom revisada (Anderson y Krathwohl, 2001), que ordena los procesos cognitivos de menor a mayor exigencia:
+The `bloom` field uses the revised Bloom's taxonomy (Anderson and Krathwohl, 2001), which orders cognitive processes from least to most demanding:
 
-| `bloom` | Qué hace quien responde | Puntaje en la rúbrica |
+| `bloom` | What the person answering does | Rubric score |
 |---|---|---|
-| `remember` | Recupera un dato o una definición. | 0 |
-| `understand` | Explica, clasifica, compara o interpreta un concepto. | 0 |
-| `apply` | Usa un procedimiento o un concepto en un caso concreto, incluido un cálculo. | 1 |
-| `analyze` | Separa un caso en partes y razona cómo se relacionan: explica lo que se observa o encuentra la causa. | 2 |
-| `evaluate` | Juzga opciones con criterios explícitos y elige la mejor bajo restricciones. | 2 |
+| `remember` | Retrieves a fact or a definition. | 0 |
+| `understand` | Explains, classifies, compares or interprets a concept. | 0 |
+| `apply` | Uses a procedure or a concept in a concrete case, including a calculation. | 1 |
+| `analyze` | Breaks a case into parts and reasons about how they relate: explains what is observed or finds the cause. | 2 |
+| `evaluate` | Judges options against explicit criteria and picks the best one under constraints. | 2 |
 
-El sexto nivel, `create`, no cabe en una pregunta de opción múltiple y queda fuera.
+The sixth level, `create`, does not fit a multiple-choice question and is left out.
 
-- **Una pregunta difícil no es un dato de nicho.** Un tema de nicho sube `specialization` en la rúbrica, pero una pregunta `hard` además debe ser `analyze` o `evaluate`, y el validador lo trata como error. Por eso las difíciles se escriben como escenarios nuevos, con números u observaciones que no aparecen así en ningún libro, para que no se respondan reconociendo una frase.
-- Una pregunta `medium` es `understand` o `apply`, y a veces `analyze` en un caso simple. Una `easy` marcada `analyze` o `evaluate` genera un aviso.
-- Regla práctica: si la respuesta aparece en la primera línea de un buscador, la pregunta no es difícil.
+- **A hard question is not a niche fact.** A niche topic raises `specialization` in the rubric, but a `hard` question must also be `analyze` or `evaluate`, and the validator treats anything else as an error. That is why hard questions are written as new scenarios, with numbers or observations that do not appear that way in any book, so they cannot be answered by recognizing a phrase.
+- A `medium` question is `understand` or `apply`, and sometimes `analyze` in a simple case. An `easy` one marked `analyze` or `evaluate` triggers a warning.
+- Rule of thumb: if the answer shows up in the first line of a search engine, the question is not hard.
 
-Las 103 preguntas actuales se reparten en `remember` 3, `understand` 45, `apply` 29, `analyze` 16 y `evaluate` 10.
+The current 103 questions break down into `remember` 3, `understand` 45, `apply` 29, `analyze` 16 and `evaluate` 10.
 
-El nivel se estima a priori con una rúbrica y se corrige con las respuestas reales (sección 12).
+The level is estimated up front with a rubric and corrected with real answers (section 12).
 
-## 4. Tipos de pregunta
+## 4. Question types
 
-| Tipo (`type`) | Qué es |
+| Type (`type`) | What it is |
 |---|---|
-| `concept` | Una definición o un mecanismo. |
-| `scenario` | Un caso con restricciones concretas y una mejor decisión. |
-| `calculation` | Un cálculo corto con números. |
-| `code` | Leer un fragmento de código, predecir su salida o encontrar el error. |
-| `evidence` | Una respuesta respaldada por un resultado experimental citado. |
+| `concept` | A definition or a mechanism. |
+| `scenario` | A case with concrete constraints and a best decision. |
+| `calculation` | A short calculation with numbers. |
+| `code` | Read a code snippet, predict its output or find the bug. |
+| `evidence` | An answer backed by a cited experimental result. |
 
-Las preguntas del tipo "¿por qué elegir X sobre Y?" se escriben siempre como `scenario`, con volumen, presupuesto u otras restricciones explícitas, porque sin contexto no tienen una respuesta correcta.
+"Why choose X over Y?" questions are always written as `scenario`, with volume, budget or other explicit constraints, because without context they have no right answer.
 
-Por ahora todas las preguntas son de una sola respuesta (`format: "single"`) con 3 a 5 alternativas. El formato `multiple` (marcar todas las correctas) queda disponible en el esquema.
+For now every question has a single answer (`format: "single"`) with 3 to 5 options. The `multiple` format (mark every correct option) remains available in the schema.
 
-## 5. Reglas de redacción
+## 5. Writing rules
 
-Las preguntas siguen las pautas de Haladyna, Downing y Rodriguez (2002), una revisión de 31 reglas para escribir preguntas de opción múltiple. Su propósito aquí es que la respuesta no se deduzca de la redacción: la correcta suele delatarse por ser la más larga, la más matizada o la única sin absolutos.
+The questions follow the guidelines of Haladyna, Downing and Rodriguez (2002), a review of 31 rules for writing multiple-choice questions. Their purpose here is that the answer cannot be deduced from the wording: the correct option tends to give itself away by being the longest, the most qualified or the only one without absolutes.
 
-**El validador revisa** (`scripts/validate.py`, en cada idioma):
+**The validator checks** (`scripts/validate.py`, in each language):
 
-| Regla | Resultado |
+| Rule | Result |
 |---|---|
-| La correcta no es la alternativa más larga por más de 1,2 veces el promedio de los distractores | Aviso |
-| La alternativa más larga no mide más de 2,5 veces la más corta | Aviso |
-| Ninguna alternativa usa absolutos: always, never, completely; siempre, nunca, completamente… | Aviso |
-| Ninguna alternativa dice «all/none of the above» ni «todas/ninguna de las anteriores» | Error |
-| La pregunta está en positivo: sin not ni except; sin no, excepto ni salvo | Aviso |
-| Una pregunta `hard` es `analyze` o `evaluate` | Error |
+| The correct option is not longer than 1.2 times the distractors' average | Warning |
+| The longest option is at most 2.5 times as long as the shortest | Warning |
+| No option uses absolutes: always, never, completely; siempre, nunca, completamente… | Warning |
+| No option says "all/none of the above" or «todas/ninguna de las anteriores» | Error |
+| The question is phrased positively: no "not" or "except"; no «no», «excepto» or «salvo» | Warning |
+| A `hard` question is `analyze` or `evaluate` | Error |
 
-Además, el resumen del validador muestra en qué porcentaje del banco la correcta es la alternativa más larga y en cuál es la más corta. Con cuatro alternativas, lo esperable al azar es cerca de 25% en cada caso; una cifra muy alta en «más larga» es una pista que se aprende aunque cada pregunta pase la regla de 1,2 veces. En la revisión de octubre de 2026 bajó de 46% a 20% en inglés.
+The validator summary also shows in what share of the bank the correct option is the longest one and in what share it is the shortest. With four options, chance gives about 25% for each; a very high share for "longest" is a clue people learn even when every question passes the 1.2× rule. In the October 2026 review it went down from 46% to 20% in English.
 
-**La verificación con otro modelo revisa** lo que depende del significado ([`prompts/verificar.md`](prompts/verificar.md)):
+**The review with another model checks** what depends on meaning ([`prompts/verificar.md`](prompts/verificar.md)):
 
-- **Pistas en las alternativas (paso 0):** el modelo ve solo las alternativas, sin el enunciado, y apuesta por una. Si acierta con confianza en dos órdenes distintos, la redacción delata la respuesta y se reescribe.
-- **Homogeneidad:** las alternativas tratan el mismo tipo de contenido con la misma forma gramatical, ninguna se traslapa con otra y no hay pares de opuestos exactos.
-- **Distractores plausibles:** cada uno corresponde a un error que alguien comete de verdad.
-- **La idea central va en el enunciado:** se puede responder sin mirar las alternativas.
+- **Clues in the options (step 0):** the model sees only the options, without the stem, and bets on one. If it gets it right with confidence in two different orders, the wording gives the answer away and the question is rewritten.
+- **Homogeneity:** the options cover the same kind of content with the same grammatical form, none overlaps another and there are no pairs of exact opposites.
+- **Plausible distractors:** each one matches a mistake people actually make.
+- **The central idea is in the stem:** the question can be answered without looking at the options.
 
-Además:
+Also:
 
-- Tres alternativas bien hechas bastan (Rodriguez, 2005): mejor tres plausibles que cuatro con una absurda.
-- El sitio baraja las alternativas en cada quiz. Las que tienen un orden natural (números, pasos) se muestran en el orden escrito con `keep_order: true`, y en ese caso quien escribe varía la posición de la correcta entre preguntas.
+- Three well-made options are enough (Rodriguez, 2005): three plausible options beat four with an absurd one.
+- The site shuffles the options in each quiz. Options with a natural order (numbers, steps) are shown in the written order with `keep_order: true`, and then the author varies the position of the correct option from question to question.
 
-## 6. Taxonomía y contenidos
+## 6. Taxonomy and topics
 
-17 áreas y 203 subtemas, en [`taxonomy.json`](taxonomy.json). Cada pregunta pertenece a un área y a un subtema.
+17 areas and 203 subtopics, in [`taxonomy.json`](taxonomy.json). Each question belongs to one area and one subtopic.
 
-El sitio no muestra las 17 áreas: los filtros y el resultado usan 8 **contenidos** que las agrupan.
+The site does not show the 17 areas: the filters and the results use 8 **topics** that group them.
 
-| Contenido (en · es) | Áreas | Incluye, por ejemplo |
+| Topic (en · es) | Areas | Includes, for example |
 |---|---|---|
-| Classical machine learning · Machine learning tradicional | `math`, `ml-foundations`, `classical-ml`, `probabilistic`, `production`, `rl` | Álgebra lineal, sesgo y varianza, gradient boosting, ML bayesiano, dataset shift, Q-learning |
-| Neural networks · Redes neuronales | `deep-learning`, `architectures` | Backpropagation, optimizadores, CNN, GAN, difusión, PINN, KAN |
-| Transformers & LLMs · Transformers y LLMs | `llm`, `adaptation` | Atención, ventana de contexto, determinismo, prompting, LoRA, RLHF |
-| Retrieval & RAG · Retrieval y RAG | `retrieval` | BM25, vectores sparse y densos, HNSW, bases vectoriales |
-| Computer vision · Visión por computador | `vision` | Convolución, detección, segmentación, ViT, CLIP |
-| Agents, harness & phenomena · Agentes, harness y fenómenos | `agents`, `phenomena` | Herramientas, ReAct, MCP, double descent, grokking, sycophancy |
-| Evaluation & responsible AI · Evaluación e IA responsable | `evaluation`, `responsible` | Precision y recall, calibración, SHAP, equidad, privacidad |
-| Landmark papers · Papers clave | `papers` | Del perceptrón (1958) a KAN (2024) |
+| Classical machine learning · Machine learning tradicional | `math`, `ml-foundations`, `classical-ml`, `probabilistic`, `production`, `rl` | Linear algebra, bias and variance, gradient boosting, Bayesian ML, dataset shift, Q-learning |
+| Neural networks · Redes neuronales | `deep-learning`, `architectures` | Backpropagation, optimizers, CNNs, GANs, diffusion, PINNs, KANs |
+| Transformers & LLMs · Transformers y LLMs | `llm`, `adaptation` | Attention, context window, determinism, prompting, LoRA, RLHF |
+| Retrieval & RAG · Retrieval y RAG | `retrieval` | BM25, sparse and dense vectors, HNSW, vector databases |
+| Computer vision · Visión por computador | `vision` | Convolution, detection, segmentation, ViT, CLIP |
+| Agents, harness & phenomena · Agentes, harness y fenómenos | `agents`, `phenomena` | Tools, ReAct, MCP, double descent, grokking, sycophancy |
+| Evaluation & responsible AI · Evaluación e IA responsable | `evaluation`, `responsible` | Precision and recall, calibration, SHAP, fairness, privacy |
+| Landmark papers · Papers clave | `papers` | From the perceptron (1958) to KAN (2024) |
 
-- **Los contenidos son solo presentación.** Viven en `groups`, dentro de `taxonomy.json`, y las preguntas guardan su área y su subtema, no su contenido. Reagrupar es editar esa lista y volver a generar el sitio: no se toca ninguna pregunta y no se pierden estadísticas.
-- El validador exige que cada área esté en exactamente un contenido.
-- El muestreo del quiz usa las áreas (sección 9), así que reagrupar tampoco cambia qué preguntas salen.
-- `rl` quedó en machine learning tradicional porque sus bases (MDP, Q-learning, policy gradients) son anteriores a los LLM. RLHF y DPO están en `adaptation`, dentro de Transformers y LLMs, junto al prompting y el fine-tuning.
+- **Topics are only presentation.** They live in `groups`, inside `taxonomy.json`, and questions store their area and subtopic, not their topic. Regrouping means editing that list and rebuilding the site: no question is touched and no statistics are lost.
+- The validator requires each area to belong to exactly one topic.
+- Quiz sampling uses the areas (section 9), so regrouping does not change which questions come up either.
+- `rl` stayed in classical machine learning because its foundations (MDPs, Q-learning, policy gradients) predate LLMs. RLHF and DPO are in `adaptation`, under Transformers & LLMs, next to prompting and fine-tuning.
 
-| Área | Subtemas | Incluye, por ejemplo |
+| Area | Subtopics | Includes, for example |
 |---|---|---|
-| `math` · Matemáticas para ML | 9 | Álgebra lineal, SVD, Bayes, MLE y MAP, entropía y KL |
-| `ml-foundations` · Fundamentos de ML | 10 | Sesgo y varianza, regularización, validación cruzada, desbalance |
-| `classical-ml` · Modelos clásicos | 13 | Regresión, SVM, árboles, gradient boosting, clustering, PCA |
-| `evaluation` · Métricas y evaluación | 11 | Precision y recall, ROC y PR, calibración, skill scores, harness de evaluación |
-| `deep-learning` · Redes neuronales y entrenamiento | 12 | Backpropagation, optimizadores, normalización, conexiones residuales |
-| `architectures` · Arquitecturas | 17 | CNN, RNN, VAE, GAN, transformers, difusión, GNN, SSM, PINN, FNO, KAN |
-| `llm` · Transformers y LLMs | 13 | Tokenización, atención, leyes de escala, decodificación, determinismo, KV cache |
-| `adaptation` · Adaptación y alineamiento | 10 | Prompting, fine-tuning, LoRA, RLHF, DPO, destilación |
-| `retrieval` · Retrieval, embeddings y RAG | 11 | BM25, vectores sparse y densos, HNSW, bases vectoriales, reranking |
-| `agents` · Agentes y harness | 9 | Herramientas, bucle ReAct, memoria, harness, prompt injection, MCP |
-| `probabilistic` · ML bayesiano e incertidumbre | 10 | Inferencia bayesiana, MCMC, inferencia variacional, procesos gaussianos, conformal |
-| `production` · ML en producción | 9 | Dataset shift, detección de drift, leakage, monitoreo, serving |
-| `vision` · Visión por computador | 10 | Convolución, detección, segmentación, ViT, CLIP |
-| `rl` · Aprendizaje por refuerzo | 8 | MDP, Q-learning, policy gradients, PPO, diseño de recompensas |
-| `responsible` · Interpretabilidad, equidad y seguridad | 7 | SHAP, interpretabilidad mecanicista, equidad, privacidad |
-| `papers` · Papers clave | 28 | Del perceptrón (1958) y Attention Is All You Need (2017) a KAN (2024) |
-| `phenomena` · Fenómenos de IA | 16 | Double descent, grokking, alucinación, sycophancy, model collapse |
+| `math` · Math for ML | 9 | Linear algebra, SVD, Bayes, MLE and MAP, entropy and KL |
+| `ml-foundations` · ML foundations | 10 | Bias and variance, regularization, cross-validation, class imbalance |
+| `classical-ml` · Classical models | 13 | Regression, SVMs, trees, gradient boosting, clustering, PCA |
+| `evaluation` · Metrics and evaluation | 11 | Precision and recall, ROC and PR, calibration, skill scores, evaluation harnesses |
+| `deep-learning` · Neural networks and training | 12 | Backpropagation, optimizers, normalization, residual connections |
+| `architectures` · Architectures | 17 | CNNs, RNNs, VAEs, GANs, transformers, diffusion, GNNs, SSMs, PINNs, FNOs, KANs |
+| `llm` · Transformers and LLMs | 13 | Tokenization, attention, scaling laws, decoding, determinism, KV cache |
+| `adaptation` · Adaptation and alignment | 10 | Prompting, fine-tuning, LoRA, RLHF, DPO, distillation |
+| `retrieval` · Retrieval, embeddings and RAG | 11 | BM25, sparse and dense vectors, HNSW, vector databases, reranking |
+| `agents` · Agents and harness | 9 | Tools, the ReAct loop, memory, harnesses, prompt injection, MCP |
+| `probabilistic` · Bayesian ML and uncertainty | 10 | Bayesian inference, MCMC, variational inference, Gaussian processes, conformal prediction |
+| `production` · ML in production | 9 | Dataset shift, drift detection, leakage, monitoring, serving |
+| `vision` · Computer vision | 10 | Convolution, detection, segmentation, ViT, CLIP |
+| `rl` · Reinforcement learning | 8 | MDPs, Q-learning, policy gradients, PPO, reward design |
+| `responsible` · Interpretability, fairness and safety | 7 | SHAP, mechanistic interpretability, fairness, privacy |
+| `papers` · Landmark papers | 28 | From the perceptron (1958) and Attention Is All You Need (2017) to KAN (2024) |
+| `phenomena` · AI phenomena | 16 | Double descent, grokking, hallucination, sycophancy, model collapse |
 
-Agregar un subtema es editar `taxonomy.json`. Los ids de áreas y subtemas no se cambian después, porque las preguntas los referencian.
+Adding a subtopic means editing `taxonomy.json`. Area and subtopic ids never change afterwards, because questions refer to them.
 
-## 7. Formato de una pregunta
+## 7. Question format
 
-Cada archivo de `questions/` es una lista de preguntas de un área (`questions/llm.json`, etc.). El esquema completo está en [`schema/question.schema.json`](schema/question.schema.json).
+Each file in `questions/` is a list of the questions in one area (`questions/llm.json`, and so on). The full schema is in [`schema/question.schema.json`](schema/question.schema.json).
 
-| Campo | Contenido |
+| Field | Content |
 |---|---|
-| `id` | `<área>-<4 dígitos>`, por ejemplo `llm-0001`. Permanente: si la pregunta se retira, su id no se reutiliza. |
-| `version` | Sube cuando cambia el enunciado, las alternativas o la respuesta, para no mezclar estadísticas. |
-| `area`, `subtopic` | Ids de `taxonomy.json`. |
-| `level`, `type`, `format`, `stability` | Los valores de las secciones 2 a 4. |
-| `bloom` | El proceso cognitivo que exige la pregunta (sección 3). |
-| `difficulty` | La rúbrica a priori: `steps`, `specialization` y `distractors`, de 0 a 2 cada uno (sección 12). |
-| `prompt` | El enunciado. |
-| `options` | 3 a 5 alternativas, cada una con `id` (a–e), `text` y `rationale`. |
-| `keep_order` | Opcional. Con `true`, el sitio muestra las alternativas en el orden escrito en vez de barajarlas. |
-| `answer` | Lista con los ids correctos. |
-| `explanation` | Lo que se muestra después de responder, con contexto que no cabe en las alternativas. |
-| `hint` | Opcional. |
-| `code` | Obligatorio en preguntas de tipo `code`: `lang` y `source`. |
-| `sources` | Al menos una: `kind`, `title` y, si existen, `authors`, `year`, `url`. |
-| `tags`, `collection` | Opcionales, para filtrar. |
-| `origin` | `human`, `llm_draft` (borrador sin revisar) o `llm_reviewed`. |
-| `reviewed_at`, `review_by` | Última revisión y fecha límite para la próxima. `review_by` es obligatoria en `slow` y `volatile`. |
+| `id` | `<area>-<4 digits>`, for example `llm-0001`. Permanent: if the question is retired, its id is not reused. |
+| `version` | Goes up when the stem, the options or the answer change, so statistics are not mixed. |
+| `area`, `subtopic` | Ids from `taxonomy.json`. |
+| `level`, `type`, `format`, `stability` | The values in sections 2 to 4. |
+| `bloom` | The cognitive process the question requires (section 3). |
+| `difficulty` | The up-front rubric: `steps`, `specialization` and `distractors`, from 0 to 2 each (section 12). |
+| `prompt` | The stem. |
+| `options` | 3 to 5 options, each with `id` (a–e), `text` and `rationale`. |
+| `keep_order` | Optional. With `true`, the site shows the options in the written order instead of shuffling them. |
+| `answer` | List with the correct ids. |
+| `explanation` | What is shown after answering, with context that does not fit in the options. |
+| `hint` | Optional. |
+| `code` | Required for `code` questions: `lang` and `source`. |
+| `sources` | At least one: `kind`, `title` and, when they exist, `authors`, `year`, `url`. |
+| `tags`, `collection` | Optional, for filtering. |
+| `origin` | `human`, `llm_draft` (an unreviewed draft) or `llm_reviewed`. |
+| `reviewed_at`, `review_by` | Last review and deadline for the next one. `review_by` is required for `slow` and `volatile`. |
 
-Todos los textos son mapas por idioma, `{ "en": "...", "es": "..." }`. El inglés es obligatorio y el español opcional, pero una pregunta debe tener los mismos idiomas en todos sus textos. Las alternativas y la respuesta son las mismas en todos los idiomas.
+Every text is a map by language, `{ "en": "...", "es": "..." }`. English is required and Spanish optional, but a question must have the same languages in all its texts. The options and the answer are the same in every language.
 
-Ejemplo:
+Example:
 
 ```json
 {
@@ -231,139 +233,139 @@ Ejemplo:
 }
 ```
 
-(Recortado a dos alternativas para el ejemplo; el esquema exige al menos tres.)
+(Trimmed to two options for the example; the schema requires at least three.)
 
-## 8. Dónde se guardan las preguntas
+## 8. Where the questions are stored
 
-**No hace falta Supabase, Firebase ni una base de datos para las preguntas.** Son contenido de solo lectura que cambia cuando tú publicas, así que viven como JSON en este repositorio, con historial de cambios y revisión por pull request, y el sitio las sirve como archivos estáticos.
+**The questions need no Supabase, Firebase or database.** They are read-only content that changes when you publish, so they live as JSON in this repository, with change history and review by pull request, and the site serves them as static files.
 
-- **Tamaño, medido con las 103 preguntas actuales:** unos 3,5 KB por pregunta en JSON minificado con los dos idiomas, y 1,2 KB comprimido con gzip. 2.000 preguntas son unos 7 MB, o 2,5 MB comprimidos: unos 150 KB comprimidos por área. Con un archivo por área, el navegador descarga solo las áreas elegidas.
-- **PWA:** en la primera visita, el service worker guarda todas las preguntas para que el sitio funcione sin conexión. Con 2.000 preguntas serían unos 2,5 MB comprimidos. Si eso pesa en el teléfono, `build_site.py` puede escribir un archivo por idioma, que reduce el tamaño a la mitad, o el service worker puede guardar cada área solo cuando se pide.
-- **Hosting:** Cloudflare (Workers con assets estáticos, o Pages) o GitHub Pages. En Cloudflare, las peticiones a assets estáticos son gratuitas e ilimitadas.
-- **Consecuencia aceptada:** las respuestas viajan al navegador, así que alguien que abra las herramientas de desarrollo puede verlas. En un sitio de práctica sin ranking da igual: hacer trampa solo perjudica a quien la hace.
+- **Size, measured with the current 103 questions:** about 3.5 KB per question as minified JSON with both languages, and 1.2 KB compressed with gzip. 2,000 questions come to about 7 MB, or 2.5 MB compressed: about 150 KB compressed per area. With one file per area, the browser downloads only the chosen areas.
+- **PWA:** on the first visit, the service worker stores every question so the site works offline. With 2,000 questions that would be about 2.5 MB compressed. If that is too heavy for phones, `build_site.py` can write one file per language, which halves the size, or the service worker can store each area only when it is requested.
+- **Hosting:** Cloudflare (Workers with static assets, or Pages) or GitHub Pages. On Cloudflare, requests for static assets are free and unlimited.
+- **Accepted trade-off:** the answers travel to the browser, so anyone who opens the developer tools can see them. On a practice site without rankings this does not matter: cheating only hurts the cheater.
 
-### Cuándo sí hace falta un backend (fase 2)
+### When a backend is needed (phase 2)
 
-| Necesidad | Por qué | Opción |
+| Need | Why | Option |
 |---|---|---|
-| Calibrar la dificultad con datos reales | Hay que guardar aciertos y errores por pregunta | Cloudflare Worker + D1 |
-| Reportar errores desde el sitio | Un formulario que guarde el reporte | Worker + D1, o sin backend: un enlace que abre un issue en GitHub |
-| Ranking o certificados | Hay que corregir en el servidor para que no se pueda hacer trampa | Worker + D1 |
-| Cuentas y progreso entre dispositivos | Hace falta autenticación | Supabase (Postgres y Auth) |
+| Calibrating difficulty with real data | Right and wrong answers must be stored per question | Cloudflare Worker + D1 |
+| Reporting mistakes from the site | A form that stores the report | Worker + D1, or no backend: a link that opens a GitHub issue |
+| Rankings or certificates | Answers must be graded on the server so nobody can cheat | Worker + D1 |
+| Accounts and progress across devices | Authentication is needed | Supabase (Postgres and Auth) |
 
-**Recomendación: Cloudflare D1**, porque vive junto al hosting. Su plan gratuito da 5 millones de filas leídas y 100.000 escritas al día, con 5 GB de almacenamiento; desde el 1 de septiembre de 2026, al pasar el límite diario las consultas fallan hasta la medianoche UTC, algo aceptable para estadísticas. El plan gratuito de Supabase da 500 MB por proyecto y pausa los proyectos tras una semana sin actividad, lo que complica un sitio con tráfico esporádico. Firebase no aporta nada que este proyecto necesite.
+**Recommendation: Cloudflare D1**, because it lives next to the hosting. Its free plan gives 5 million rows read and 100,000 rows written per day, with 5 GB of storage; since September 1, 2026, once the daily limit is reached, queries fail until midnight UTC, which is acceptable for statistics. Supabase's free plan gives 500 MB per project and pauses projects after a week without activity, which complicates a site with sporadic traffic. Firebase offers nothing this project needs.
 
-Para las estadísticas basta guardar `(id, versión, alternativa elegida, acierto, fecha)`, sin IP ni identificadores de usuario.
+For statistics it is enough to store `(id, version, chosen option, correct, date)`, with no IP addresses or user identifiers.
 
-## 9. Reglas del quiz
+## 9. Quiz rules
 
-- **Cantidad:** 10, 25, 50, 100 o 200 preguntas. Si con los filtros elegidos hay menos, aparece la opción «Todas (N)».
-- **Filtros:** niveles y contenidos. Colección y vigencia quedan para más adelante.
-- **Muestreo:** estratificado por área y nivel, para que un quiz mezclado no quede dominado por el área con más preguntas. Usa las 17 áreas y no los 8 contenidos, para que reagrupar los contenidos no cambie qué preguntas salen. No repite preguntas dentro de un quiz y evita las vistas hace poco (historial en el navegador).
-- **Alternativas barajadas** en cada quiz, salvo las de `keep_order`; por eso la respuesta se guarda por id y no por posición. En 500.000 barajadas de prueba, la correcta cayó en cada posición entre el 24,9% y el 25,1% de las veces.
-- **Dificultad visible:** cada pregunta muestra una pelotita verde, amarilla o roja con el nivel escrito al lado, para no depender solo del color.
-- **Modos:** estudio (explicación después de cada respuesta) y examen (resultado y explicaciones al final).
-- **Quizzes largos:** 200 preguntas toman unas 2 a 3 horas, así que el avance se guarda en el navegador.
-- **Al terminar:** puntaje por contenido y nivel, repaso de errores, resultado para compartir (sección 13) y botón de Ko-fi.
-- **En cada pregunta:** botón para reportar un error y, en las `volatile`, la fecha de la última revisión.
-- **Solo se publican** preguntas con `origin` `human` o `llm_reviewed`.
+- **Count:** 10, 25, 50, 100 or 200 questions. If fewer questions match the chosen filters, an "All (N)" option appears.
+- **Filters:** levels and topics. Collection and stability are left for later.
+- **Sampling:** stratified by area and level, so a mixed quiz is not dominated by the area with the most questions. It uses the 17 areas, not the 8 topics, so regrouping topics does not change which questions come up. It never repeats a question within a quiz and avoids recently seen ones (history stored in the browser).
+- **Shuffled options** in each quiz, except with `keep_order`; that is why the answer is stored by id and not by position. In 500,000 test shuffles, the correct option landed in each position between 24.9% and 25.1% of the time.
+- **Visible difficulty:** each question shows a green, yellow or red dot with the level written next to it, so it does not rely on color alone.
+- **Modes:** study (explanation after each answer) and exam (score and explanations at the end).
+- **Long quizzes:** 200 questions take about 2 to 3 hours, so progress is saved in the browser.
+- **At the end:** score by topic and level, review of mistakes, a result to share (section 13) and a Ko-fi button.
+- **On each question:** a button to report a mistake and, for `volatile` questions, the date of the last review.
+- **Only questions** with `origin` `human` or `llm_reviewed` are published.
 
-## 10. Cómo producir muchas preguntas
+## 10. How to produce many questions
 
-1. **Elegir una celda** (área × nivel) con pocas preguntas; el resumen de `scripts/validate.py` muestra la tabla.
-2. **Generar un lote** con [`prompts/generar.md`](prompts/generar.md). El prompt pide cada pregunta en inglés y en español, con su nivel de Bloom y siguiendo las reglas de redacción. Todo lo generado entra como `llm_draft`.
-3. **Validar** con `python scripts/validate.py`: el esquema, las reglas de redacción de la sección 5 y que la rúbrica calce con el nivel.
-4. **Verificar con otro modelo** usando [`prompts/verificar.md`](prompts/verificar.md), en tres pasos: ver solo las alternativas (busca pistas), responder sin ver la clave, y auditar con la clave (hechos, fuentes, reglas de redacción, Bloom, rúbrica y traducción). Se reescribe o descarta toda pregunta con una pista, donde no coincida con la clave, donde dos alternativas sean defendibles o donde la explicación tenga un error.
-5. **Revisar a mano** todas las difíciles, todas las de nicho y una muestra de las demás, incluida su versión en español. Al aprobar, `origin` pasa a `llm_reviewed`.
-6. **Publicar** cuando `python scripts/validate.py --publish` pasa sin errores.
-7. **Mantener:** el validador avisa cuando vence un `review_by`; los reportes de errores entran como issues.
+1. **Pick a cell** (area × level) with few questions; the summary of `scripts/validate.py` shows the table.
+2. **Generate a batch** with [`prompts/generar.md`](prompts/generar.md). The prompt asks for each question in English and Spanish, with its Bloom level and following the writing rules. Everything generated enters as `llm_draft`.
+3. **Validate** with `python scripts/validate.py`: the schema, the writing rules of section 5 and whether the rubric matches the level.
+4. **Review with another model** using [`prompts/verificar.md`](prompts/verificar.md), in three steps: look only at the options (to find clues), answer without seeing the key, and audit with the key (facts, sources, writing rules, Bloom, rubric and translation). A question is rewritten or discarded if it has a clue, if the model's answer does not match the key, if two options are defensible or if the explanation has a mistake.
+5. **Review by hand** every hard question, every niche one and a sample of the rest, including the Spanish version. On approval, `origin` becomes `llm_reviewed`.
+6. **Publish** when `python scripts/validate.py --publish` passes without errors.
+7. **Maintain:** the validator warns when a `review_by` date has passed; mistake reports come in as issues.
 
-Esfuerzo estimado: a 2 o 3 minutos de revisión por pregunta, 500 preguntas son entre 17 y 25 horas, algo más si se revisa a fondo la traducción.
+Estimated effort: at 2 to 3 minutes of review per question, 500 questions take between 17 and 25 hours, a bit more with a thorough check of the translation.
 
-## 11. Metas de volumen
+## 11. Volume goals
 
-Hay 51 celdas (17 áreas × 3 niveles). Hoy hay 103 preguntas, unas 2 por celda.
+There are 51 cells (17 areas × 3 levels). Today there are 103 questions, about 2 per cell.
 
-- **Primer lote (listo, octubre de 2026):** ventana de contexto y prompts, en los subtemas `llm/context-kv-cache`, `adaptation/prompting`, `adaptation/choosing-adaptation`, `agents/memory-context`, `agents/agent-security` (prompt injection), `phenomena/prompt-sensitivity` y `phenomena/in-context-learning`. Salió junto con preguntas de las demás áreas, y el banco pasó de 22 a 103 preguntas.
-- **Lanzamiento:** unas 10 preguntas por celda, cerca de 500 en total.
-- **Largo plazo:** unas 35 por celda, cerca de 1.800. Las áreas grandes (arquitecturas, LLMs, papers) pueden tener más y las pequeñas (RL, interpretabilidad) menos.
+- **First batch (done, October 2026):** context window and prompts, in the subtopics `llm/context-kv-cache`, `adaptation/prompting`, `adaptation/choosing-adaptation`, `agents/memory-context`, `agents/agent-security` (prompt injection), `phenomena/prompt-sensitivity` and `phenomena/in-context-learning`. It shipped together with questions from the other areas, and the bank went from 22 to 103 questions.
+- **Launch:** about 10 questions per cell, around 500 in total.
+- **Long term:** about 35 per cell, around 1,800. Large areas (architectures, LLMs, papers) can have more and small ones (RL, interpretability) fewer.
 
-## 12. Dificultad
+## 12. Difficulty
 
-La dificultad se expresa con el índice de dificultad clásico: la proporción de personas que aciertan la pregunta, p. Cada color corresponde a una banda de p:
+Difficulty is expressed with the classical difficulty index: the proportion of people who answer the question correctly, p. Each color corresponds to a band of p:
 
-| Pelotita | Nivel | Aciertos esperados |
+| Dot | Level | Expected share of correct answers |
 |---|---|---|
-| Verde | `easy` | 70% o más |
-| Amarilla | `medium` | Entre 40% y 70% |
-| Roja | `hard` | Menos de 40% |
+| Green | `easy` | 70% or more |
+| Yellow | `medium` | Between 40% and 70% |
+| Red | `hard` | Under 40% |
 
-Con cuatro alternativas, quien responde al azar acierta un 25%, así que una pregunta difícil bien construida queda entre 25% y 40%.
+With four options, someone guessing gets 25% right, so a well-built hard question lands between 25% and 40%.
 
-### A priori: rúbrica
+### Up front: rubric
 
-Antes de que haya respuestas, la banda se estima sumando el puntaje de Bloom (sección 3) y tres criterios de 0 a 2, guardados en el campo `difficulty`:
+Before there are answers, the band is estimated by adding the Bloom score (section 3) and three criteria from 0 to 2, stored in the `difficulty` field:
 
-| Criterio | 0 | 1 | 2 |
+| Criterion | 0 | 1 | 2 |
 |---|---|---|---|
-| Bloom (`bloom`) | `remember` o `understand` | `apply` | `analyze` o `evaluate` |
-| `steps` | Un paso hasta la respuesta | Dos o tres pasos | Cuatro o más |
-| `specialization` | Está en cualquier curso introductorio | Se aprende trabajando en el área | Nicho o investigación |
-| `distractors` | Se descartan con facilidad | Uno es plausible | Varios corresponden a errores frecuentes |
+| Bloom (`bloom`) | `remember` or `understand` | `apply` | `analyze` or `evaluate` |
+| `steps` | One step to the answer | Two or three steps | Four or more |
+| `specialization` | Covered in any introductory course | Learned by working in the field | Niche or research |
+| `distractors` | Easy to rule out | One is plausible | Several match common mistakes |
 
-La suma va de 0 a 8: 0–2 es verde, 3–5 amarilla y 6–8 roja.
+The sum goes from 0 to 8: 0–2 is green, 3–5 yellow and 6–8 red.
 
-- Bloom reemplaza al criterio `cognitive` de v1, que medía lo mismo sin un marco reconocido.
-- Además de la suma, el validador exige `analyze` o `evaluate` en toda pregunta `hard`. Una pregunta de nicho con buenos distractores puede sumar mucho, pero si solo pide recordar, su dificultad es de memoria y no de razonamiento.
-- El validador avisa cuando `level` no coincide con lo que sugiere la rúbrica. Quien revisa puede mantener otro nivel si tiene una razón.
-- En la verificación, un segundo modelo estima Bloom y puntúa la rúbrica sin ver lo que puso el generador. Si las sumas difieren en 2 puntos o más, decide quien revisa.
-- Las 103 preguntas están puntuadas, y en todas la rúbrica coincide con el nivel.
+- Bloom replaces v1's `cognitive` criterion, which measured the same thing without a recognized framework.
+- Besides the sum, the validator requires `analyze` or `evaluate` for every `hard` question. A niche question with good distractors can score high, but if it only asks for recall, its difficulty comes from memory, not reasoning.
+- The validator warns when `level` does not match what the rubric suggests. The reviewer can keep a different level for a good reason.
+- In the review, a second model estimates Bloom and scores the rubric without seeing what the generator chose. If the sums differ by 2 points or more, the person reviewing decides.
+- All 103 questions are scored, and in every one the rubric matches the level.
 
-### A posteriori: actualización bayesiana (fase 2)
+### After the fact: Bayesian update (phase 2)
 
-Cuando haya estadísticas anónimas, cada pregunta parte de un prior Beta centrado en su banda, con media m = 0,80 (verde), 0,55 (amarilla) o 0,33 (roja) y un peso equivalente a n₀ = 10 respuestas. Si después la responden n personas y k aciertan, la estimación es:
+Once there are anonymous statistics, each question starts from a Beta prior centered on its band, with mean m = 0.80 (green), 0.55 (yellow) or 0.33 (red) and a weight equivalent to n₀ = 10 answers. If n people then answer it and k get it right, the estimate is:
 
 ```
 p = (n₀ · m + k) / (n₀ + n)
 ```
 
-Por ejemplo, una pregunta roja que responden 40 personas, de las cuales aciertan 30, queda en p = (3,3 + 30) / 50 ≈ 0,67 y pasa a amarilla.
+For example, a red question answered by 40 people, 30 of whom get it right, ends up at p = (3.3 + 30) / 50 ≈ 0.67 and turns yellow.
 
-- **Cambio de color:** cuando la pregunta tiene al menos 30 respuestas y p cae en otra banda, para que no cambie por el azar de las primeras respuestas.
-- **Revisión:** si p queda bajo 0,30 con 30 respuestas o más, está cerca del azar, lo que suele delatar una clave equivocada o una pregunta ambigua.
-- **Recalibrar la rúbrica:** como la rúbrica queda guardada junto al nivel medido, con suficientes datos se ajusta una regresión logística del acierto sobre Bloom y los tres criterios. Eso muestra cuáles predicen de verdad la dificultad, y la rúbrica pasa a ser un modelo entrenado con las respuestas.
+- **Color change:** when the question has at least 30 answers and p falls in another band, so it does not change because of luck in the first answers.
+- **Review:** if p stays below 0.30 with 30 answers or more, it is close to chance, which often reveals a wrong key or an ambiguous question.
+- **Recalibrating the rubric:** since the rubric is stored next to the measured level, with enough data a logistic regression of correctness on Bloom and the three criteria can be fitted. That shows which criteria really predict difficulty, and the rubric becomes a model trained on the answers.
 
-### Discriminación y confiabilidad
+### Discrimination and reliability
 
-- **Discriminación:** indica si aciertan más la pregunta quienes tienen mejor puntaje en el resto del quiz. Una correlación punto-biserial bajo 0,10 significa que la pregunta no distingue niveles; una negativa suele delatar una clave equivocada.
-- **Confiabilidad:** el alfa de Cronbach mide la confiabilidad de una prueba fija, no la dificultad de una pregunta, y supone que todos responden las mismas preguntas. Como cada quiz sale al azar del banco, conviene un modelo de teoría de respuesta al ítem (Rasch o 2PL). Estima dificultad y discriminación en una escala común aunque cada persona vea preguntas distintas, y su confiabilidad marginal cumple el papel del alfa.
+- **Discrimination:** whether the people who score better on the rest of the quiz get the question right more often. A point-biserial correlation below 0.10 means the question does not tell levels apart; a negative one usually reveals a wrong key.
+- **Reliability:** Cronbach's alpha measures the reliability of a fixed test, not the difficulty of a question, and assumes everyone answers the same questions. Since each quiz is drawn at random from the bank, an item response theory model (Rasch or 2PL) fits better. It estimates difficulty and discrimination on a common scale even when each person sees different questions, and its marginal reliability plays the role of alpha.
 
-## 13. Sitio web
+## 13. Website
 
-`site/` es un sitio estático: HTML, CSS y JavaScript sin frameworks ni dependencias externas, con las fuentes incluidas.
+`site/` is a static site: HTML, CSS and JavaScript with no frameworks, with the fonts bundled. Its only external script is Cloudflare Web Analytics (see "Visits").
 
-### Nombre
+### Name
 
-**AI/ML Questions** en inglés y **Preguntas IA/ML** en español, con la insignia «alpha» («alfa») mientras dure la versión alfa. Es descriptivo a propósito: dice qué es el sitio con las mismas palabras que alguien escribiría en un buscador. Para cambiarlo:
+**AI/ML Questions** in English and **Preguntas IA/ML** in Spanish, with an "alpha" badge («alfa» in Spanish) for as long as the site is in alpha. The name is descriptive on purpose: it says what the site is with the same words someone would type into a search engine. To change it:
 
-- `site/app.js`: `siteName` en `STRINGS.en` y en `STRINGS.es`.
-- `site/index.html`: el `<title>`, `og:site_name` y el texto inicial del encabezado.
-- `site/manifest.webmanifest`: `name` y `short_name`.
-- `scripts/make_assets.py`: `NAME`. Después corre el script para regenerar `og-image.png`.
+- `site/app.js`: `siteName` in `STRINGS.en` and in `STRINGS.es`.
+- `site/index.html`: the `<title>`, `og:site_name` and the initial header text.
+- `site/manifest.webmanifest`: `name` and `short_name`.
+- `scripts/make_assets.py`: `NAME`. Then run the script to regenerate `og-image.png`.
 
-Para quitar la versión alfa, borra de `site/index.html` el `<span class="badge">`.
+To end the alpha, delete the `<span class="badge">` from `site/index.html`.
 
-### Pantallas
+### Screens
 
-1. **Inicio:** el nombre, el selector de idioma (EN/ES) y el objetivo del sitio. Después, dificultad (las tres pelotitas), contenidos, cantidad de preguntas y modo, con cuántas preguntas hay disponibles para esos filtros. Si hay un quiz a medias, ofrece retomarlo.
-2. **Pregunta:** la pelotita con el nivel escrito al lado, el contenido y el subtema, el enunciado y las alternativas como burbujas de hoja de respuestas. En modo estudio, al responder se marca la correcta y aparecen la justificación de cada alternativa, la explicación y las fuentes. En el computador, las teclas 1 a 4 (o A a D) eligen y Enter sigue. El idioma se puede cambiar en medio del quiz sin perder el avance.
-3. **Resultado:** puntaje, aciertos por dificultad y por contenido, el mensaje para compartir, Ko-fi y el repaso de errores, con la opción de repetir solo los que se fallaron.
+1. **Home:** the name, the language switch (EN/ES) and the site's goal. Then difficulty (the three dots), topics, number of questions and mode, with how many questions are available for those filters. If there is an unfinished quiz, it offers to resume it.
+2. **Question:** the dot with the level written next to it, the topic and subtopic, the stem, and the options as answer-sheet bubbles. In study mode, answering marks the correct option and shows each option's rationale, the explanation and the sources. On a computer, keys 1 to 4 (or A to D) choose and Enter moves on. The language can be switched mid-quiz without losing progress.
+3. **Results:** score, correct answers by difficulty and by topic, the message to share, Ko-fi and the review of mistakes, with the option to retry only the missed questions.
 
-### Compartir en LinkedIn
+### Sharing on LinkedIn
 
-La URL para compartir de LinkedIn (`https://www.linkedin.com/sharing/share-offsite/?url=...`) solo acepta el enlace; el texto de la publicación no se puede precargar. Por eso el botón copia el mensaje al portapapeles y abre LinkedIn con el enlace, y la persona pega el texto. En el teléfono, el botón «Share…» («Compartir…») abre el menú nativo del sistema.
+LinkedIn's share URL (`https://www.linkedin.com/sharing/share-offsite/?url=...`) accepts only the link; the post text cannot be prefilled. So the button copies the message to the clipboard and opens LinkedIn with the link, and the person pastes the text. On phones, the "Share…" button («Compartir…» in Spanish) opens the system's share menu.
 
-El mensaje se arma con el resultado, en el idioma elegido, y la persona puede editarlo antes de copiarlo:
+The message is built from the result, in the chosen language, and the person can edit it before copying:
 
 ```
 I answered 25 AI and machine learning questions and got 19 right (76%).
@@ -379,84 +381,85 @@ Lo que mejor me fue: Redes neuronales. Lo que más me costó: Retrieval y RAG.
 ¿Cuánto sacas tú? https://ai-ml-questions.strangemachines.workers.dev/#es
 ```
 
-- La línea de contenidos aparece solo si el quiz tuvo al menos dos contenidos con dos o más preguntas cada uno, y con resultados distintos.
-- El enlace en español lleva `#es`, para que quien lo abra vea el sitio en español.
+- The topics line appears only if the quiz had at least two topics with two or more questions each, and with different results.
+- The Spanish link ends in `#es`, so whoever opens it sees the site in Spanish.
 
-LinkedIn arma la tarjeta del enlace con las etiquetas Open Graph de `index.html`: el título «How much do you know about AI and machine learning?», la descripción y `og-image.png` (1200 × 627). La tarjeta está en inglés y es la misma para los dos idiomas, porque LinkedIn no lee lo que va después del `#`; una tarjeta en español necesitaría una ruta propia, como `/es/`, con sus propias etiquetas. Como el sitio es estático, la tarjeta es la misma para todos; una imagen con el puntaje de cada persona necesita un Worker que la genere (fase 2). LinkedIn guarda la tarjeta en caché, así que después de cambiarla hay que refrescarla con su Post Inspector.
+LinkedIn builds the link card from the Open Graph tags in `index.html`: the title "How much do you know about AI and machine learning?", the description and `og-image.png` (1200 × 627). The card is in English and the same for both languages, because LinkedIn ignores what comes after the `#`; a Spanish card would need its own path, such as `/es/`, with its own tags. Since the site is static, the card is the same for everyone; an image with each person's score needs a Worker to generate it (phase 2). LinkedIn caches the card, so after changing it you have to refresh it with LinkedIn's Post Inspector.
 
 ### PWA
 
-Con `manifest.webmanifest` y `sw.js`, el sitio se puede instalar en el teléfono y funciona sin conexión. En la primera visita, el service worker guarda lo que lista `precache.json` (la página, las fuentes, los íconos y todas las preguntas); después responde con lo guardado y lo actualiza en segundo plano. `scripts/build_site.py` cambia la versión del service worker cada vez que cambia un archivo, para que los navegadores descarguen lo nuevo.
+With `manifest.webmanifest` and `sw.js`, the site can be installed on a phone and works offline. On the first visit, the service worker stores what `precache.json` lists (the page, the fonts, the icons and every question); after that it answers from what it stored and updates it in the background. `scripts/build_site.py` changes the service worker version whenever a file changes, so browsers download the new files.
 
-### Generar y probar
+### Build and test
 
 ```bash
-python scripts/build_site.py                  # solo preguntas revisadas
-python scripts/build_site.py --include-drafts # también borradores, para probar
-python -m http.server 8000 --directory site   # abre http://localhost:8000
-python scripts/make_assets.py                 # íconos y og-image.png (pip install playwright)
+python scripts/build_site.py                  # reviewed questions only
+python scripts/build_site.py --include-drafts # drafts too, for testing
+python -m http.server 8000 --directory site   # open http://localhost:8000
+python scripts/make_assets.py                 # icons and og-image.png (pip install playwright)
 ```
 
-El service worker solo funciona en `localhost` o con HTTPS.
+The service worker only works on `localhost` or over HTTPS.
 
-### Publicar en Cloudflare
+### Publishing on Cloudflare
 
-El repositorio es [CristobalSantana/ai-ml-questions](https://github.com/CristobalSantana/ai-ml-questions). El sitio se publica como un Worker de Cloudflare llamado `ai-ml-questions`, conectado al repositorio con Workers Builds. [`wrangler.jsonc`](wrangler.jsonc) le dice que publique la carpeta `site/` tal cual, como archivos estáticos, sin paso de compilación, porque `site/data` ya viene generado en el repositorio.
+The repository is [CristobalSantana/ai-ml-questions](https://github.com/CristobalSantana/ai-ml-questions). The site is published as a Cloudflare Worker called `ai-ml-questions`, connected to the repository through Workers Builds. [`wrangler.jsonc`](wrangler.jsonc) tells it to publish the `site/` folder as is, as static files, with no build step, because `site/data` is already generated in the repository.
 
-- Cada push a `main` vuelve a publicar el sitio solo; el estado de cada publicación se ve en el panel de Cloudflare, en el Worker, pestaña **Deployments** o **Builds**.
-- El `name` de `wrangler.jsonc` debe coincidir con el nombre del Worker en el panel.
-- La dirección pública es https://ai-ml-questions.strangemachines.workers.dev/. Si cambia, o si se agrega un dominio propio en **Domains & Routes**, hay que actualizar `CONFIG.siteUrl` en `site/app.js` y las etiquetas `og:url` y `og:image` en `site/index.html`, porque LinkedIn necesita URLs absolutas.
+- Every push to `main` republishes the site on its own; the status of each deployment is in the Cloudflare dashboard, under the Worker, in the **Deployments** or **Builds** tab.
+- The `name` in `wrangler.jsonc` must match the Worker's name in the dashboard.
+- The public address is https://ai-ml-questions.strangemachines.workers.dev/. If it changes, or if a custom domain is added under **Domains & Routes**, update `CONFIG.siteUrl` in `site/app.js` and the `og:url` and `og:image` tags in `site/index.html`, because LinkedIn needs absolute URLs.
 
-Antes de cada push que cambie preguntas o el sitio, regenera `site/data` y la versión del service worker. Mientras las preguntas sigan como borradores (`llm_draft`), el sitio se publica con `python scripts/build_site.py --include-drafts`; cuando estén revisadas, sin esa opción.
+Before each push that changes questions or the site, regenerate `site/data` and the service worker version. While the questions are still drafts (`llm_draft`), the site is published with `python scripts/build_site.py --include-drafts`; once they are reviewed, without that option.
 
-`CONFIG` en `site/app.js` también guarda la página de Ko-fi (`kofiUrl`) y el enlace para reportar errores (`reportUrl`), que abre un issue en el repositorio.
+`CONFIG` in `site/app.js` also holds the Ko-fi page (`kofiUrl`) and the link for reporting mistakes (`reportUrl`), which opens an issue in the repository.
 
-### Visitas
+### Visits
 
-El sitio cuenta visitas con Cloudflare Web Analytics: el script `beacon.min.js` al final de `site/index.html`, con el token del sitio. No usa cookies ni identifica a quien visita, así que no hace falta un aviso de cookies. Las cifras (visitas, páginas vistas, países, de dónde llega la gente y velocidad de carga) se ven en el panel de Cloudflare, en **Analytics & Logs → Web Analytics**. Los bloqueadores de anuncios suelen bloquear el script, así que las cifras quedan algo por debajo de las reales. El service worker no intercepta esas peticiones porque van a otro dominio.
+The site counts visits with Cloudflare Web Analytics: the `beacon.min.js` script at the end of `site/index.html`, with the site's token. It uses no cookies and does not identify visitors, so no cookie banner is needed. The numbers (visits, page views, countries, where people come from and load speed) are in the Cloudflare dashboard under **Analytics & Logs → Web Analytics**. Ad blockers often block the script, so the numbers come out somewhat below the real ones. The service worker does not intercept those requests because they go to another domain.
 
-## 14. Idioma
+## 14. Language
 
-- **Inglés por defecto.** El sitio abre en inglés y se puede cambiar a español con el botón EN/ES; la elección queda guardada en el navegador.
-- **Enlaces por idioma.** `#es` o `#en` al final del enlace abre el sitio en ese idioma. El orden de decisión es: el idioma del enlace, la elección guardada y, si no hay ninguna, inglés. El sitio no usa el idioma del navegador, para que el predeterminado sea siempre inglés.
-- **Preguntas.** El inglés es obligatorio y el español opcional; si una pregunta no tiene español, se muestra en inglés. El resumen del validador cuenta cuántas preguntas tiene cada idioma.
-- **Interfaz.** Los textos están en `STRINGS`, en `site/app.js`, uno por idioma. Agregar otro idioma es agregarlo a `CONFIG.languages`, a `STRINGS`, al esquema y a las preguntas.
+- **English by default.** The site opens in English and can be switched to Spanish with the EN/ES button; the choice is saved in the browser.
+- **Links per language.** `#es` or `#en` at the end of the link opens the site in that language. The order of precedence is: the link's language, the saved choice and, if there is neither, English. The site ignores the browser's language, so the default is always English.
+- **Questions.** English is required and Spanish optional; if a question has no Spanish, it is shown in English. The validator summary counts how many questions each language has.
+- **Interface.** The texts are in `STRINGS`, in `site/app.js`, one set per language. Adding another language means adding it to `CONFIG.languages`, to `STRINGS`, to the schema and to the questions.
+- **This document.** `README.md` (English) and `README.es.md` (Spanish) say the same thing; a change in one goes into the other too.
 
-Strange Machines y ml-toy-experiments están en inglés, lo que favorece al inglés por alcance; el español tiene menos competencia y queda disponible para el público de Chile y Latinoamérica.
+Strange Machines and ml-toy-experiments are in English, which favors English for reach; Spanish has less competition and serves readers in Chile and Latin America.
 
-## 15. Licencia
+## 15. License
 
-- Preguntas: CC BY-SA 4.0 ([`LICENSE-QUESTIONS`](LICENSE-QUESTIONS)). Cualquiera puede reutilizarlas si cita la fuente y comparte bajo la misma licencia.
-- Código: MIT ([`LICENSE`](LICENSE)), como ml-toy-experiments.
-- Fuentes: STIX Two Text, IBM Plex Sans e IBM Plex Mono, bajo la SIL Open Font License 1.1 (`site/fonts/OFL-*.txt`).
+- Questions: CC BY-SA 4.0 ([`LICENSE-QUESTIONS`](LICENSE-QUESTIONS)). Anyone can reuse them if they credit the source and share under the same license.
+- Code: MIT ([`LICENSE`](LICENSE)), like ml-toy-experiments.
+- Fonts: STIX Two Text, IBM Plex Sans and IBM Plex Mono, under the SIL Open Font License 1.1 (`site/fonts/OFL-*.txt`).
 
-## 16. Archivos
+## 16. Files
 
 ```
-README.md                    esta especificación
-LICENSE, LICENSE-QUESTIONS   licencias del código (MIT) y de las preguntas (CC BY-SA 4.0)
-wrangler.jsonc               configuración del Worker de Cloudflare que publica site/
-taxonomy.json                8 contenidos, 17 áreas y 203 subtemas, en inglés y español
-schema/question.schema.json  el formato de una pregunta (JSON Schema 2020-12)
-questions/<área>.json        las preguntas, un archivo por área
-scripts/validate.py          valida el banco, las reglas de redacción y la cobertura (pip install jsonschema)
-scripts/build_site.py        genera site/data, site/precache.json y la versión del service worker
-scripts/make_assets.py       genera los íconos y og-image.png (pip install playwright)
-prompts/generar.md           prompt para generar lotes de preguntas
-prompts/verificar.md         prompt para verificar preguntas con otro modelo
-site/index.html              la página y las etiquetas para compartir
-site/styles.css, fonts.css   estilos y fuentes
-site/app.js                  la lógica del quiz; CONFIG y los textos (STRINGS) al inicio
-site/manifest.webmanifest    datos para instalar la PWA
-site/sw.js                   service worker para funcionar sin conexión
-site/icons/, og-image.png    íconos y la imagen de la tarjeta para compartir
-site/fonts/                  las fuentes y sus licencias
-site/data/                   generado: taxonomía, índice y preguntas por área
+README.md, README.es.md      this specification, in English and Spanish
+LICENSE, LICENSE-QUESTIONS   licenses for the code (MIT) and the questions (CC BY-SA 4.0)
+wrangler.jsonc               configuration of the Cloudflare Worker that publishes site/
+taxonomy.json                8 topics, 17 areas and 203 subtopics, in English and Spanish
+schema/question.schema.json  the format of a question (JSON Schema 2020-12)
+questions/<area>.json        the questions, one file per area
+scripts/validate.py          validates the bank, the writing rules and coverage (pip install jsonschema)
+scripts/build_site.py        generates site/data, site/precache.json and the service worker version
+scripts/make_assets.py       generates the icons and og-image.png (pip install playwright)
+prompts/generar.md           prompt for generating batches of questions (in Spanish)
+prompts/verificar.md         prompt for reviewing questions with another model
+site/index.html              the page and the tags for sharing
+site/styles.css, fonts.css   styles and fonts
+site/app.js                  the quiz logic; CONFIG and the texts (STRINGS) at the top
+site/manifest.webmanifest    data for installing the PWA
+site/sw.js                   service worker for working offline
+site/icons/, og-image.png    icons and the image for the share card
+site/fonts/                  the fonts and their licenses
+site/data/                   generated: taxonomy, index and questions per area
 ```
 
-Las 103 preguntas actuales cubren las 17 áreas, los tres niveles, las tres vigencias y los cinco niveles de Bloom, están en inglés y en español, y siguen marcadas como `llm_draft` hasta que las revises.
+The current 103 questions cover the 17 areas, the three levels, the three stability classes and the five Bloom levels, are in English and Spanish, and remain marked as `llm_draft` until you review them.
 
-## Referencias
+## References
 
 - Haladyna, T. M., Downing, S. M., & Rodriguez, M. C. (2002). A review of multiple-choice item-writing guidelines for classroom assessment. *Applied Measurement in Education*, 15(3), 309–333. https://doi.org/10.1207/S15324818AME1503_5
 - Rodriguez, M. C. (2005). Three options are optimal for multiple-choice items: A meta-analysis of 80 years of research. *Educational Measurement: Issues and Practice*, 24, 3–13.
