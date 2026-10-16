@@ -28,6 +28,7 @@ scripts/build_site.py        generates site/data, site/precache.json and the ser
 scripts/make_assets.py       generates the icons and og-image.png (pip install playwright)
 prompts/generate.md          prompt for generating batches of questions
 prompts/review.md            prompt for reviewing questions with another model
+prompts/*.es.md              the same two prompts in Spanish, the language they were first written in
 site/index.html              the page and the tags for sharing
 site/styles.css, fonts.css   styles and fonts
 site/app.js                  the quiz logic; CONFIG and the interface texts (STRINGS) at the top
@@ -40,7 +41,7 @@ site/data/                   generated: taxonomy, index and questions per area
 
 ## Language
 
-Everything in the repository is in English: code, comments, prompts, the schema, commit messages and this documentation. Spanish is for content people read on the site: the questions, the taxonomy names and the interface texts, plus the short [`README.es.md`](../README.es.md).
+Everything in the repository is in English: code, comments, prompts, the schema, commit messages and this documentation. Spanish is for content people read on the site: the questions, the taxonomy names and the interface texts, plus the short [`README.es.md`](../README.es.md). The two prompts also keep their Spanish versions, [`generate.es.md`](../prompts/generate.es.md) and [`review.es.md`](../prompts/review.es.md), because they were first written in Spanish; each pair says the same thing.
 
 ## History
 

@@ -1,5 +1,7 @@
 # Prompt for generating questions
 
+This prompt was first written in Spanish; the Spanish version is [`generate.es.md`](generate.es.md). Both say the same thing, so a change to one goes into the other too.
+
 Replace the variables in `{{ }}` and send the whole block to an LLM. Ask for small batches (5 to 10 questions): quality drops in large ones.
 
 ---

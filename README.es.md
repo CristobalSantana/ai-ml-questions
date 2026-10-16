@@ -46,7 +46,7 @@ python -m http.server 8000 --directory site   # luego abre http://localhost:8000
 | `taxonomy.json` | Contenidos, áreas y subtemas, en inglés y en español |
 | `schema/` | El formato de una pregunta |
 | `scripts/` | El validador y el generador del sitio |
-| `prompts/` | Prompts para generar y revisar preguntas |
+| `prompts/` | Prompts para generar y revisar preguntas, en inglés y en su versión original en español |
 | `site/` | El sitio |
 | `docs/` | La documentación completa, en inglés |
 

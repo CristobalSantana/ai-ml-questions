@@ -1,5 +1,7 @@
 # Prompt for reviewing questions
 
+This prompt was first written in Spanish; the Spanish version is [`review.es.md`](review.es.md). Both say the same thing, so a change to one goes into the other too. The texts sent to the model are in English in both, because the review uses the English version of the question.
+
 Use a different model from the one that generated the question, so it does not share the same blind spots. The review has three steps, best done in separate conversations. Use the English version; the Spanish one is checked afterwards as a translation.
 
 ## Step 0: options only
