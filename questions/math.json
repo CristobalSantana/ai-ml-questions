@@ -60,5 +60,73 @@
     "tags": ["entropy", "units"],
     "origin": "llm_draft",
     "reviewed_at": "2026-10-15"
+  },
+  {
+    "id": "math-0002",
+    "version": 1,
+    "area": "math",
+    "subtopic": "matrix-decompositions",
+    "level": "medium",
+    "bloom": "apply",
+    "type": "calculation",
+    "format": "single",
+    "stability": "stable",
+    "difficulty": { "steps": 2, "specialization": 1, "distractors": 1 },
+    "prompt": {
+      "en": "The centered data matrix of a dataset has singular values 10, 5, 2 and 1. What fraction of the total variance does the first principal component explain?",
+      "es": "La matriz de datos centrada de un dataset tiene valores singulares 10, 5, 2 y 1. ¿Qué fracción de la varianza total explica la primera componente principal?"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": { "en": "25%", "es": "25%" },
+        "rationale": {
+          "en": "That would be the share if all four components explained the same variance.",
+          "es": "Esa sería la proporción si las cuatro componentes explicaran la misma varianza."
+        }
+      },
+      {
+        "id": "b",
+        "text": { "en": "56%", "es": "56%" },
+        "rationale": {
+          "en": "This divides the singular values directly: 10/(10 + 5 + 2 + 1). Variance is proportional to the squared singular values.",
+          "es": "Esto divide los valores singulares directamente: 10/(10 + 5 + 2 + 1). La varianza es proporcional a los valores singulares al cuadrado."
+        }
+      },
+      {
+        "id": "c",
+        "text": { "en": "77%", "es": "77%" },
+        "rationale": {
+          "en": "Variance is proportional to the squares: 100/(100 + 25 + 4 + 1) = 100/130 ≈ 0.77.",
+          "es": "La varianza es proporcional a los cuadrados: 100/(100 + 25 + 4 + 1) = 100/130 ≈ 0,77."
+        }
+      },
+      {
+        "id": "d",
+        "text": { "en": "96%", "es": "96%" },
+        "rationale": {
+          "en": "That is the cumulative share of the first two components: (100 + 25)/130.",
+          "es": "Esa es la proporción acumulada de las dos primeras componentes: (100 + 25)/130."
+        }
+      }
+    ],
+    "keep_order": true,
+    "answer": ["c"],
+    "explanation": {
+      "en": "PCA can be computed from the SVD of the centered data, X = UΣVᵀ: the right singular vectors are the principal directions, and the variance along each one is σᵢ²/(n − 1). Because of the squares, a few large singular values usually dominate, which is why a handful of components often captures most of the variance.",
+      "es": "El PCA se puede calcular a partir de la SVD de los datos centrados, X = UΣVᵀ: los vectores singulares derechos son las direcciones principales, y la varianza a lo largo de cada una es σᵢ²/(n − 1). Por los cuadrados, unos pocos valores singulares grandes suelen dominar, y por eso un puñado de componentes muchas veces captura casi toda la varianza."
+    },
+    "sources": [
+      {
+        "kind": "book",
+        "title": "The Elements of Statistical Learning (2nd ed.)",
+        "authors": "Trevor Hastie, Robert Tibshirani & Jerome Friedman",
+        "year": 2009
+      },
+      { "kind": "book", "title": "Principal Component Analysis (2nd ed.)", "authors": "Ian T. Jolliffe", "year": 2002 }
+    ],
+    "tags": ["pca", "svd", "variance"],
+    "origin": "llm_draft",
+    "reviewed_at": "2026-10-16"
   }
 ]

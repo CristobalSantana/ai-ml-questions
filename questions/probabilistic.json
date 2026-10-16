@@ -153,5 +153,78 @@
     "collection": "strange-machines",
     "origin": "llm_draft",
     "reviewed_at": "2026-10-15"
+  },
+  {
+    "id": "probabilistic-0003",
+    "version": 1,
+    "area": "probabilistic",
+    "subtopic": "gaussian-processes",
+    "level": "medium",
+    "bloom": "understand",
+    "type": "concept",
+    "format": "single",
+    "stability": "stable",
+    "difficulty": { "steps": 1, "specialization": 1, "distractors": 1 },
+    "prompt": {
+      "en": "A Gaussian process regression with an RBF kernel and zero prior mean is trained on data between x = 0 and x = 10. What does it predict at x = 50?",
+      "es": "Una regresión con procesos gaussianos, kernel RBF y media a priori cero se entrena con datos entre x = 0 y x = 10. ¿Qué predice en x = 50?"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "A mean near 0 and uncertainty near the prior variance, since the data barely inform that point.",
+          "es": "Una media cercana a 0 e incertidumbre cercana a la a priori, porque los datos casi no informan ese punto."
+        },
+        "rationale": {
+          "en": "The RBF kernel's correlation decays with distance, so far from the data the posterior falls back to the prior. The model says it does not know, which is the behavior you want.",
+          "es": "La correlación del kernel RBF decae con la distancia, así que lejos de los datos la distribución a posteriori vuelve a la a priori. El modelo dice que no sabe, que es justo lo deseable."
+        }
+      },
+      {
+        "id": "b",
+        "text": {
+          "en": "A straight-line extrapolation of the trend in the data, with small uncertainty.",
+          "es": "Una extrapolación en línea recta de la tendencia de los datos, con poca incertidumbre."
+        },
+        "rationale": {
+          "en": "An RBF kernel does not encode trends; extrapolating a line would need a linear kernel or a linear mean function.",
+          "es": "Un kernel RBF no codifica tendencias; extrapolar una recta requeriría un kernel lineal o una función de media lineal."
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "The value of the closest training point, x = 10, with the same uncertainty it had there.",
+          "es": "El valor del punto de entrenamiento más cercano, x = 10, con la misma incertidumbre que tenía ahí."
+        },
+        "rationale": {
+          "en": "The correlation with x = 10 decays with distance, so that point's influence fades instead of carrying over unchanged.",
+          "es": "La correlación con x = 10 decae con la distancia, así que la influencia de ese punto se desvanece en vez de mantenerse igual."
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "An error, since a Gaussian process is defined only inside the range of the training data.",
+          "es": "Un error, porque un proceso gaussiano solo está definido dentro del rango de los datos de entrenamiento."
+        },
+        "rationale": {
+          "en": "A Gaussian process defines a distribution over functions on the whole input space; it can predict anywhere.",
+          "es": "Un proceso gaussiano define una distribución sobre funciones en todo el espacio de entradas; puede predecir en cualquier punto."
+        }
+      }
+    ],
+    "answer": ["a"],
+    "explanation": {
+      "en": "This calibrated growth of uncertainty away from the data is the main appeal of Gaussian processes, and it depends on the kernel: the lengthscale sets how fast the correlation decays, and periodic or linear kernels extrapolate differently. The cost is computation, which grows as O(n³) with the number of training points.",
+      "es": "Este aumento calibrado de la incertidumbre lejos de los datos es el principal atractivo de los procesos gaussianos, y depende del kernel: la escala de longitud fija qué tan rápido decae la correlación, y los kernels periódicos o lineales extrapolan de otra forma. El costo es el cómputo, que crece como O(n³) con el número de puntos de entrenamiento."
+    },
+    "sources": [
+      { "kind": "book", "title": "Gaussian Processes for Machine Learning", "authors": "Carl Edward Rasmussen & Christopher K. I. Williams", "year": 2006 }
+    ],
+    "tags": ["gaussian-processes", "uncertainty", "extrapolation"],
+    "origin": "llm_draft",
+    "reviewed_at": "2026-10-16"
   }
 ]

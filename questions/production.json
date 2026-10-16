@@ -79,5 +79,165 @@
     "collection": "strange-machines",
     "origin": "llm_draft",
     "reviewed_at": "2026-10-15"
+  },
+  {
+    "id": "production-0002",
+    "version": 1,
+    "area": "production",
+    "subtopic": "data-leakage",
+    "level": "hard",
+    "bloom": "analyze",
+    "type": "scenario",
+    "format": "single",
+    "stability": "stable",
+    "difficulty": { "steps": 2, "specialization": 1, "distractors": 2 },
+    "prompt": {
+      "en": "A model that predicts 30-day hospital readmission reaches an AUC of 0.97 in validation but 0.62 in production. Its most important feature is the number of follow-up appointments in the patient's record, which the hospital fills in during the weeks after discharge. What is the most likely cause?",
+      "es": "Un modelo que predice el reingreso hospitalario a 30 días logra un AUC de 0,97 en validación pero de 0,62 en producción. Su atributo más importante es el número de controles registrados en la ficha del paciente, que el hospital completa durante las semanas posteriores al alta. ¿Cuál es la causa más probable?"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "Target leakage: the historical feature already included events after discharge, unknown when predicting.",
+          "es": "Fuga del objetivo: el atributo histórico ya incluía eventos posteriores al alta, que se desconocen al predecir."
+        },
+        "rationale": {
+          "en": "Historical records were complete, so the count included appointments scheduled because of the problems that led to readmission. At discharge the field is mostly empty, so the signal disappears in production.",
+          "es": "Los registros históricos estaban completos, así que el conteo incluía controles agendados por los problemas que llevaron al reingreso. Al momento del alta el campo está casi vacío, y la señal desaparece en producción."
+        }
+      },
+      {
+        "id": "b",
+        "text": {
+          "en": "Concept drift: the relationship between appointments and readmission changed after deployment.",
+          "es": "Concept drift: la relación entre controles y reingreso cambió después de poner el modelo en producción."
+        },
+        "rationale": {
+          "en": "Drift could lower performance gradually, but a collapse right at deployment, driven by a feature filled in after the event, points to leakage.",
+          "es": "El drift podría bajar el rendimiento de forma gradual, pero un derrumbe justo al desplegar, causado por un atributo que se completa después del evento, apunta a una fuga."
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "Overfitting: the model has too many trees, so it memorized the validation set as well.",
+          "es": "Sobreajuste: el modelo tiene demasiados árboles, así que también memorizó el conjunto de validación."
+        },
+        "rationale": {
+          "en": "The number of trees affects the fit to the training data; it cannot make a model memorize a validation set it never trained on.",
+          "es": "El número de árboles afecta el ajuste a los datos de entrenamiento; no puede hacer que un modelo memorice un conjunto de validación con el que no entrenó."
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "Class imbalance: readmissions are rare, so AUC is unreliable in validation and in production.",
+          "es": "Desbalance de clases: los reingresos son poco frecuentes, así que el AUC es poco confiable en validación y en producción."
+        },
+        "rationale": {
+          "en": "Imbalance affects metrics like accuracy more than AUC, and it would not explain the gap between validation and production.",
+          "es": "El desbalance afecta más a métricas como la exactitud que al AUC, y no explicaría la diferencia entre validación y producción."
+        }
+      }
+    ],
+    "answer": ["a"],
+    "explanation": {
+      "en": "The test for leakage is temporal: for each feature, ask whether its value would be available, with the same content, at the moment the prediction is made. Building training data from snapshots taken at prediction time, rather than from the final state of each record, prevents this whole class of errors.",
+      "es": "La prueba para detectar fugas es temporal: para cada atributo, preguntar si su valor estaría disponible, con el mismo contenido, en el momento en que se hace la predicción. Construir los datos de entrenamiento con fotos tomadas al momento de predecir, y no con el estado final de cada registro, evita toda esta clase de errores."
+    },
+    "sources": [
+      {
+        "kind": "paper",
+        "title": "Leakage in Data Mining: Formulation, Detection, and Avoidance",
+        "authors": "Shachar Kaufman, Saharon Rosset, Claudia Perlich & Ori Stitelman",
+        "year": 2012
+      }
+    ],
+    "tags": ["data-leakage", "target-leakage", "production"],
+    "origin": "llm_draft",
+    "reviewed_at": "2026-10-16"
+  },
+  {
+    "id": "production-0003",
+    "version": 1,
+    "area": "production",
+    "subtopic": "drift-detection",
+    "level": "medium",
+    "bloom": "apply",
+    "type": "scenario",
+    "format": "single",
+    "stability": "stable",
+    "difficulty": { "steps": 1, "specialization": 1, "distractors": 2 },
+    "prompt": {
+      "en": "You want to detect whether the distribution of a continuous feature, such as transaction amount, changed between the training data and last week's traffic. Labels for last week are not available yet. Which check fits best?",
+      "es": "Quieres detectar si la distribución de un atributo continuo, como el monto de las transacciones, cambió entre los datos de entrenamiento y el tráfico de la semana pasada. Las etiquetas de la semana pasada todavía no están disponibles. ¿Qué verificación es la más adecuada?"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "A two-sample Kolmogorov–Smirnov test comparing both samples of the feature.",
+          "es": "Un test de Kolmogorov–Smirnov de dos muestras que compare ambas muestras del atributo."
+        },
+        "rationale": {
+          "en": "The KS test compares whole distributions without needing labels, so it detects shifts in location, spread or shape.",
+          "es": "El test KS compara distribuciones completas sin necesitar etiquetas, así que detecta cambios de posición, dispersión o forma."
+        }
+      },
+      {
+        "id": "b",
+        "text": { "en": "A t-test on the means of the feature in both periods.", "es": "Un test t sobre las medias del atributo en ambos períodos." },
+        "rationale": {
+          "en": "A t-test only detects a change in the mean; a distribution can change its shape or spread while keeping the same mean.",
+          "es": "Un test t solo detecta un cambio en la media; una distribución puede cambiar de forma o de dispersión manteniendo la misma media."
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "Comparing last week's accuracy with the validation accuracy.",
+          "es": "Comparar la exactitud de la semana pasada con la de validación."
+        },
+        "rationale": {
+          "en": "Accuracy needs labels, which are not available yet; label-free checks on the inputs give an earlier warning.",
+          "es": "La exactitud necesita etiquetas, que todavía no están; las verificaciones sobre las entradas, sin etiquetas, avisan antes."
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "Checking that the feature's minimum and maximum stayed within the training range.",
+          "es": "Revisar que el mínimo y el máximo del atributo sigan dentro del rango de entrenamiento."
+        },
+        "rationale": {
+          "en": "Values can stay within the old range while their distribution changes completely.",
+          "es": "Los valores pueden seguir dentro del rango anterior aunque su distribución cambie por completo."
+        }
+      }
+    ],
+    "answer": ["a"],
+    "explanation": {
+      "en": "With large samples, the KS test flags tiny, harmless differences, so teams usually track an effect size, such as the KS statistic itself or the population stability index, and alert above a threshold. Input drift does not always hurt the model; it is a signal to check performance as soon as labels arrive.",
+      "es": "Con muestras grandes, el test KS marca diferencias mínimas e inofensivas, así que los equipos suelen seguir un tamaño de efecto, como el propio estadístico KS o el population stability index, y alertar sobre un umbral. El drift en las entradas no siempre perjudica al modelo; es una señal para revisar el rendimiento apenas lleguen las etiquetas."
+    },
+    "sources": [
+      {
+        "kind": "paper",
+        "title": "Failing Loudly: An Empirical Study of Methods for Detecting Dataset Shift",
+        "authors": "Stephan Rabanser, Stephan Günnemann & Zachary C. Lipton",
+        "year": 2019,
+        "url": "https://arxiv.org/abs/1810.11953"
+      },
+      {
+        "kind": "book",
+        "title": "Dataset Shift in Machine Learning",
+        "authors": "Joaquin Quiñonero-Candela, Masashi Sugiyama, Anton Schwaighofer & Neil D. Lawrence (eds.)",
+        "year": 2009
+      }
+    ],
+    "tags": ["drift-detection", "kolmogorov-smirnov", "monitoring"],
+    "origin": "llm_draft",
+    "reviewed_at": "2026-10-16"
   }
 ]

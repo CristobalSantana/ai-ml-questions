@@ -173,5 +173,323 @@
     "collection": "strange-machines",
     "origin": "llm_draft",
     "reviewed_at": "2026-10-15"
+  },
+  {
+    "id": "architectures-0003",
+    "version": 1,
+    "area": "architectures",
+    "subtopic": "rnn-lstm",
+    "level": "easy",
+    "bloom": "understand",
+    "type": "concept",
+    "format": "single",
+    "stability": "stable",
+    "difficulty": { "steps": 0, "specialization": 1, "distractors": 1 },
+    "prompt": {
+      "en": "What lets an LSTM carry information across many more time steps than a simple recurrent network?",
+      "es": "¿Qué le permite a una LSTM conservar información durante muchos más pasos de tiempo que una red recurrente simple?"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "A gated cell state updated by addition, so gradients can flow back without shrinking each step.",
+          "es": "Un estado de celda con compuertas que se actualiza por suma, así los gradientes vuelven sin achicarse."
+        },
+        "rationale": {
+          "en": "The forget, input and output gates decide what to keep, write and expose. Because the cell state is updated additively, the gradient along it is not multiplied by a small factor at every step.",
+          "es": "Las compuertas de olvido, entrada y salida deciden qué conservar, escribir y exponer. Como el estado de celda se actualiza sumando, el gradiente a lo largo de él no se multiplica por un factor pequeño en cada paso."
+        }
+      },
+      {
+        "id": "b",
+        "text": {
+          "en": "Attention over all past time steps, so the network can look back at any earlier input.",
+          "es": "Atención sobre todos los pasos anteriores, para que la red pueda mirar cualquier entrada pasada."
+        },
+        "rationale": {
+          "en": "Attention came later, first in sequence-to-sequence models and then in transformers; an LSTM does not use it by itself.",
+          "es": "La atención llegó después, primero en modelos secuencia a secuencia y luego en transformers; una LSTM no la usa por sí misma."
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "A separate set of weights for each time step, so longer sequences get more parameters.",
+          "es": "Un conjunto de pesos distinto para cada paso, para que las secuencias largas tengan más parámetros."
+        },
+        "rationale": {
+          "en": "LSTMs share the same weights across all time steps, like any recurrent network.",
+          "es": "Las LSTM comparten los mismos pesos en todos los pasos de tiempo, como cualquier red recurrente."
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "Processing the sequence in both directions, so information from the end reaches the start.",
+          "es": "Procesar la secuencia en ambas direcciones, para que la información del final llegue al inicio."
+        },
+        "rationale": {
+          "en": "That is a bidirectional network, which can be built from simple RNNs or LSTMs; it does not solve vanishing gradients.",
+          "es": "Eso es una red bidireccional, que se puede armar con RNN simples o con LSTM; no resuelve el desvanecimiento del gradiente."
+        }
+      }
+    ],
+    "answer": ["a"],
+    "explanation": {
+      "en": "Hochreiter and Schmidhuber (1997) designed the LSTM to fix the vanishing gradients that kept simple RNNs from learning dependencies longer than about 10 steps. LSTMs dominated sequence modeling, including speech recognition and machine translation, until transformers replaced them for most tasks after 2017.",
+      "es": "Hochreiter y Schmidhuber (1997) diseñaron la LSTM para resolver el desvanecimiento del gradiente que impedía a las RNN simples aprender dependencias de más de unos 10 pasos. Las LSTM dominaron el modelado de secuencias, incluidos el reconocimiento de voz y la traducción automática, hasta que los transformers las reemplazaron en la mayoría de las tareas después de 2017."
+    },
+    "sources": [
+      { "kind": "paper", "title": "Long Short-Term Memory", "authors": "Sepp Hochreiter & Jürgen Schmidhuber", "year": 1997 }
+    ],
+    "tags": ["lstm", "rnn", "vanishing-gradients"],
+    "origin": "llm_draft",
+    "reviewed_at": "2026-10-16"
+  },
+  {
+    "id": "architectures-0004",
+    "version": 1,
+    "area": "architectures",
+    "subtopic": "transformer-variants",
+    "level": "medium",
+    "bloom": "apply",
+    "type": "scenario",
+    "format": "single",
+    "stability": "stable",
+    "difficulty": { "steps": 1, "specialization": 1, "distractors": 1 },
+    "prompt": {
+      "en": "You need embeddings of short support tickets to classify them into 30 categories, with a small model that runs fast on CPU. Which transformer family is the most natural fit?",
+      "es": "Necesitas embeddings de tickets de soporte cortos para clasificarlos en 30 categorías, con un modelo pequeño que corra rápido en CPU. ¿Qué familia de transformers encaja mejor?"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "An encoder-only model like BERT, which reads the whole text in both directions.",
+          "es": "Un modelo solo encoder como BERT, que lee todo el texto en ambas direcciones."
+        },
+        "rationale": {
+          "en": "Encoders use bidirectional attention, so each token's representation sees the whole ticket. Small BERT-style models produce good embeddings cheaply, and a light classifier on top does the rest.",
+          "es": "Los encoders usan atención bidireccional, así que la representación de cada token ve todo el ticket. Los modelos pequeños tipo BERT producen buenos embeddings a bajo costo, y un clasificador liviano encima hace el resto."
+        }
+      },
+      {
+        "id": "b",
+        "text": {
+          "en": "A decoder-only model like GPT, which predicts the next token from left to right.",
+          "es": "Un modelo solo decoder como GPT, que predice el siguiente token de izquierda a derecha."
+        },
+        "rationale": {
+          "en": "Decoders can classify too, especially large ones, but they only attend to the left and are usually larger and slower for the same quality.",
+          "es": "Los decoders también pueden clasificar, sobre todo los grandes, pero solo atienden hacia la izquierda y suelen ser más grandes y lentos para la misma calidad."
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "An encoder-decoder model like T5, which generates the category name as output text.",
+          "es": "Un modelo encoder-decoder como T5, que genera el nombre de la categoría como texto de salida."
+        },
+        "rationale": {
+          "en": "Generating the label works, but it adds a decoder and generation steps that a classification task does not need.",
+          "es": "Generar la etiqueta funciona, pero agrega un decoder y pasos de generación que una tarea de clasificación no necesita."
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "A diffusion model, which refines a noisy representation of the text step by step.",
+          "es": "Un modelo de difusión, que refina paso a paso una representación ruidosa del texto."
+        },
+        "rationale": {
+          "en": "Diffusion models are mainly used to generate images and other continuous data, not to embed short texts for classification.",
+          "es": "Los modelos de difusión se usan sobre todo para generar imágenes y otros datos continuos, no para crear embeddings de textos cortos y clasificarlos."
+        }
+      }
+    ],
+    "answer": ["a"],
+    "explanation": {
+      "en": "The three families come from the original transformer: the encoder (BERT) for understanding tasks, the decoder (GPT) for generation, and both together (T5) for text-to-text tasks such as translation. Large decoder-only LLMs can handle all three, but for a narrow task with latency limits a small encoder is usually the cheaper choice.",
+      "es": "Las tres familias vienen del transformer original: el encoder (BERT) para tareas de comprensión, el decoder (GPT) para generación, y ambos juntos (T5) para tareas de texto a texto como la traducción. Los LLM grandes solo decoder pueden con las tres, pero para una tarea acotada con límites de latencia un encoder pequeño suele ser la opción más barata."
+    },
+    "sources": [
+      {
+        "kind": "paper",
+        "title": "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+        "authors": "Jacob Devlin et al.",
+        "year": 2019,
+        "url": "https://arxiv.org/abs/1810.04805"
+      },
+      {
+        "kind": "paper",
+        "title": "Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer",
+        "authors": "Colin Raffel et al.",
+        "year": 2020,
+        "url": "https://arxiv.org/abs/1910.10683"
+      }
+    ],
+    "tags": ["bert", "encoder", "transformer-variants"],
+    "origin": "llm_draft",
+    "reviewed_at": "2026-10-16"
+  },
+  {
+    "id": "architectures-0005",
+    "version": 1,
+    "area": "architectures",
+    "subtopic": "moe",
+    "level": "medium",
+    "bloom": "analyze",
+    "type": "concept",
+    "format": "single",
+    "stability": "slow",
+    "difficulty": { "steps": 1, "specialization": 1, "distractors": 1 },
+    "prompt": {
+      "en": "A mixture-of-experts model has 47 billion parameters in total but uses about 13 billion per token, with 8 experts per layer and 2 active for each token. How does it compare with a dense 13-billion-parameter model?",
+      "es": "Un modelo mixture-of-experts tiene 47 mil millones de parámetros en total, pero usa unos 13 mil millones por token, con 8 expertos por capa y 2 activos por token. ¿Cómo se compara con un modelo denso de 13 mil millones de parámetros?"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "Similar compute per token, but memory for all 47 billion parameters.",
+          "es": "Cómputo por token parecido, pero memoria para los 47 mil millones."
+        },
+        "rationale": {
+          "en": "The router sends each token to 2 of the 8 expert feed-forward blocks, so only about 13B parameters do work for it. But any token may need any expert, so all of them must sit in memory.",
+          "es": "El router envía cada token a 2 de los 8 bloques feed-forward expertos, así que solo unos 13 mil millones de parámetros trabajan para él. Pero cualquier token puede necesitar cualquier experto, así que todos deben estar en memoria."
+        }
+      },
+      {
+        "id": "b",
+        "text": {
+          "en": "Similar compute and memory, since inactive experts are not loaded.",
+          "es": "Cómputo y memoria parecidos, porque los expertos inactivos no se cargan."
+        },
+        "rationale": {
+          "en": "Which experts a token needs is decided at run time, token by token; keeping the inactive ones out of memory would mean loading them on demand, which is too slow for typical serving.",
+          "es": "Qué expertos necesita cada token se decide al ejecutar, token por token; dejar fuera de memoria los inactivos obligaría a cargarlos a pedido, lo que es demasiado lento al servir el modelo."
+        }
+      },
+      {
+        "id": "c",
+        "text": { "en": "Similar memory, but about 3.6 times more compute per token.", "es": "Memoria parecida, pero unas 3,6 veces más cómputo por token." },
+        "rationale": {
+          "en": "That reverses the trade-off: MoE spends memory to save compute, not the other way around.",
+          "es": "Eso invierte el intercambio: MoE gasta memoria para ahorrar cómputo, no al revés."
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "The same compute and memory as a dense 47-billion-parameter model.",
+          "es": "El mismo cómputo y memoria que un modelo denso de 47 mil millones."
+        },
+        "rationale": {
+          "en": "A dense 47B model runs all its parameters for every token; MoE runs only the selected experts.",
+          "es": "Un modelo denso de 47 mil millones usa todos sus parámetros en cada token; MoE usa solo los expertos elegidos."
+        }
+      }
+    ],
+    "answer": ["a"],
+    "explanation": {
+      "en": "These numbers match Mixtral 8x7B, which has 46.7B parameters and 12.9B active per token. MoE lets a model store more knowledge for the same compute per token; the costs are memory, communication between devices that hold different experts, and training tricks to stop the router from overusing a few experts.",
+      "es": "Estos números corresponden a Mixtral 8x7B, que tiene 46,7 mil millones de parámetros y 12,9 mil millones activos por token. MoE permite guardar más conocimiento con el mismo cómputo por token; los costos son la memoria, la comunicación entre dispositivos que tienen expertos distintos y trucos de entrenamiento para que el router no sobreuse a unos pocos expertos."
+    },
+    "sources": [
+      { "kind": "paper", "title": "Mixtral of Experts", "authors": "Albert Q. Jiang et al.", "year": 2024, "url": "https://arxiv.org/abs/2401.04088" },
+      {
+        "kind": "paper",
+        "title": "Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer",
+        "authors": "Noam Shazeer et al.",
+        "year": 2017,
+        "url": "https://arxiv.org/abs/1701.06538"
+      }
+    ],
+    "tags": ["moe", "mixture-of-experts", "inference"],
+    "origin": "llm_draft",
+    "reviewed_at": "2026-10-16",
+    "review_by": "2027-10-16"
+  },
+  {
+    "id": "architectures-0006",
+    "version": 1,
+    "area": "architectures",
+    "subtopic": "choosing-architecture",
+    "level": "hard",
+    "bloom": "evaluate",
+    "type": "scenario",
+    "format": "single",
+    "stability": "slow",
+    "difficulty": { "steps": 1, "specialization": 1, "distractors": 2 },
+    "prompt": {
+      "en": "You have 20,000 rows of tabular data with 40 numeric and categorical columns, some skewed and some irrelevant, and must deliver a strong baseline this week. Which model should you try first?",
+      "es": "Tienes 20.000 filas de datos tabulares con 40 columnas numéricas y categóricas, algunas sesgadas y otras irrelevantes, y debes entregar una buena línea base esta semana. ¿Qué modelo conviene probar primero?"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "Gradient-boosted trees, such as XGBoost, LightGBM or CatBoost.",
+          "es": "Árboles con gradient boosting, como XGBoost, LightGBM o CatBoost."
+        },
+        "rationale": {
+          "en": "Trees handle mixed types, skewed values and irrelevant columns with little preprocessing, and Grinsztajn et al. (2022) found them ahead of deep models on medium-sized tabular benchmarks.",
+          "es": "Los árboles manejan tipos mixtos, valores sesgados y columnas irrelevantes con poco preprocesamiento, y Grinsztajn et al. (2022) los encontraron por delante de los modelos profundos en benchmarks tabulares de tamaño medio."
+        }
+      },
+      {
+        "id": "b",
+        "text": {
+          "en": "A deep multilayer perceptron with embeddings for the categorical columns.",
+          "es": "Un perceptrón multicapa profundo con embeddings para las columnas categóricas."
+        },
+        "rationale": {
+          "en": "MLPs can work, but they need careful preprocessing and tuning, and they were less robust to irrelevant features in the same benchmarks.",
+          "es": "Los MLP pueden funcionar, pero necesitan preprocesamiento y ajuste cuidadosos, y fueron menos robustos a atributos irrelevantes en esos mismos benchmarks."
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "A transformer trained from scratch on the rows written out as text.",
+          "es": "Un transformer entrenado desde cero con las filas escritas como texto."
+        },
+        "rationale": {
+          "en": "Training a transformer from scratch needs far more than 20,000 rows, and writing rows as text discards their structure.",
+          "es": "Entrenar un transformer desde cero requiere muchas más de 20.000 filas, y escribir las filas como texto descarta su estructura."
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "A k-nearest-neighbors model on the standardized columns.",
+          "es": "Un modelo de k vecinos más cercanos sobre las columnas estandarizadas."
+        },
+        "rationale": {
+          "en": "kNN suffers from irrelevant and skewed features, since all of them enter the distance.",
+          "es": "kNN sufre con atributos irrelevantes y sesgados, porque todos entran en la distancia."
+        }
+      }
+    ],
+    "answer": ["a"],
+    "explanation": {
+      "en": "Tabular foundation models such as TabPFN have recently matched or beaten boosted trees on small datasets, so the gap is narrowing. For a first baseline under time pressure, boosted trees remain the safest choice, and a newer model is worth comparing once that baseline exists.",
+      "es": "Los modelos fundacionales tabulares como TabPFN han igualado o superado hace poco a los árboles con boosting en datasets pequeños, así que la brecha se está cerrando. Para una primera línea base con poco tiempo, los árboles con boosting siguen siendo la opción más segura, y vale la pena comparar un modelo más nuevo una vez que esa línea base exista."
+    },
+    "sources": [
+      {
+        "kind": "paper",
+        "title": "Why do tree-based models still outperform deep learning on typical tabular data?",
+        "authors": "Léo Grinsztajn, Edouard Oyallon & Gaël Varoquaux",
+        "year": 2022,
+        "url": "https://arxiv.org/abs/2207.08815"
+      },
+      { "kind": "paper", "title": "Accurate predictions on small data with a tabular foundation model", "authors": "Noah Hollmann et al.", "year": 2025 }
+    ],
+    "tags": ["tabular-data", "gradient-boosting", "model-selection"],
+    "origin": "llm_draft",
+    "reviewed_at": "2026-10-16",
+    "review_by": "2027-10-16"
   }
 ]

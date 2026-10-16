@@ -158,5 +158,388 @@
     "collection": "strange-machines",
     "origin": "llm_draft",
     "reviewed_at": "2026-10-15"
+  },
+  {
+    "id": "evaluation-0003",
+    "version": 1,
+    "area": "evaluation",
+    "subtopic": "roc-pr",
+    "level": "medium",
+    "bloom": "evaluate",
+    "type": "scenario",
+    "format": "single",
+    "stability": "stable",
+    "difficulty": { "steps": 1, "specialization": 1, "distractors": 1 },
+    "prompt": {
+      "en": "A fraud model, on data with 0.1% fraud, has a ROC-AUC of 0.98 but a PR-AUC of 0.20. The fraud team will review the 100 highest-scoring transactions every day. Which number better reflects what they will experience?",
+      "es": "Un modelo de fraude, en datos con 0,1% de fraude, tiene un ROC-AUC de 0,98 pero un PR-AUC de 0,20. El equipo de fraude revisará cada día las 100 transacciones con mayor puntaje. ¿Qué número refleja mejor lo que van a vivir?"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "PR-AUC, since precision shows how many flagged transactions will be real fraud.",
+          "es": "El PR-AUC, porque la precision muestra cuántas transacciones marcadas serán fraude real."
+        },
+        "rationale": {
+          "en": "With 0.1% fraud, even a small false positive rate means many false alarms among millions of legitimate transactions. Precision captures that; the false positive rate on the ROC curve hides it.",
+          "es": "Con 0,1% de fraude, incluso una tasa pequeña de falsos positivos significa muchas falsas alarmas entre millones de transacciones legítimas. La precision lo captura; la tasa de falsos positivos de la curva ROC lo esconde."
+        }
+      },
+      {
+        "id": "b",
+        "text": {
+          "en": "ROC-AUC, since it is independent of the class balance and therefore more objective.",
+          "es": "El ROC-AUC, porque no depende del balance de clases y por eso es más objetivo."
+        },
+        "rationale": {
+          "en": "Ignoring the class balance is exactly why ROC-AUC looks good here: 1% of false positives is a small rate but a huge number of transactions.",
+          "es": "Ignorar el balance de clases es justamente la razón por la que el ROC-AUC se ve bien aquí: 1% de falsos positivos es una tasa pequeña, pero una cantidad enorme de transacciones."
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "Both equally, since they are two views of the same ranking.",
+          "es": "Ambos por igual, porque son dos miradas distintas sobre el mismo ranking de puntajes."
+        },
+        "rationale": {
+          "en": "They do come from the same ranking, but they weight errors differently, and only precision reflects the reviewers' workload.",
+          "es": "Sí vienen del mismo ranking, pero ponderan los errores de forma distinta, y solo la precision refleja la carga de trabajo de quienes revisan."
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "Neither: accuracy, since it counts every transaction the model gets right.",
+          "es": "Ninguno: la exactitud, porque cuenta todas las transacciones que el modelo acierta."
+        },
+        "rationale": {
+          "en": "A model that flags nothing reaches 99.9% accuracy here, so accuracy says almost nothing.",
+          "es": "Un modelo que no marca nada llega aquí a 99,9% de exactitud, así que la exactitud casi no dice nada."
+        }
+      }
+    ],
+    "answer": ["a"],
+    "explanation": {
+      "en": "Saito and Rehmsmeier (2015) showed that precision-recall plots are more informative than ROC plots on imbalanced data. With a fixed daily review budget, the most direct metric is precision at k, here the precision of the top 100, which is exactly what the team will see.",
+      "es": "Saito y Rehmsmeier (2015) mostraron que las curvas de precision-recall son más informativas que las ROC con datos desbalanceados. Con un presupuesto fijo de revisión diaria, la métrica más directa es la precision en k, aquí la precision de las 100 primeras, que es justo lo que verá el equipo."
+    },
+    "sources": [
+      {
+        "kind": "paper",
+        "title": "The Precision-Recall Plot Is More Informative than the ROC Plot When Evaluating Binary Classifiers on Imbalanced Datasets",
+        "authors": "Takaya Saito & Marc Rehmsmeier",
+        "year": 2015
+      },
+      { "kind": "paper", "title": "The Relationship Between Precision-Recall and ROC Curves", "authors": "Jesse Davis & Mark Goadrich", "year": 2006 }
+    ],
+    "tags": ["pr-auc", "roc-auc", "class-imbalance"],
+    "origin": "llm_draft",
+    "reviewed_at": "2026-10-16"
+  },
+  {
+    "id": "evaluation-0004",
+    "version": 1,
+    "area": "evaluation",
+    "subtopic": "calibration",
+    "level": "medium",
+    "bloom": "apply",
+    "type": "scenario",
+    "format": "single",
+    "stability": "stable",
+    "difficulty": { "steps": 1, "specialization": 1, "distractors": 1 },
+    "prompt": {
+      "en": "On a validation set, the predictions your classifier makes with about 90% confidence are correct only 70% of the time, while its ranking of predictions is good. Which fix is the most common first step?",
+      "es": "En un conjunto de validación, las predicciones que tu clasificador hace con cerca de 90% de confianza aciertan solo el 70% de las veces, aunque el orden de sus predicciones es bueno. ¿Qué arreglo es el primer paso más común?"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "Temperature scaling: fit one value on validation data that softens the probabilities.",
+          "es": "Temperature scaling: ajustar un solo valor con datos de validación que suaviza las probabilidades."
+        },
+        "rationale": {
+          "en": "The model is overconfident but ranks well, which is what temperature scaling fixes: dividing the logits by T > 1 lowers confidence without changing which class wins.",
+          "es": "El modelo está sobreconfiado pero ordena bien, que es justo lo que corrige el temperature scaling: dividir los logits por T > 1 baja la confianza sin cambiar qué clase gana."
+        }
+      },
+      {
+        "id": "b",
+        "text": {
+          "en": "Retrain the model for more epochs so it gains confidence in its correct answers.",
+          "es": "Reentrenar el modelo con más épocas para que gane confianza en sus respuestas correctas."
+        },
+        "rationale": {
+          "en": "Longer training tends to increase overconfidence in modern networks, not reduce it.",
+          "es": "Entrenar más tiende a aumentar la sobreconfianza de las redes modernas, no a reducirla."
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "Raise the decision threshold from 0.5 to 0.9 so only confident predictions count.",
+          "es": "Subir el umbral de decisión de 0,5 a 0,9 para que solo cuenten las predicciones confiadas."
+        },
+        "rationale": {
+          "en": "A higher threshold changes which predictions are made, but the probabilities stay miscalibrated.",
+          "es": "Un umbral más alto cambia qué predicciones se hacen, pero las probabilidades siguen mal calibradas."
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "Replace the softmax with one sigmoid per class, which removes overconfidence.",
+          "es": "Reemplazar el softmax por una sigmoide por clase, lo que elimina la sobreconfianza."
+        },
+        "rationale": {
+          "en": "Sigmoid outputs can be just as overconfident; the problem is the scale of the logits.",
+          "es": "Las salidas sigmoide pueden estar igual de sobreconfiadas; el problema es la escala de los logits."
+        }
+      }
+    ],
+    "answer": ["a"],
+    "explanation": {
+      "en": "Guo et al. (2017) found that modern deep networks are often overconfident, and that temperature scaling, with a single parameter fitted on validation data, was among the most effective fixes. Calibration is measured with reliability diagrams or with the expected calibration error (ECE).",
+      "es": "Guo et al. (2017) encontraron que las redes profundas modernas suelen estar sobreconfiadas, y que el temperature scaling, con un solo parámetro ajustado en datos de validación, estaba entre los arreglos más efectivos. La calibración se mide con diagramas de confiabilidad o con el error de calibración esperado (ECE)."
+    },
+    "sources": [
+      {
+        "kind": "paper",
+        "title": "On Calibration of Modern Neural Networks",
+        "authors": "Chuan Guo, Geoff Pleiss, Yu Sun & Kilian Q. Weinberger",
+        "year": 2017,
+        "url": "https://arxiv.org/abs/1706.04599"
+      }
+    ],
+    "tags": ["calibration", "temperature-scaling", "overconfidence"],
+    "origin": "llm_draft",
+    "reviewed_at": "2026-10-16"
+  },
+  {
+    "id": "evaluation-0005",
+    "version": 1,
+    "area": "evaluation",
+    "subtopic": "regression-metrics",
+    "level": "easy",
+    "bloom": "understand",
+    "type": "concept",
+    "format": "single",
+    "stability": "stable",
+    "difficulty": { "steps": 0, "specialization": 0, "distractors": 1 },
+    "prompt": {
+      "en": "Two demand forecasts have the same MAE, but forecast B has a much higher RMSE than forecast A. What does this tell you?",
+      "es": "Dos pronósticos de demanda tienen el mismo MAE, pero el pronóstico B tiene un RMSE mucho mayor que el A. ¿Qué te dice esto?"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "B makes a few large errors, while A's errors are more uniform.",
+          "es": "B comete unos pocos errores grandes; los errores de A son más parejos."
+        },
+        "rationale": {
+          "en": "RMSE squares the errors before averaging, so large errors weigh much more. Equal MAE with a higher RMSE means B's errors are concentrated in a few big misses.",
+          "es": "El RMSE eleva los errores al cuadrado antes de promediar, así que los errores grandes pesan mucho más. Igual MAE con mayor RMSE significa que los errores de B se concentran en unas pocas fallas grandes."
+        }
+      },
+      {
+        "id": "b",
+        "text": { "en": "B is biased: it overestimates demand more often than A.", "es": "B está sesgado: sobreestima la demanda más seguido que A." },
+        "rationale": {
+          "en": "Neither metric shows the direction of the errors; bias is measured with the mean signed error.",
+          "es": "Ninguna de las dos métricas muestra la dirección de los errores; el sesgo se mide con el error medio con signo."
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "B is better, since RMSE rewards forecasts that are usually close.",
+          "es": "B es mejor, porque el RMSE premia los pronósticos que suelen acercarse."
+        },
+        "rationale": { "en": "A higher RMSE is worse, not better; it signals large errors.", "es": "Un RMSE mayor es peor, no mejor; indica errores grandes." }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "Both are equivalent, since MAE and RMSE measure the same thing.",
+          "es": "Ambos son equivalentes, porque el MAE y el RMSE miden lo mismo."
+        },
+        "rationale": {
+          "en": "They weight errors differently, which is why they can disagree.",
+          "es": "Ponderan los errores de forma distinta, y por eso pueden discrepar."
+        }
+      }
+    ],
+    "answer": ["a"],
+    "explanation": {
+      "en": "Which metric to use depends on the cost of errors: if one large miss costs more than several small ones, as with stockouts of critical items, RMSE reflects that better; if every unit of error costs the same, MAE is more faithful. RMSE is always at least as large as MAE.",
+      "es": "Qué métrica usar depende del costo de los errores: si una falla grande cuesta más que varias pequeñas, como con quiebres de stock de productos críticos, el RMSE lo refleja mejor; si cada unidad de error cuesta lo mismo, el MAE es más fiel. El RMSE siempre es al menos tan grande como el MAE."
+    },
+    "sources": [
+      { "kind": "book", "title": "Forecasting: Principles and Practice (3rd ed.)", "authors": "Rob J. Hyndman & George Athanasopoulos", "year": 2021 }
+    ],
+    "tags": ["mae", "rmse", "forecasting"],
+    "origin": "llm_draft",
+    "reviewed_at": "2026-10-16"
+  },
+  {
+    "id": "evaluation-0006",
+    "version": 1,
+    "area": "evaluation",
+    "subtopic": "llm-evaluation",
+    "level": "hard",
+    "bloom": "evaluate",
+    "type": "scenario",
+    "format": "single",
+    "stability": "slow",
+    "difficulty": { "steps": 1, "specialization": 2, "distractors": 1 },
+    "prompt": {
+      "en": "You use an LLM as a judge to compare answers from two systems. When you swap the order in which the two answers are shown, the judge's preference flips in 35% of cases. What is the best way to keep comparing with this judge?",
+      "es": "Usas un LLM como juez para comparar respuestas de dos sistemas. Cuando cambias el orden en que se muestran las dos respuestas, la preferencia del juez se invierte en el 35% de los casos. ¿Cuál es la mejor forma de seguir comparando con este juez?"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "Judge each pair in both orders, count a win only when both agree, and treat the rest as ties.",
+          "es": "Juzgar cada par en ambos órdenes, contar una victoria solo si coinciden y tratar el resto como empate."
+        },
+        "rationale": {
+          "en": "Position bias is a known failure of LLM judges. Swapping and requiring agreement cancels it, and the share of ties tells you how many verdicts were unreliable.",
+          "es": "El sesgo de posición es una falla conocida de los jueces LLM. Invertir el orden y exigir acuerdo lo cancela, y la proporción de empates indica cuántos veredictos no eran confiables."
+        }
+      },
+      {
+        "id": "b",
+        "text": {
+          "en": "Show the answers in a fixed order, so the bias is at least the same for both systems.",
+          "es": "Mostrar las respuestas en un orden fijo, para que el sesgo sea al menos igual para ambos sistemas."
+        },
+        "rationale": {
+          "en": "A fixed order does not make the bias equal: whichever system is always shown first gets the advantage.",
+          "es": "Un orden fijo no iguala el sesgo: el sistema que siempre aparece primero se lleva la ventaja."
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "Ask the judge for longer explanations, since reasoning removes positional bias.",
+          "es": "Pedirle al juez explicaciones más largas, porque razonar elimina el sesgo de posición."
+        },
+        "rationale": {
+          "en": "Explanations can help a little, but position bias persists with reasoning; it does not go away.",
+          "es": "Las explicaciones pueden ayudar un poco, pero el sesgo de posición persiste aunque el juez razone; no desaparece."
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "Use a judge from the same model family as one of the systems, since it knows that style best.",
+          "es": "Usar un juez de la misma familia de modelos que uno de los sistemas, porque conoce mejor ese estilo."
+        },
+        "rationale": {
+          "en": "Judges tend to favor answers in their own style, which adds a self-preference bias instead of removing one.",
+          "es": "Los jueces tienden a preferir respuestas con su propio estilo, lo que agrega un sesgo de autopreferencia en vez de quitar uno."
+        }
+      }
+    ],
+    "answer": ["a"],
+    "explanation": {
+      "en": "Zheng et al. (2023) documented position, verbosity and self-enhancement biases in LLM judges, and proposed swapping positions as a mitigation. Before trusting a judge, measure its agreement with human labels on a sample; a judge that flips 35% of the time when answers are swapped needs that check more than most.",
+      "es": "Zheng et al. (2023) documentaron sesgos de posición, de verbosidad y de autopreferencia en los jueces LLM, y propusieron invertir las posiciones para mitigarlos. Antes de confiar en un juez, conviene medir su acuerdo con etiquetas humanas en una muestra; un juez que se invierte el 35% de las veces al cambiar el orden necesita esa revisión más que ninguno."
+    },
+    "sources": [
+      {
+        "kind": "paper",
+        "title": "Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena",
+        "authors": "Lianmin Zheng et al.",
+        "year": 2023,
+        "url": "https://arxiv.org/abs/2306.05685"
+      }
+    ],
+    "tags": ["llm-as-judge", "position-bias", "llm-evaluation"],
+    "origin": "llm_draft",
+    "reviewed_at": "2026-10-16",
+    "review_by": "2027-10-16"
+  },
+  {
+    "id": "evaluation-0007",
+    "version": 1,
+    "area": "evaluation",
+    "subtopic": "statistical-testing",
+    "level": "medium",
+    "bloom": "evaluate",
+    "type": "scenario",
+    "format": "single",
+    "stability": "stable",
+    "difficulty": { "steps": 1, "specialization": 1, "distractors": 1 },
+    "prompt": {
+      "en": "On the same 500 test examples, model A scores 85.0% accuracy and model B scores 85.6%. What is the most reasonable conclusion?",
+      "es": "En los mismos 500 ejemplos de prueba, el modelo A obtiene 85,0% de exactitud y el modelo B 85,6%. ¿Cuál es la conclusión más razonable?"
+    },
+    "options": [
+      {
+        "id": "a",
+        "text": {
+          "en": "The gap is within noise; a paired McNemar test on the disagreements would settle it.",
+          "es": "La diferencia está dentro del ruido; un test pareado de McNemar sobre los desacuerdos lo aclararía."
+        },
+        "rationale": {
+          "en": "0.6 points is 3 examples out of 500, while the standard error of each accuracy is about 1.6 points. A paired test uses the cases where the models disagree, which is the right comparison on the same data.",
+          "es": "0,6 puntos son 3 ejemplos de 500, mientras que el error estándar de cada exactitud es de unos 1,6 puntos. Un test pareado usa los casos en que los modelos discrepan, que es la comparación correcta sobre los mismos datos."
+        }
+      },
+      {
+        "id": "b",
+        "text": {
+          "en": "B is better, since any improvement measured on the same test set is real.",
+          "es": "B es mejor, porque toda mejora medida en el mismo conjunto de prueba es una mejora real."
+        },
+        "rationale": {
+          "en": "Even on the same examples, a difference of 3 answers can easily come from chance in which examples each model gets right.",
+          "es": "Incluso con los mismos ejemplos, una diferencia de 3 respuestas puede venir fácilmente del azar en qué ejemplos acierta cada modelo."
+        }
+      },
+      {
+        "id": "c",
+        "text": {
+          "en": "A is better, since a difference this small can only come from overfitting by B.",
+          "es": "A es mejor, porque una diferencia tan pequeña solo puede venir de sobreajuste de B."
+        },
+        "rationale": {
+          "en": "A small difference is not evidence of overfitting; for now it is not evidence of anything.",
+          "es": "Una diferencia pequeña no es evidencia de sobreajuste; por ahora no es evidencia de nada."
+        }
+      },
+      {
+        "id": "d",
+        "text": {
+          "en": "They are identical, since differences below 1 point have no practical meaning.",
+          "es": "Son idénticos, porque las diferencias bajo 1 punto no tienen significado práctico."
+        },
+        "rationale": {
+          "en": "Small differences can be real with enough data; the problem here is too little data, not a rule about 1 point.",
+          "es": "Las diferencias pequeñas pueden ser reales con datos suficientes; el problema aquí es que hay pocos datos, no una regla sobre 1 punto."
+        }
+      }
+    ],
+    "answer": ["a"],
+    "explanation": {
+      "en": "With 500 examples, the 95% confidence interval for an accuracy near 85% spans about ±3 points. Here, if the models disagree on 21 examples, B wins 12 of them and A wins 9, a split that chance explains easily (McNemar p ≈ 0.66); a split of 18 to 3, a 3-point gap, would be strong evidence (p < 0.01). Detecting gains under a point takes thousands of examples.",
+      "es": "Con 500 ejemplos, el intervalo de confianza de 95% para una exactitud cercana a 85% abarca unos ±3 puntos. Aquí, si los modelos discrepan en 21 ejemplos, B gana 12 y A gana 9, un reparto que el azar explica sin problema (McNemar p ≈ 0,66); un reparto de 18 a 3, una diferencia de 3 puntos, sería evidencia fuerte (p < 0,01). Detectar mejoras menores a un punto requiere miles de ejemplos."
+    },
+    "sources": [
+      {
+        "kind": "paper",
+        "title": "Approximate Statistical Tests for Comparing Supervised Classification Learning Algorithms",
+        "authors": "Thomas G. Dietterich",
+        "year": 1998
+      }
+    ],
+    "tags": ["statistical-testing", "mcnemar", "model-comparison"],
+    "origin": "llm_draft",
+    "reviewed_at": "2026-10-16"
   }
 ]

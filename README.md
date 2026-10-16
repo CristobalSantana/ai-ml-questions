@@ -59,7 +59,7 @@ El sexto nivel, `create`, no cabe en una pregunta de opción múltiple y queda f
 - Una pregunta `medium` es `understand` o `apply`, y a veces `analyze` en un caso simple. Una `easy` marcada `analyze` o `evaluate` genera un aviso.
 - Regla práctica: si la respuesta aparece en la primera línea de un buscador, la pregunta no es difícil.
 
-Las 22 preguntas de muestra se reparten en `remember` 1, `understand` 8, `apply` 7, `analyze` 3 y `evaluate` 3.
+Las 103 preguntas actuales se reparten en `remember` 3, `understand` 45, `apply` 29, `analyze` 16 y `evaluate` 10.
 
 El nivel se estima a priori con una rúbrica y se corrige con las respuestas reales (sección 12).
 
@@ -235,8 +235,8 @@ Ejemplo:
 
 **No hace falta Supabase, Firebase ni una base de datos para las preguntas.** Son contenido de solo lectura que cambia cuando tú publicas, así que viven como JSON en este repositorio, con historial de cambios y revisión por pull request, y el sitio las sirve como archivos estáticos.
 
-- **Tamaño, medido con las preguntas de muestra:** unos 3,7 KB por pregunta en JSON minificado con los dos idiomas, y 1,2 KB comprimido con gzip. 2.000 preguntas son unos 7,5 MB, o 2,4 MB comprimidos: unos 145 KB comprimidos por área. Con un archivo por área, el navegador descarga solo las áreas elegidas.
-- **PWA:** en la primera visita, el service worker guarda todas las preguntas para que el sitio funcione sin conexión. Con 2.000 preguntas serían unos 2,4 MB comprimidos. Si eso pesa en el teléfono, `build_site.py` puede escribir un archivo por idioma, que reduce el tamaño a la mitad, o el service worker puede guardar cada área solo cuando se pide.
+- **Tamaño, medido con las 103 preguntas actuales:** unos 3,5 KB por pregunta en JSON minificado con los dos idiomas, y 1,2 KB comprimido con gzip. 2.000 preguntas son unos 7 MB, o 2,5 MB comprimidos: unos 150 KB comprimidos por área. Con un archivo por área, el navegador descarga solo las áreas elegidas.
+- **PWA:** en la primera visita, el service worker guarda todas las preguntas para que el sitio funcione sin conexión. Con 2.000 preguntas serían unos 2,5 MB comprimidos. Si eso pesa en el teléfono, `build_site.py` puede escribir un archivo por idioma, que reduce el tamaño a la mitad, o el service worker puede guardar cada área solo cuando se pide.
 - **Hosting:** Cloudflare (Workers con assets estáticos, o Pages) o GitHub Pages. En Cloudflare, las peticiones a assets estáticos son gratuitas e ilimitadas.
 - **Consecuencia aceptada:** las respuestas viajan al navegador, así que alguien que abra las herramientas de desarrollo puede verlas. En un sitio de práctica sin ranking da igual: hacer trampa solo perjudica a quien la hace.
 
@@ -280,9 +280,9 @@ Esfuerzo estimado: a 2 o 3 minutos de revisión por pregunta, 500 preguntas son 
 
 ## 11. Metas de volumen
 
-Hay 51 celdas (17 áreas × 3 niveles).
+Hay 51 celdas (17 áreas × 3 niveles). Hoy hay 103 preguntas, unas 2 por celda.
 
-- **Primer lote:** ventana de contexto y prompts. Los subtemas son `llm/context-kv-cache`, `adaptation/prompting`, `adaptation/choosing-adaptation`, `agents/memory-context`, `agents/agent-security` (prompt injection), `phenomena/prompt-sensitivity` y `phenomena/in-context-learning`.
+- **Primer lote (listo, octubre de 2026):** ventana de contexto y prompts, en los subtemas `llm/context-kv-cache`, `adaptation/prompting`, `adaptation/choosing-adaptation`, `agents/memory-context`, `agents/agent-security` (prompt injection), `phenomena/prompt-sensitivity` y `phenomena/in-context-learning`. Salió junto con preguntas de las demás áreas, y el banco pasó de 22 a 103 preguntas.
 - **Lanzamiento:** unas 10 preguntas por celda, cerca de 500 en total.
 - **Largo plazo:** unas 35 por celda, cerca de 1.800. Las áreas grandes (arquitecturas, LLMs, papers) pueden tener más y las pequeñas (RL, interpretabilidad) menos.
 
@@ -315,7 +315,7 @@ La suma va de 0 a 8: 0–2 es verde, 3–5 amarilla y 6–8 roja.
 - Además de la suma, el validador exige `analyze` o `evaluate` en toda pregunta `hard`. Una pregunta de nicho con buenos distractores puede sumar mucho, pero si solo pide recordar, su dificultad es de memoria y no de razonamiento.
 - El validador avisa cuando `level` no coincide con lo que sugiere la rúbrica. Quien revisa puede mantener otro nivel si tiene una razón.
 - En la verificación, un segundo modelo estima Bloom y puntúa la rúbrica sin ver lo que puso el generador. Si las sumas difieren en 2 puntos o más, decide quien revisa.
-- Las 22 preguntas de muestra están puntuadas, y en todas la rúbrica coincide con el nivel.
+- Las 103 preguntas están puntuadas, y en todas la rúbrica coincide con el nivel.
 
 ### A posteriori: actualización bayesiana (fase 2)
 
@@ -364,15 +364,15 @@ La URL para compartir de LinkedIn (`https://www.linkedin.com/sharing/share-offsi
 El mensaje se arma con el resultado, en el idioma elegido, y la persona puede editarlo antes de copiarlo:
 
 ```
-I answered 22 AI and machine learning questions and got 19 right (86%).
-🟢 Easy 7/7 · 🟡 Medium 8/10 · 🔴 Hard 4/5
+I answered 25 AI and machine learning questions and got 19 right (76%).
+🟢 Easy 8/8 · 🟡 Medium 8/12 · 🔴 Hard 3/5
 Best topic: Neural networks. Hardest for me: Retrieval & RAG.
 How many can you get? https://ai-ml-questions.strangemachines.workers.dev/
 ```
 
 ```
-Respondí 22 preguntas de IA y machine learning y acerté 19 (86%).
-🟢 Fácil 7/7 · 🟡 Medio 8/10 · 🔴 Difícil 4/5
+Respondí 25 preguntas de IA y machine learning y acerté 19 (76%).
+🟢 Fácil 8/8 · 🟡 Medio 8/12 · 🔴 Difícil 3/5
 Lo que mejor me fue: Redes neuronales. Lo que más me costó: Retrieval y RAG.
 ¿Cuánto sacas tú? https://ai-ml-questions.strangemachines.workers.dev/#es
 ```
@@ -448,7 +448,7 @@ site/fonts/                  las fuentes y sus licencias
 site/data/                   generado: taxonomía, índice y preguntas por área
 ```
 
-Las 22 preguntas actuales son muestras: cubren las 17 áreas, los tres niveles, las tres vigencias y cinco niveles de Bloom, están en inglés y en español, y siguen marcadas como `llm_draft` hasta que las revises.
+Las 103 preguntas actuales cubren las 17 áreas, los tres niveles, las tres vigencias y los cinco niveles de Bloom, están en inglés y en español, y siguen marcadas como `llm_draft` hasta que las revises.
 
 ## Referencias
 
