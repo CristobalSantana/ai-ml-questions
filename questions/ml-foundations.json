@@ -19,40 +19,40 @@
         "id": "a",
         "text": {
           "en": "High variance (overfitting): add regularization or more training data.",
-          "es": "Alta varianza (overfitting): más regularización o más datos de entrenamiento."
+          "es": "Alta varianza (sobreajuste): más regularización o más datos de entrenamiento."
         },
         "rationale": {
           "en": "A large gap between training and validation error is the signature of high variance: the model fits the training data but does not generalize.",
-          "es": "Una brecha grande entre entrenamiento y validación es la firma de la alta varianza: el modelo se ajusta a los datos de entrenamiento, pero no generaliza."
+          "es": "Una brecha grande entre entrenamiento y validación es la señal característica de la alta varianza: el modelo se ajusta a los datos de entrenamiento, pero no generaliza."
         }
       },
       {
         "id": "b",
         "text": {
           "en": "High bias (underfitting): use a larger model or train for longer.",
-          "es": "Alto sesgo (underfitting): un modelo más grande o entrenar por más tiempo."
+          "es": "Alto sesgo (subajuste): un modelo más grande o entrenar por más tiempo."
         },
         "rationale": {
           "en": "Underfitting shows up as high error on the training set too. Here training error is low, and a bigger model would likely widen the gap.",
-          "es": "El underfitting también se ve como error alto en entrenamiento. Aquí ese error es bajo, y un modelo más grande probablemente agrandaría la brecha."
+          "es": "El subajuste también se ve como error alto en entrenamiento. Aquí ese error es bajo, y un modelo más grande probablemente agrandaría la brecha."
         }
       },
       {
         "id": "c",
         "text": {
           "en": "Leakage between the splits: remove the duplicates shared by both sets.",
-          "es": "Fuga entre los conjuntos: quitar los duplicados que comparten ambos."
+          "es": "Data leakage entre los conjuntos: quitar los duplicados que comparten ambos."
         },
         "rationale": {
           "en": "Leakage between splits makes validation look too good, not too bad: it would shrink the gap rather than create it.",
-          "es": "Una fuga entre conjuntos hace que la validación se vea demasiado bien, no demasiado mal: achicaría la brecha en vez de crearla."
+          "es": "El data leakage entre conjuntos hace que la validación se vea demasiado bien, no demasiado mal: achicaría la brecha en vez de crearla."
         }
       },
       {
         "id": "d",
         "text": {
           "en": "Unstable optimization: lower the learning rate and train again.",
-          "es": "Optimización inestable: bajar el learning rate y volver a entrenar."
+          "es": "Optimización inestable: bajar la tasa de aprendizaje y volver a entrenar."
         },
         "rationale": {
           "en": "Unstable optimization shows up as high or erratic training error, but this model reached 2% on the training set.",
@@ -63,7 +63,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "The diagnosis compares two numbers: training error (bias) and the gap to validation error (variance). Low training error with a large gap points to high variance. Before concluding, check that both sets come from the same distribution, because a shift between them also produces a gap.",
-      "es": "El diagnóstico compara dos números: el error de entrenamiento (sesgo) y la brecha con validación (varianza). Error de entrenamiento bajo con brecha grande indica alta varianza. Antes de concluir, conviene verificar que ambos conjuntos vengan de la misma distribución, porque un shift entre ellos también produce una brecha."
+      "es": "El diagnóstico compara dos números: el error de entrenamiento (sesgo) y la brecha con validación (varianza). Error de entrenamiento bajo con brecha grande indica alta varianza. Antes de concluir, conviene verificar que ambos conjuntos vengan de la misma distribución, porque un dataset shift entre ellos también produce una brecha."
     },
     "sources": [
       { "kind": "book", "title": "Deep Learning", "authors": "Ian Goodfellow, Yoshua Bengio & Aaron Courville", "year": 2016 }
@@ -92,7 +92,7 @@
         "id": "a",
         "text": {
           "en": "Increase the model's capacity, for example with more features or a more flexible model.",
-          "es": "Aumentar la capacidad del modelo, por ejemplo con más atributos o un modelo más flexible."
+          "es": "Aumentar la capacidad del modelo, por ejemplo con más variables o un modelo más flexible."
         },
         "rationale": {
           "en": "Training error far above the achievable 5% means high bias, or underfitting. The model cannot fit even the data it sees, so it needs more capacity.",
@@ -125,7 +125,7 @@
         "id": "d",
         "text": {
           "en": "Stop training earlier, before the model starts to memorize the training set.",
-          "es": "Detener el entrenamiento antes, para que el modelo no alcance a memorizar los datos."
+          "es": "Detener el entrenamiento antes de que el modelo empiece a memorizar los datos de entrenamiento."
         },
         "rationale": {
           "en": "Early stopping limits overfitting, and this model is not overfitting.",
@@ -159,7 +159,7 @@
     "difficulty": { "steps": 2, "specialization": 1, "distractors": 2 },
     "prompt": {
       "en": "A k-nearest-neighbors classifier works well with 10 features. After 990 features of random noise are added, its accuracy drops close to chance, even though the original 10 features are still there. What best explains this?",
-      "es": "Un clasificador de k vecinos más cercanos funciona bien con 10 atributos. Después de agregar 990 atributos de ruido aleatorio, su exactitud cae casi al nivel del azar, aunque los 10 atributos originales siguen ahí. ¿Qué lo explica mejor?"
+      "es": "Un clasificador de k vecinos más cercanos funciona bien con 10 variables. Después de agregar 990 variables de ruido aleatorio, su exactitud cae casi al nivel del azar, aunque las 10 variables originales siguen ahí. ¿Qué lo explica mejor?"
     },
     "options": [
       {
@@ -170,47 +170,47 @@
         },
         "rationale": {
           "en": "Each noise feature adds a random term to every squared distance. With 990 of them, the 10 informative features become a tiny part of the distance, and the ranking of neighbors becomes close to random.",
-          "es": "Cada atributo de ruido suma un término aleatorio a cada distancia al cuadrado. Con 990 de ellos, los 10 atributos informativos pasan a ser una parte mínima de la distancia, y el orden de los vecinos se vuelve casi aleatorio."
+          "es": "Cada variable de ruido suma un término aleatorio a cada distancia al cuadrado. Con 990 de ellas, las 10 variables informativas pasan a ser una parte mínima de la distancia, y el orden de los vecinos se vuelve casi aleatorio."
         }
       },
       {
         "id": "b",
         "text": {
           "en": "With 1,000 features the training set no longer fits in memory, so kNN samples a random subset of points.",
-          "es": "Con 1.000 atributos el conjunto de entrenamiento ya no cabe en memoria, así que kNN muestrea un subconjunto de puntos al azar."
+          "es": "Con 1.000 variables el conjunto de entrenamiento ya no cabe en memoria, así que kNN muestrea un subconjunto de puntos al azar."
         },
         "rationale": {
           "en": "A thousand features is not a memory problem for typical datasets, and kNN does not subsample on its own.",
-          "es": "Mil atributos no son un problema de memoria para datasets típicos, y kNN no submuestrea por su cuenta."
+          "es": "Mil variables no son un problema de memoria para datasets típicos, y kNN no submuestrea por su cuenta."
         }
       },
       {
         "id": "c",
         "text": {
           "en": "kNN overfits when there are more features than training points, because it fits one parameter per feature.",
-          "es": "kNN se sobreajusta cuando hay más atributos que puntos de entrenamiento, porque ajusta un parámetro por atributo."
+          "es": "kNN se sobreajusta cuando hay más variables que puntos de entrenamiento, porque ajusta un parámetro por variable."
         },
         "rationale": {
           "en": "kNN has no per-feature parameters to fit; it stores the data and compares distances.",
-          "es": "kNN no tiene parámetros por atributo que ajustar; guarda los datos y compara distancias."
+          "es": "kNN no tiene parámetros por variable que ajustar; guarda los datos y compara distancias."
         }
       },
       {
         "id": "d",
         "text": {
           "en": "The noise features are correlated with the label by chance, so kNN learns spurious rules from them.",
-          "es": "Los atributos de ruido se correlacionan por azar con la etiqueta, así que kNN aprende reglas espurias de ellos."
+          "es": "Las variables de ruido se correlacionan por azar con la etiqueta, así que kNN aprende reglas espurias de ellas."
         },
         "rationale": {
           "en": "Chance correlations exist, but kNN does not learn rules from individual features; the damage comes from how all the features combine into a single distance.",
-          "es": "Las correlaciones por azar existen, pero kNN no aprende reglas de atributos individuales; el daño viene de cómo todos los atributos se combinan en una sola distancia."
+          "es": "Las correlaciones por azar existen, pero kNN no aprende reglas de variables individuales; el daño viene de cómo todas las variables se combinan en una sola distancia."
         }
       }
     ],
     "answer": ["a"],
     "explanation": {
       "en": "Beyer et al. (1999) showed that, under broad conditions, the ratio between the distances to the farthest and the nearest point approaches 1 as the number of dimensions grows, which makes “nearest” meaningless. Feature selection, dimensionality reduction or a learned distance restore the signal, and models that weight features, such as tree ensembles, are much less affected by irrelevant ones.",
-      "es": "Beyer et al. (1999) mostraron que, bajo condiciones amplias, la razón entre la distancia al punto más lejano y al más cercano se acerca a 1 a medida que crece el número de dimensiones, lo que vuelve «más cercano» algo sin sentido. La selección de atributos, la reducción de dimensionalidad o una distancia aprendida recuperan la señal, y los modelos que ponderan atributos, como los ensambles de árboles, se ven mucho menos afectados por los irrelevantes."
+      "es": "Beyer et al. (1999) mostraron que, bajo condiciones amplias, la razón entre la distancia al punto más lejano y al más cercano se acerca a 1 a medida que crece el número de dimensiones, lo que vuelve «más cercano» algo sin sentido. La selección de variables, la reducción de dimensionalidad o una distancia aprendida recuperan la señal, y los modelos que ponderan variables, como los ensembles de árboles, se ven mucho menos afectados por las irrelevantes."
     },
     "sources": [
       {

@@ -19,11 +19,11 @@
         "id": "a",
         "text": {
           "en": "Retrieval-augmented generation over the manual, so updates only need reindexing and answers can cite passages.",
-          "es": "Retrieval-augmented generation sobre el manual: actualizarlo es reindexar, y cada respuesta puede citar pasajes."
+          "es": "Retrieval-augmented generation sobre el manual: actualizarlo es reindexar, y cada respuesta puede citar fragmentos."
         },
         "rationale": {
           "en": "Updating the knowledge means reindexing the manual, not retraining, and each answer can point to the passage that supports it.",
-          "es": "Actualizar el conocimiento es reindexar el manual, no reentrenar, y cada respuesta puede apuntar al pasaje que la respalda."
+          "es": "Actualizar el conocimiento es reindexar el manual, no reentrenar, y cada respuesta puede apuntar al fragmento que la respalda."
         }
       },
       {
@@ -45,25 +45,25 @@
         },
         "rationale": {
           "en": "A summary of 400 pages leaves out most of the details, and it cannot point to the exact passage behind an answer.",
-          "es": "Un resumen de 400 páginas deja fuera la mayoría de los detalles y no puede apuntar al pasaje exacto detrás de una respuesta."
+          "es": "Un resumen de un manual de 400 páginas deja fuera la mayoría de los detalles y no puede apuntar al fragmento exacto detrás de una respuesta."
         }
       },
       {
         "id": "d",
         "text": {
           "en": "A larger model with a more recent training cutoff, so it already knows the latest version of the manual.",
-          "es": "Un modelo más grande con un corte de entrenamiento más reciente, que ya conozca la última versión del manual."
+          "es": "Un modelo más grande con una fecha de corte de entrenamiento más reciente, que ya conozca la última versión del manual."
         },
         "rationale": {
           "en": "An internal manual is not in any public training data, so no training cutoff will include it.",
-          "es": "Un manual interno no está en ningún dato de entrenamiento público, así que ningún corte de entrenamiento lo va a incluir."
+          "es": "Un manual interno no está en ningún conjunto de datos de entrenamiento público, así que ninguna fecha de corte lo va a incluir."
         }
       }
     ],
     "answer": ["a"],
     "explanation": {
       "en": "RAG pairs a retriever with a generator: the retrieved passages go into the context and the model answers from them, without touching its weights. That makes it the first choice when knowledge changes or must be cited. Fine-tuning wins when what needs to change is behavior (format, tone, a specific task), and the two can be combined.",
-      "es": "RAG combina un recuperador con un generador: los pasajes recuperados entran al contexto y el modelo responde a partir de ellos, sin tocar sus pesos. Por eso es la primera opción cuando el conocimiento cambia o debe citarse. El fine-tuning gana cuando lo que hay que cambiar es el comportamiento (formato, tono, una tarea específica), y las dos técnicas se pueden combinar."
+      "es": "RAG combina un retriever con un generador: los fragmentos recuperados entran al contexto y el modelo responde a partir de ellos, sin tocar sus pesos. Por eso es la primera opción cuando el conocimiento cambia o debe citarse. El fine-tuning gana cuando lo que hay que cambiar es el comportamiento (formato, tono, una tarea específica), y las dos técnicas se pueden combinar."
     },
     "sources": [
       {
@@ -103,14 +103,14 @@
         },
         "rationale": {
           "en": "This is in-context learning: the examples change the model's activations, not its parameters. Remove them from the prompt and the behavior goes away.",
-          "es": "Es aprendizaje en contexto: los ejemplos cambian las activaciones del modelo, no sus parámetros. Si se quitan del prompt, el comportamiento desaparece."
+          "es": "Es in-context learning: los ejemplos cambian las activaciones del modelo, no sus parámetros. Si se quitan del prompt, el comportamiento desaparece."
         }
       },
       {
         "id": "b",
         "text": {
           "en": "They receive a few gradient steps on the examples, which are undone at the end of the call.",
-          "es": "Reciben unos pocos pasos de gradiente con los ejemplos, que se deshacen al final de la llamada."
+          "es": "Reciben unos pocos pasos de gradiente con los ejemplos, y esos cambios se deshacen al final de la llamada."
         },
         "rationale": {
           "en": "No gradients are computed at inference. Adapting through gradient steps for each request is a different technique, test-time training.",
@@ -132,7 +132,7 @@
         "id": "d",
         "text": {
           "en": "They are swapped for a version fine-tuned on tasks similar to the examples.",
-          "es": "Se reemplazan por una versión ajustada en tareas parecidas a los ejemplos."
+          "es": "Se reemplazan por una versión con fine-tuning en tareas parecidas a los ejemplos."
         },
         "rationale": {
           "en": "The provider serves the same weights; the examples act only through the context window.",
@@ -213,7 +213,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "The gains appeared mainly in large models: in the original study, chain of thought hurt or barely helped models below roughly 100 billion parameters. Reasoning models now produce these steps on their own, so explicit chain-of-thought prompts matter less with them.",
-      "es": "Las mejoras aparecieron sobre todo en modelos grandes: en el estudio original, el chain of thought perjudicaba o casi no ayudaba a modelos bajo unos 100 mil millones de parámetros. Los modelos de razonamiento ya producen estos pasos por su cuenta, así que con ellos los prompts explícitos importan menos."
+      "es": "Las mejoras aparecieron sobre todo en modelos grandes: en el estudio original, el chain of thought perjudicaba o casi no ayudaba a modelos por debajo de unos 100 mil millones de parámetros. Los modelos de razonamiento ya producen estos pasos por su cuenta, así que con ellos los prompts explícitos de chain of thought importan menos."
     },
     "sources": [
       {
@@ -256,7 +256,7 @@
         "id": "a",
         "text": {
           "en": "The prompt biases the model toward some labels; measure it with “N/A” and rescale the probabilities.",
-          "es": "El prompt sesga al modelo hacia ciertas etiquetas; medirlo con «N/A» y reescalar las probabilidades."
+          "es": "El prompt sesga al modelo hacia ciertas etiquetas; medir ese sesgo con «N/A» y reescalar las probabilidades."
         },
         "rationale": {
           "en": "Zhao et al. (2021) traced this instability to biases toward the majority label, the most recent label and common tokens. Contextual calibration measures the bias with an input like “N/A” and corrects it, which raised accuracy and reduced the variance across choices of prompt examples.",
@@ -448,14 +448,14 @@
         },
         "rationale": {
           "en": "Automatic length or fluency scores are easy to game, and they are not what the reward model learns from.",
-          "es": "Los puntajes automáticos de largo o fluidez son fáciles de explotar, y no son de donde aprende el modelo de recompensa."
+          "es": "Los puntajes automáticos de largo o fluidez son fáciles de explotar, y el modelo de recompensa no aprende de ellos."
         }
       }
     ],
     "answer": ["a"],
     "explanation": {
       "en": "In InstructGPT, labelers ranked between 4 and 9 responses per prompt, which gives many pairwise comparisons from each prompt. Comparisons are easier for people to give consistently than absolute scores, which is why preference data is the basis of RLHF and of later methods such as DPO.",
-      "es": "En InstructGPT, los evaluadores ordenaron entre 4 y 9 respuestas por prompt, lo que entrega muchas comparaciones de pares por cada prompt. A las personas les resulta más fácil comparar de forma consistente que asignar puntajes absolutos, y por eso los datos de preferencias son la base de RLHF y de métodos posteriores como DPO."
+      "es": "En InstructGPT, los evaluadores ordenaron entre 4 y 9 respuestas por prompt, lo que genera muchas comparaciones por pares a partir de cada prompt. A las personas les resulta más fácil comparar de forma coherente que asignar puntajes absolutos, y por eso los datos de preferencias son la base de RLHF y de métodos posteriores como DPO."
     },
     "sources": [
       {
@@ -523,7 +523,7 @@
         },
         "rationale": {
           "en": "DPO is usually applied after supervised fine-tuning, which provides the starting policy.",
-          "es": "DPO se suele aplicar después del fine-tuning supervisado, que entrega la política inicial."
+          "es": "DPO se suele aplicar después del fine-tuning supervisado, que proporciona la política inicial."
         }
       },
       {
@@ -569,7 +569,7 @@
     "difficulty": { "steps": 1, "specialization": 1, "distractors": 1 },
     "prompt": {
       "en": "After full fine-tuning on 50,000 legal documents, a model drafts contracts well but has become noticeably worse at general questions and coding. Which change most directly reduces this loss?",
-      "es": "Después de un fine-tuning completo con 50.000 documentos legales, un modelo redacta bien contratos, pero empeoró bastante en preguntas generales y en programación. ¿Qué cambio reduce más directamente esa pérdida?"
+      "es": "Después de un fine-tuning completo con 50.000 documentos legales, un modelo redacta bien contratos, pero empeoró bastante en preguntas generales y en programación. ¿Qué cambio reduce más directamente ese deterioro?"
     },
     "options": [
       {
@@ -598,7 +598,7 @@
         "id": "c",
         "text": {
           "en": "Raise the learning rate so the model reaches the new optimum before it has time to forget.",
-          "es": "Subir la tasa de aprendizaje para que el modelo llegue al nuevo óptimo antes de alcanzar a olvidar."
+          "es": "Subir la tasa de aprendizaje para que el modelo llegue al nuevo óptimo antes de que tenga tiempo de olvidar."
         },
         "rationale": {
           "en": "A higher learning rate makes bigger updates and tends to overwrite more of what was learned before.",

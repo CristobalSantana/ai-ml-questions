@@ -12,7 +12,7 @@
     "difficulty": { "steps": 1, "specialization": 2, "distractors": 1 },
     "prompt": {
       "en": "You want to learn a frictionless pendulum's dynamics from its position and momentum, then simulate it over long times. Which choice builds in the right assumption, and when would that assumption hurt?",
-      "es": "Quieres aprender la dinámica de un péndulo sin fricción a partir de su posición y su momentum, para simularlo por tiempos largos. ¿Qué opción incorpora el supuesto correcto, y cuándo ese supuesto perjudica?"
+      "es": "Quieres aprender la dinámica de un péndulo sin fricción a partir de su posición y su momento, para simularlo por tiempos largos. ¿Qué opción incorpora el supuesto correcto, y cuándo ese supuesto perjudica?"
     },
     "options": [
       {
@@ -56,14 +56,14 @@
         },
         "rationale": {
           "en": "The pendulum's next state depends only on its current position and momentum, so memory of the past is not the missing assumption.",
-          "es": "El estado siguiente del péndulo depende solo de su posición y momentum actuales, así que la memoria del pasado no es el supuesto que falta."
+          "es": "El estado siguiente del péndulo depende solo de su posición y momento actuales, así que la memoria del pasado no es el supuesto que falta."
         }
       }
     ],
     "answer": ["a"],
     "explanation": {
       "en": "An HNN learns H(q, p) and obtains dq/dt = ∂H/∂p and dp/dt = −∂H/∂q by automatic differentiation, so its flow conserves H exactly. In an experiment with the same number of parameters (about 4,500), the MLP fit the field better (0.13% vs 0.26% error) but drifted 33 times more in energy over 100 time units of simulation. With friction added, the HNN's error rose 11-fold while the MLP's did not move: the useful inductive bias had become a wrong one.",
-      "es": "Una HNN aprende H(q, p) y obtiene dq/dt = ∂H/∂p y dp/dt = −∂H/∂q por diferenciación automática, así que su flujo conserva H exactamente. En un experimento con el mismo número de parámetros (unos 4.500), el MLP ajustó mejor el campo (0,13% contra 0,26% de error), pero al simular 100 unidades de tiempo acumuló 33 veces más deriva de energía. Con fricción, el error de la HNN subió 11 veces y el del MLP no cambió: el sesgo inductivo que ayudaba pasó a ser incorrecto."
+      "es": "Una HNN aprende H(q, p) y obtiene dq/dt = ∂H/∂p y dp/dt = −∂H/∂q por diferenciación automática, así que su flujo conserva H exactamente. En un experimento con el mismo número de parámetros (unos 4.500), el MLP ajustó mejor el campo (0,13% contra 0,26% de error), pero al simular 100 unidades de tiempo acumuló 33 veces más deriva de energía. Con fricción, el error de la HNN se multiplicó por 11 y el del MLP no cambió: el sesgo inductivo que ayudaba pasó a ser incorrecto."
     },
     "sources": [
       {
@@ -150,7 +150,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "Inspired by the Kolmogorov-Arnold representation theorem, KANs move the nonlinearity from nodes to edges, where each edge learns its own one-variable function. The original paper notes they are usually about 10 times slower to train than an MLP with the same number of parameters. In an experiment that solved a diffusion equation as a PINN, a 900-parameter KAN was about 1.6 times more accurate than a 921-parameter MLP, but each epoch took about 16 times longer.",
-      "es": "Inspiradas en el teorema de representación de Kolmogorov-Arnold, las KAN mueven la no linealidad de los nodos a las aristas, y cada arista aprende su propia función de una variable. El paper original reconoce que suelen ser unas 10 veces más lentas de entrenar que un MLP con los mismos parámetros. En un experimento que resolvía una ecuación de difusión como PINN, una KAN de 900 parámetros fue cerca de 1,6 veces más precisa que un MLP de 921, pero cada época tomó unas 16 veces más."
+      "es": "Inspiradas en el teorema de representación de Kolmogorov-Arnold, las KAN mueven la no linealidad de los nodos a las aristas, y cada arista aprende su propia función de una variable. El paper original reconoce que suelen ser unas 10 veces más lentas de entrenar que un MLP con el mismo número de parámetros. En un experimento que resolvía una ecuación de difusión como PINN, una KAN de 900 parámetros fue cerca de 1,6 veces más precisa que un MLP de 921, pero cada época tardó unas 16 veces más."
     },
     "sources": [
       { "kind": "paper", "title": "KAN: Kolmogorov-Arnold Networks", "authors": "Ziming Liu et al.", "year": 2024, "url": "https://arxiv.org/abs/2404.19756" },
@@ -194,7 +194,7 @@
         "id": "a",
         "text": {
           "en": "A gated cell state updated by addition, so gradients can flow back without shrinking each step.",
-          "es": "Un estado de celda con compuertas, actualizado por suma, que deja volver los gradientes sin achicarlos en cada paso."
+          "es": "Un estado de celda con compuertas, actualizado por suma, que propaga el gradiente hacia atrás sin achicarlo en cada paso."
         },
         "rationale": {
           "en": "The forget, input and output gates decide what to keep, write and expose. Because the cell state is updated additively, the gradient along it is scaled only by the forget gate, which the network can keep near 1, instead of passing through a weight matrix and an activation derivative at every step.",
@@ -374,7 +374,7 @@
         },
         "rationale": {
           "en": "Which experts a token needs is decided at run time, token by token; keeping the inactive ones out of memory would mean loading them on demand, which is too slow for typical serving.",
-          "es": "Qué expertos necesita cada token se decide al ejecutar, token por token; dejar fuera de memoria los inactivos obligaría a cargarlos a pedido, lo que es demasiado lento al servir el modelo."
+          "es": "Qué expertos necesita cada token se decide al ejecutar, token por token; dejar fuera de memoria los inactivos obligaría a cargarlos bajo demanda, lo que es demasiado lento al servir el modelo."
         }
       },
       {
@@ -382,7 +382,7 @@
         "text": { "en": "Similar memory, but about 3.6 times more compute per token.", "es": "Memoria parecida, pero unas 3,6 veces más cómputo por token." },
         "rationale": {
           "en": "That reverses the trade-off: MoE spends memory to save compute, not the other way around.",
-          "es": "Eso invierte el intercambio: MoE gasta memoria para ahorrar cómputo, no al revés."
+          "es": "Eso invierte los términos: MoE gasta memoria para ahorrar cómputo, no al revés."
         }
       },
       {
@@ -430,7 +430,7 @@
     "difficulty": { "steps": 1, "specialization": 1, "distractors": 2 },
     "prompt": {
       "en": "You have 20,000 rows of tabular data with 40 numeric and categorical columns, some skewed and some irrelevant, and must deliver a strong baseline this week. Which model should you try first?",
-      "es": "Tienes 20.000 filas de datos tabulares con 40 columnas numéricas y categóricas, algunas con distribuciones asimétricas y otras irrelevantes, y debes entregar una buena línea base esta semana. ¿Qué modelo conviene probar primero?"
+      "es": "Tienes 20.000 filas de datos tabulares con 40 columnas numéricas y categóricas, algunas con distribuciones asimétricas y otras irrelevantes, y debes entregar un buen baseline esta semana. ¿Qué modelo conviene probar primero?"
     },
     "options": [
       {
@@ -441,7 +441,7 @@
         },
         "rationale": {
           "en": "Trees handle mixed types, skewed values and irrelevant columns with little preprocessing, and Grinsztajn et al. (2022) found them ahead of deep models on medium-sized tabular benchmarks.",
-          "es": "Los árboles manejan tipos mixtos, valores asimétricos y columnas irrelevantes con poco preprocesamiento, y Grinsztajn et al. (2022) los encontraron por delante de los modelos profundos en benchmarks tabulares de tamaño medio."
+          "es": "Los árboles manejan tipos mixtos, valores asimétricos y columnas irrelevantes con poco preprocesamiento, y Grinsztajn et al. (2022) encontraron que superaban a los modelos profundos en benchmarks tabulares de tamaño medio."
         }
       },
       {
@@ -452,7 +452,7 @@
         },
         "rationale": {
           "en": "MLPs can work, but they need careful preprocessing and tuning, and they were less robust to irrelevant features in the same benchmarks.",
-          "es": "Los MLP pueden funcionar, pero necesitan preprocesamiento y ajuste cuidadosos, y fueron menos robustos a atributos irrelevantes en esos mismos benchmarks."
+          "es": "Los MLP pueden funcionar, pero necesitan preprocesamiento y ajuste cuidadosos, y fueron menos robustos a variables irrelevantes en esos mismos benchmarks."
         }
       },
       {
@@ -474,14 +474,14 @@
         },
         "rationale": {
           "en": "kNN suffers from irrelevant and skewed features, since all of them enter the distance.",
-          "es": "kNN sufre con atributos irrelevantes y asimétricos, porque todos entran en la distancia."
+          "es": "kNN sufre con variables irrelevantes y asimétricas, porque todas entran en la distancia."
         }
       }
     ],
     "answer": ["a"],
     "explanation": {
       "en": "Tabular foundation models such as TabPFN have recently matched or beaten boosted trees on small datasets, so the gap is narrowing. For a first baseline under time pressure, boosted trees remain the safest choice, and a newer model is worth comparing once that baseline exists.",
-      "es": "Los modelos fundacionales tabulares como TabPFN han igualado o superado hace poco a los árboles con boosting en datasets pequeños, así que la brecha se está cerrando. Para una primera línea base con poco tiempo, los árboles con boosting siguen siendo la opción más segura, y vale la pena comparar un modelo más nuevo una vez que esa línea base exista."
+      "es": "Los modelos fundacionales tabulares como TabPFN han igualado o superado hace poco a los árboles con boosting en datasets pequeños, así que la brecha se está cerrando. Para un primer baseline con poco tiempo, los árboles con boosting siguen siendo la opción más segura, y vale la pena comparar un modelo más nuevo una vez que ese baseline exista."
     },
     "sources": [
       {

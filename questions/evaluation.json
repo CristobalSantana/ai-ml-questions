@@ -52,7 +52,7 @@
     "answer": ["c"],
     "explanation": {
       "en": "There are 40 true positives, 10 false positives and 40 false negatives. Precision = TP/(TP+FP) = 0.8 and recall = TP/(TP+FN) = 0.5, so F1 = 2·0.8·0.5/(0.8+0.5) ≈ 0.62. In imbalanced problems such as fraud, these metrics and the precision-recall curve say much more than accuracy, which can be very high for a model that never flags anything.",
-      "es": "Hay 40 verdaderos positivos, 10 falsos positivos y 40 falsos negativos. Precision = TP/(TP+FP) = 0,8 y recall = TP/(TP+FN) = 0,5, así que F1 = 2·0,8·0,5/(0,8+0,5) ≈ 0,62. En problemas desbalanceados como el fraude, estas métricas y la curva precision-recall dicen mucho más que el accuracy, que puede ser altísimo con un modelo que nunca marca nada."
+      "es": "Hay 40 verdaderos positivos, 10 falsos positivos y 40 falsos negativos. Precision = TP/(TP+FP) = 0,8 y recall = TP/(TP+FN) = 0,5, así que F1 = 2·0,8·0,5/(0,8+0,5) ≈ 0,62. En problemas desbalanceados como el fraude, estas métricas y la curva precision-recall dicen mucho más que la exactitud, que puede ser altísima con un modelo que nunca marca nada."
     },
     "sources": [
       {
@@ -79,7 +79,7 @@
     "difficulty": { "steps": 1, "specialization": 1, "distractors": 2 },
     "prompt": {
       "en": "A solar forecasting model reports R² = 0.92 for hourly generation over a held-out year. What would best show whether it actually forecasts the weather?",
-      "es": "Un modelo de pronóstico solar reporta R² = 0,92 para la generación horaria en un año de prueba. ¿Qué mostraría mejor si de verdad pronostica el clima?"
+      "es": "Un modelo de pronóstico solar reporta R² = 0,92 para la generación horaria en un año de prueba. ¿Qué mostraría mejor si de verdad pronostica el tiempo meteorológico?"
     },
     "options": [
       {
@@ -90,7 +90,7 @@
         },
         "rationale": {
           "en": "A skill score measures the improvement over a baseline that knows the time of day and year but not the weather, which is exactly what a forecast has to add.",
-          "es": "Un skill score mide la mejora sobre un baseline que conoce la hora y el día del año, pero no el clima, que es justamente lo que un pronóstico tiene que aportar."
+          "es": "Un skill score mide la mejora sobre un baseline que conoce la hora y el día del año, pero no el tiempo meteorológico, que es justamente lo que un pronóstico tiene que aportar."
         }
       },
       {
@@ -101,7 +101,7 @@
         },
         "rationale": {
           "en": "Comparing training and held-out R² checks for overfitting. Both can be high for a model that only learned the daily cycle.",
-          "es": "Comparar el R² de entrenamiento y de prueba detecta overfitting. Ambos pueden ser altos en un modelo que solo aprendió el ciclo diario."
+          "es": "Comparar el R² de entrenamiento y de prueba detecta sobreajuste. Ambos pueden ser altos en un modelo que solo aprendió el ciclo diario."
         }
       },
       {
@@ -112,7 +112,7 @@
         },
         "rationale": {
           "en": "MAPE is undefined when generation is zero at night and, like R², it does not compare against a baseline.",
-          "es": "El MAPE se indefine cuando la generación es cero de noche y, como el R², no compara contra un baseline."
+          "es": "El MAPE no está definido cuando la generación es cero de noche y, como el R², no compara contra un baseline."
         }
       },
       {
@@ -130,7 +130,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "R² compares against the overall mean, and in solar data most of the variance is the daily and seasonal cycle, which no one needs to forecast. In an experiment on five years of measured German solar generation, climatology (the average for that day of the year and hour) reached R² = 0.878 on the held-out year without any weather information. Scored by skill against their baseline, the same models spread from −5.75 to +0.89.",
-      "es": "El R² compara contra la media global, y en datos solares la mayor parte de la varianza es el ciclo diario y estacional, que nadie tiene que pronosticar. En un experimento con cinco años de generación solar alemana medida, la climatología (el promedio de ese día del año y esa hora) logró R² = 0,878 en el año de prueba sin ninguna información meteorológica. Medidos con skill score contra su baseline, los mismos modelos se separaron de −5,75 a +0,89."
+      "es": "El R² compara contra la media global, y en datos solares la mayor parte de la varianza es el ciclo diario y estacional, que nadie tiene que pronosticar. En un experimento con cinco años de mediciones de generación solar en Alemania, la climatología (el promedio de ese día del año y esa hora) logró R² = 0,878 en el año de prueba sin ninguna información meteorológica. Medidos con skill score contra su baseline, los mismos modelos obtuvieron puntajes de −5,75 a +0,89."
     },
     "sources": [
       {
@@ -258,11 +258,11 @@
         "id": "a",
         "text": {
           "en": "Temperature scaling: fit one value on validation data that softens the probabilities.",
-          "es": "Temperature scaling: ajustar un solo valor con datos de validación que suaviza las probabilidades."
+          "es": "Temperature scaling: ajustar con datos de validación un solo valor que suaviza las probabilidades."
         },
         "rationale": {
           "en": "The model is overconfident but ranks well, which is what temperature scaling fixes: dividing the logits by T > 1 lowers confidence without changing which class wins.",
-          "es": "El modelo está sobreconfiado pero ordena bien, que es justo lo que corrige el temperature scaling: dividir los logits por T > 1 baja la confianza sin cambiar qué clase gana."
+          "es": "El modelo tiene exceso de confianza pero ordena bien, que es justo lo que corrige el temperature scaling: dividir los logits por T > 1 baja la confianza sin cambiar qué clase gana."
         }
       },
       {
@@ -273,7 +273,7 @@
         },
         "rationale": {
           "en": "Longer training tends to increase overconfidence in modern networks, not reduce it.",
-          "es": "Entrenar más tiende a aumentar la sobreconfianza de las redes modernas, no a reducirla."
+          "es": "Entrenar más tiende a aumentar el exceso de confianza de las redes modernas, no a reducirlo."
         }
       },
       {
@@ -291,18 +291,18 @@
         "id": "d",
         "text": {
           "en": "Replace the softmax with one sigmoid per class, which removes overconfidence.",
-          "es": "Reemplazar el softmax por una sigmoide por clase, lo que elimina la sobreconfianza."
+          "es": "Reemplazar el softmax por una sigmoide por clase, lo que elimina el exceso de confianza."
         },
         "rationale": {
           "en": "Sigmoid outputs can be just as overconfident; the problem is the scale of the logits.",
-          "es": "Las salidas sigmoide pueden estar igual de sobreconfiadas; el problema es la escala de los logits."
+          "es": "Las salidas sigmoide pueden tener el mismo exceso de confianza; el problema es la escala de los logits."
         }
       }
     ],
     "answer": ["a"],
     "explanation": {
       "en": "Guo et al. (2017) found that modern deep networks are often overconfident, and that temperature scaling, with a single parameter fitted on validation data, was among the most effective fixes. Calibration is measured with reliability diagrams or with the expected calibration error (ECE).",
-      "es": "Guo et al. (2017) encontraron que las redes profundas modernas suelen estar sobreconfiadas, y que el temperature scaling, con un solo parámetro ajustado en datos de validación, estaba entre los arreglos más efectivos. La calibración se mide con diagramas de confiabilidad o con el error de calibración esperado (ECE)."
+      "es": "Guo et al. (2017) encontraron que las redes profundas modernas suelen tener exceso de confianza, y que el temperature scaling, con un solo parámetro ajustado en datos de validación, estaba entre los arreglos más efectivos. La calibración se mide con diagramas de confiabilidad o con el error de calibración esperado (ECE)."
     },
     "sources": [
       {
@@ -375,7 +375,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "Which metric to use depends on the cost of errors: if one large miss costs more than several small ones, as with stockouts of critical items, RMSE reflects that better; if every unit of error costs the same, MAE is more faithful. RMSE is always at least as large as MAE.",
-      "es": "Qué métrica usar depende del costo de los errores: si una falla grande cuesta más que varias pequeñas, como con quiebres de stock de productos críticos, el RMSE lo refleja mejor; si cada unidad de error cuesta lo mismo, el MAE es más fiel. El RMSE siempre es al menos tan grande como el MAE."
+      "es": "Qué métrica usar depende del costo de los errores: si una falla grande cuesta más que varias pequeñas, como cuando faltan productos críticos en inventario, el RMSE lo refleja mejor; si cada unidad de error cuesta lo mismo, el MAE es más fiel. El RMSE siempre es al menos tan grande como el MAE."
     },
     "sources": [
       { "kind": "book", "title": "Forecasting: Principles and Practice (3rd ed.)", "authors": "Rob J. Hyndman & George Athanasopoulos", "year": 2021 }
@@ -517,7 +517,7 @@
         "id": "d",
         "text": {
           "en": "They are identical, since differences below 1 point have no practical meaning.",
-          "es": "Son idénticos, porque las diferencias bajo 1 punto no tienen significado práctico."
+          "es": "Son idénticos, porque las diferencias de menos de 1 punto no tienen significado práctico."
         },
         "rationale": {
           "en": "Small differences can be real with enough data; the problem here is too little data, not a rule about 1 point.",

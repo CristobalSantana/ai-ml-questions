@@ -12,7 +12,7 @@
     "difficulty": { "steps": 0, "specialization": 0, "distractors": 1 },
     "prompt": {
       "en": "Compared with the sequence-to-sequence models of its time, what did the Transformer in 'Attention Is All You Need' remove?",
-      "es": "Respecto de los modelos seq2seq de su época, ¿qué eliminó el Transformer de 'Attention Is All You Need'?"
+      "es": "Respecto de los modelos seq2seq de su época, ¿qué eliminó el Transformer de «Attention Is All You Need»?"
     },
     "options": [
       {
@@ -51,7 +51,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "Vaswani et al. (2017) proposed an encoder-decoder built on multi-head scaled dot-product attention, plus sinusoidal positional encodings, because without recurrence the model does not know the order of the tokens. It beat the state of the art in WMT 2014 translation at a fraction of the earlier models' training cost, and became the basis of today's LLMs.",
-      "es": "Vaswani et al. (2017) propusieron una arquitectura encoder-decoder basada en scaled dot-product attention con múltiples cabezas, más codificaciones posicionales sinusoidales, porque sin recurrencia el modelo no conoce el orden de los tokens. Superó el estado del arte en traducción de WMT 2014 con una fracción del costo de entrenamiento de los modelos anteriores, y se convirtió en la base de los LLMs actuales."
+      "es": "Vaswani et al. (2017) propusieron una arquitectura encoder-decoder basada en atención de producto punto escalado con múltiples cabezas, más codificaciones posicionales sinusoidales, porque sin recurrencia el modelo no conoce el orden de los tokens. Superó el estado del arte en traducción de WMT 2014 con una fracción del costo de entrenamiento de los modelos anteriores, y se convirtió en la base de los LLM actuales."
     },
     "sources": [
       { "kind": "paper", "title": "Attention Is All You Need", "authors": "Ashish Vaswani et al.", "year": 2017, "url": "https://arxiv.org/abs/1706.03762" }
@@ -84,7 +84,7 @@
         },
         "rationale": {
           "en": "Each block learns a residual F(x) and outputs F(x) + x. The identity path lets signals and gradients cross many layers, which made a 152-layer network trainable and won ILSVRC 2015.",
-          "es": "Cada bloque aprende un residuo F(x) y entrega F(x) + x. El camino identidad deja que las señales y los gradientes crucen muchas capas, lo que permitió entrenar una red de 152 capas y ganar ILSVRC 2015."
+          "es": "Cada bloque aprende un residuo F(x) y devuelve F(x) + x. El camino de identidad deja que las señales y los gradientes crucen muchas capas, lo que permitió entrenar una red de 152 capas y ganar ILSVRC 2015."
         }
       },
       {
@@ -179,7 +179,7 @@
         "text": { "en": "Translating pairs of sentences between English and German.", "es": "Traducir pares de oraciones entre inglés y alemán." },
         "rationale": {
           "en": "Translation was the task of the original Transformer; BERT is pretrained on unlabeled text from books and English Wikipedia.",
-          "es": "La traducción era la tarea del Transformer original; BERT se preentrena con texto sin etiquetas de libros y de la Wikipedia en inglés."
+          "es": "La traducción era la tarea del Transformer original; BERT se preentrena con texto sin etiquetar de libros y de la Wikipedia en inglés."
         }
       },
       {
@@ -194,7 +194,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "BERT also used next sentence prediction, a second task that later work such as RoBERTa (2019) found could be dropped without harm. As an encoder-only model, BERT is fine-tuned for classification, tagging or extractive question answering rather than used to generate text.",
-      "es": "BERT también usó la predicción de la oración siguiente, una segunda tarea que trabajos posteriores como RoBERTa (2019) mostraron que se podía quitar sin perjuicio. Como es un modelo solo-encoder, BERT se ajusta para clasificación, etiquetado o respuesta extractiva de preguntas, en vez de usarse para generar texto."
+      "es": "BERT también usó la predicción de la oración siguiente, una segunda tarea que, según mostraron trabajos posteriores como RoBERTa (2019), se podía quitar sin perjuicio. Como es un modelo solo-encoder, BERT se adapta con fine-tuning para clasificación, etiquetado o respuesta extractiva de preguntas, en vez de usarse para generar texto."
     },
     "sources": [
       {

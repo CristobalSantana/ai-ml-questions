@@ -261,11 +261,11 @@
         "id": "a",
         "text": {
           "en": "Models store more features than neurons, as overlapping directions (superposition).",
-          "es": "Los modelos guardan más características que neuronas, como direcciones superpuestas (superposición)."
+          "es": "Los modelos guardan más features que neuronas, como direcciones superpuestas (superposición)."
         },
         "rationale": {
           "en": "Elhage et al. (2022) showed in toy models that networks represent more sparse features than they have dimensions by overlapping them, which makes neurons polysemantic: active for several unrelated concepts.",
-          "es": "Elhage et al. (2022) mostraron en modelos de juguete que las redes representan más características dispersas que dimensiones al superponerlas, lo que vuelve polisemánticas a las neuronas: se activan con varios conceptos sin relación."
+          "es": "Elhage et al. (2022) mostraron en modelos de juguete que las redes representan más features dispersas que dimensiones al superponerlas, lo que vuelve polisemánticas a las neuronas: se activan con varios conceptos sin relación."
         }
       },
       {
@@ -287,7 +287,7 @@
         },
         "rationale": {
           "en": "MLP layers hold much of a model's knowledge, and features appear in both attention and MLP activations.",
-          "es": "Las capas MLP guardan buena parte del conocimiento de un modelo, y las características aparecen tanto en las activaciones de atención como en las de las MLP."
+          "es": "Las capas MLP guardan buena parte del conocimiento de un modelo, y las features aparecen tanto en las activaciones de atención como en las de las MLP."
         }
       },
       {
@@ -305,7 +305,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "Sparse autoencoders, trained to rebuild a layer's activations from a much larger set of rarely active features, recover many interpretable directions, such as features for specific places, for errors in code or for deception-related text. Anthropic applied them to a production model in 2024 and found millions of features.",
-      "es": "Los sparse autoencoders, entrenados para reconstruir las activaciones de una capa a partir de un conjunto mucho más grande de características que se activan pocas veces, recuperan muchas direcciones interpretables, como características para lugares específicos, para errores en código o para texto relacionado con el engaño. Anthropic los aplicó a un modelo en producción en 2024 y encontró millones de características."
+      "es": "Los sparse autoencoders, entrenados para reconstruir las activaciones de una capa a partir de un conjunto mucho más grande de features que se activan pocas veces, recuperan muchas direcciones interpretables, como features para lugares específicos, para errores en código o para texto relacionado con el engaño. Anthropic los aplicó a un modelo en producción en 2024 y encontró millones de features."
     },
     "sources": [
       { "kind": "paper", "title": "Toy Models of Superposition", "authors": "Nelson Elhage et al.", "year": 2022, "url": "https://arxiv.org/abs/2209.10652" },

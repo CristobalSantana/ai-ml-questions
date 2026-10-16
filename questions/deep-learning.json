@@ -19,11 +19,11 @@
         "id": "a",
         "text": {
           "en": "Deeper networks reached higher training error, and the shortcut let each block learn a correction to the identity.",
-          "es": "Las redes más profundas llegaban a más error de entrenamiento, y el atajo dejó que cada bloque aprendiera una corrección a la identidad."
+          "es": "Las redes más profundas tenían un error de entrenamiento mayor, y el atajo dejó que cada bloque aprendiera una corrección a la identidad."
         },
         "rationale": {
           "en": "He et al. saw deeper plain networks reach higher training error than shallower ones. With y = F(x) + x, a block that adds nothing can stay close to the identity, and gradients flow through the shortcut.",
-          "es": "He et al. vieron que redes planas más profundas llegaban a más error de entrenamiento que otras menos profundas. Con y = F(x) + x, un bloque que no aporta puede quedarse cerca de la identidad, y el gradiente fluye por el atajo."
+          "es": "He et al. vieron que redes simples más profundas tenían un error de entrenamiento mayor que otras menos profundas. Con y = F(x) + x, un bloque que no aporta puede quedarse cerca de la identidad, y el gradiente fluye por el atajo."
         }
       },
       {
@@ -34,7 +34,7 @@
         },
         "rationale": {
           "en": "The problem was higher training error, which overfitting does not explain, and an identity shortcut adds no constraint on capacity.",
-          "es": "El problema era más error de entrenamiento, algo que el overfitting no explica, y un atajo de identidad no restringe la capacidad."
+          "es": "El problema era un error de entrenamiento mayor, algo que el sobreajuste no explica, y un atajo de identidad no restringe la capacidad."
         }
       },
       {
@@ -63,7 +63,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "He et al. called it the degradation problem: adding layers to an already deep network raised training error, which overfitting cannot explain. Rewriting each block as y = F(x) + x means the network only has to learn the residual F(x). Residual shortcuts are now in almost every deep architecture, transformers included.",
-      "es": "He et al. lo llamaron el problema de degradación: agregar capas a una red ya profunda subía el error de entrenamiento, algo que el overfitting no explica. Al reescribir cada bloque como y = F(x) + x, la red solo tiene que aprender el residuo F(x). Hoy los atajos residuales están en casi todas las arquitecturas profundas, transformers incluidos."
+      "es": "He et al. lo llamaron el problema de degradación: agregar capas a una red ya profunda subía el error de entrenamiento, algo que el sobreajuste no explica. Al reescribir cada bloque como y = F(x) + x, la red solo tiene que aprender el residuo F(x). Hoy los atajos residuales están en casi todas las arquitecturas profundas, transformers incluidos."
     },
     "sources": [
       {
@@ -113,7 +113,7 @@
         },
         "rationale": {
           "en": "Learning rates are chosen by the user or by a schedule; backpropagation only provides gradients.",
-          "es": "La tasa de aprendizaje la elige el usuario o un calendario; backpropagation solo entrega gradientes."
+          "es": "La tasa de aprendizaje la elige el usuario o un schedule; backpropagation solo proporciona gradientes."
         }
       },
       {
@@ -207,7 +207,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "This is the vanishing gradient problem that made deep sigmoid networks hard to train. ReLU, whose derivative is 1 for positive inputs, careful initialization, normalization layers and residual connections are the usual fixes; in the opposite case, factors above 1 make gradients explode.",
-      "es": "Este es el problema del gradiente que se desvanece, que hacía difícil entrenar redes sigmoide profundas. ReLU, cuya derivada es 1 para entradas positivas, una buena inicialización, las capas de normalización y las conexiones residuales son las soluciones habituales; en el caso opuesto, factores mayores que 1 hacen que los gradientes exploten."
+      "es": "Este es el problema del gradiente que se desvanece, que hacía difícil entrenar redes profundas con activaciones sigmoide. ReLU, cuya derivada es 1 para entradas positivas, una buena inicialización, las capas de normalización y las conexiones residuales son las soluciones habituales; en el caso opuesto, factores mayores que 1 hacen que los gradientes exploten."
     },
     "sources": [
       {
@@ -251,7 +251,7 @@
         },
         "rationale": {
           "en": "Loshchilov and Hutter (2019) showed that combining L2 with Adam's per-parameter scaling makes the effective decay uneven. Decoupling it shrinks every weight at the same rate and improved generalization.",
-          "es": "Loshchilov y Hutter (2019) mostraron que combinar L2 con el escalamiento por parámetro de Adam hace que el decaimiento efectivo sea desigual. Desacoplarlo encoge todos los pesos al mismo ritmo y mejoró la generalización."
+          "es": "Loshchilov y Hutter (2019) mostraron que combinar L2 con el escalamiento por parámetro de Adam hace que el weight decay efectivo sea desigual. Desacoplarlo encoge todos los pesos al mismo ritmo y mejoró la generalización."
         }
       },
       {
@@ -333,7 +333,7 @@
         "id": "a",
         "text": {
           "en": "Layer normalization, which normalizes over the features of each example independently.",
-          "es": "Layer normalization, que normaliza sobre los atributos de cada ejemplo por separado."
+          "es": "Layer normalization, que normaliza sobre las features de cada ejemplo por separado."
         },
         "rationale": {
           "en": "Layer norm computes its statistics from a single example, so it behaves the same with batches of 2, 1 or 1,000, in training and at inference.",
@@ -344,7 +344,7 @@
         "id": "b",
         "text": {
           "en": "Batch normalization, which normalizes each feature over the examples in the batch.",
-          "es": "Batch normalization, que normaliza cada atributo usando los ejemplos del batch."
+          "es": "Batch normalization, que normaliza cada feature usando los ejemplos del batch."
         },
         "rationale": {
           "en": "With only 2 examples per batch the batch statistics are very noisy, and inference must rely on running averages that may not match them.",
@@ -377,7 +377,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "Ba et al. (2016) introduced layer normalization for recurrent networks, where batch statistics are awkward, and transformers adopted it, now often as RMSNorm, which skips subtracting the mean. Batch norm remains common in convolutional networks for vision trained with large batches.",
-      "es": "Ba et al. (2016) introdujeron layer normalization para redes recurrentes, donde las estadísticas por batch son incómodas, y los transformers la adoptaron, hoy a menudo como RMSNorm, que omite restar la media. Batch norm sigue siendo común en redes convolucionales para visión entrenadas con batches grandes."
+      "es": "Ba et al. (2016) introdujeron layer normalization para redes recurrentes, donde las estadísticas por batch son difíciles de aplicar, y los transformers la adoptaron, hoy a menudo como RMSNorm, que omite restar la media. Batch norm sigue siendo común en redes convolucionales para visión entrenadas con batches grandes."
     },
     "sources": [
       {
@@ -412,7 +412,7 @@
     "difficulty": { "steps": 2, "specialization": 1, "distractors": 1 },
     "prompt": {
       "en": "While training a transformer, the loss falls smoothly during a 2,000-step warmup. Shortly after the learning rate reaches its peak, the loss spikes repeatedly and finally becomes NaN. The data and code did not change. Which change most directly addresses the cause?",
-      "es": "Al entrenar un transformer, la pérdida baja suavemente durante un warmup de 2.000 pasos. Poco después de que la tasa de aprendizaje llega a su máximo, la pérdida se dispara varias veces y termina en NaN. Los datos y el código no cambiaron. ¿Qué cambio ataca más directamente la causa?"
+      "es": "Al entrenar un transformer, la pérdida baja suavemente durante un warmup de 2.000 pasos. Poco después de que la tasa de aprendizaje llegue a su máximo, la pérdida se dispara varias veces y termina en NaN. Los datos y el código no cambiaron. ¿Qué cambio ataca más directamente la causa?"
     },
     "options": [
       {

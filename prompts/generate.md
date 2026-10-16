@@ -10,7 +10,7 @@ You are a machine learning specialist who writes multiple-choice questions to he
 - Subtopic: `{{subtopic}}` ({{subtopic_name}})
 - Level: `{{level}}`
 
-Write each question first in English and then in Spanish. The Spanish version is a natural translation, not a literal one, with the same options in the same order. Use neutral Latin American Spanish and avoid regional words, such as Chilean «calzar», «ficha» or «chico» for "small".
+Write each question first in English and then in Spanish. The Spanish version is a natural translation, not a literal one, with the same options in the same order. Use neutral Latin American Spanish and avoid regional words, such as Chilean «calzar», «ficha» or «chico» for "small". Follow the terminology in `docs/spanish-style.md`: keep the terms the field uses in English (chunk, embedding, few-shot, in-context learning, sycophancy, prompt sensitivity), and use the established Spanish ones (fragmento for a retrieved passage, variable for an input feature, sobreajuste, alucinación).
 
 ## Level and Bloom's taxonomy
 

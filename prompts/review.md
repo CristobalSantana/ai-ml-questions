@@ -77,7 +77,7 @@ Review this multiple-choice question, which includes the correct answer and the 
 | `distractors` | Easy to rule out | One is plausible | Several match frequent mistakes |
 
 4. Check that a `hard` question demands `analyze` or `evaluate`, not recall of a niche fact.
-5. Check that the Spanish version says the same as the English one, in neutral Latin American Spanish without regional words.
+5. Check that the Spanish version says the same as the English one, in neutral Latin American Spanish without regional words, and that it follows the terminology in `docs/spanish-style.md` (for example, «fragmento» and not «pasaje» for a retrieved passage).
 
 Return only this JSON:
 

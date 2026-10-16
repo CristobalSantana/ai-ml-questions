@@ -428,7 +428,7 @@
         "id": "a",
         "text": {
           "en": "Hybrid search: combine BM25 with the dense retriever and merge both rankings.",
-          "es": "Búsqueda híbrida: combinar BM25 con el recuperador denso y fusionar ambos rankings."
+          "es": "Búsqueda híbrida: combinar BM25 con el retriever denso y fusionar ambos rankings."
         },
         "rationale": {
           "en": "Lexical matching handles exact tokens such as codes and IDs, while dense retrieval handles paraphrases. Reciprocal rank fusion merges the two lists using only ranks, so their scores need no calibration.",
@@ -545,14 +545,14 @@
         },
         "rationale": {
           "en": "A reranker only scores relevance; the answer is written later by the LLM from the top passages.",
-          "es": "Un reranker solo puntúa relevancia; la respuesta la redacta después el LLM con los mejores pasajes."
+          "es": "Un reranker solo puntúa relevancia; la respuesta la redacta después el LLM con los mejores fragmentos."
         }
       }
     ],
     "answer": ["a"],
     "explanation": {
       "en": "This two-stage design aims the first stage at recall and the second at precision. Reranking often brings large gains for little engineering effort, since it slots in after retrieval with no re-indexing and decides which few candidates reach the generator.",
-      "es": "Este diseño en dos etapas apunta la primera al recall y la segunda a la precisión. Reordenar suele traer mejoras grandes con poco esfuerzo de ingeniería, porque se agrega después de la recuperación sin reindexar y decide qué pocos candidatos llegan al generador."
+      "es": "Este diseño en dos etapas apunta la primera al recall y la segunda a la precision. Reordenar suele traer mejoras grandes con poco esfuerzo de ingeniería, porque se agrega después de la recuperación sin reindexar y decide qué pocos candidatos llegan al generador."
     },
     "sources": [
       {
@@ -636,7 +636,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "Approximate indexes trade a little recall for large speedups over exact search. In HNSW, M sets the graph's memory and, with ef_construction, its quality when it is built, and ef_search tunes the recall-latency trade-off for each query, which makes it the first knob to try when recall is too low.",
-      "es": "Los índices aproximados ceden un poco de recall a cambio de grandes aceleraciones respecto de la búsqueda exacta. En HNSW, M fija la memoria del grafo y, junto con ef_construction, su calidad al construirlo, y ef_search ajusta el equilibrio entre recall y latencia en cada consulta, lo que lo vuelve la primera perilla a mover cuando el recall es bajo."
+      "es": "Los índices aproximados ceden un poco de recall a cambio de grandes aceleraciones respecto de la búsqueda exacta. En HNSW, M fija la memoria del grafo y, junto con ef_construction, su calidad al construirlo, y ef_search ajusta el equilibrio entre recall y latencia en cada consulta, lo que lo vuelve el primer parámetro a ajustar cuando el recall es bajo."
     },
     "sources": [
       {
@@ -664,29 +664,29 @@
     "difficulty": { "steps": 2, "specialization": 1, "distractors": 2 },
     "prompt": {
       "en": "In a RAG system, the passage that contains the answer is among the top 5 retrieved results for 95% of the test questions, yet 30% of the final answers are wrong. Where should you look first?",
-      "es": "En un sistema RAG, el pasaje que contiene la respuesta está entre los 5 primeros resultados recuperados en el 95% de las preguntas de prueba, pero el 30% de las respuestas finales son incorrectas. ¿Dónde conviene buscar primero?"
+      "es": "En un sistema RAG, el fragmento que contiene la respuesta está entre los 5 primeros resultados recuperados en el 95% de las preguntas de prueba, pero el 30% de las respuestas finales son incorrectas. ¿Dónde conviene buscar primero?"
     },
     "options": [
       {
         "id": "a",
         "text": {
           "en": "At generation: how the model uses the retrieved passages, checking the faithfulness of wrong answers.",
-          "es": "En la generación: cómo usa el modelo los pasajes recuperados, revisando la fidelidad de las respuestas erróneas."
+          "es": "En la generación: cómo usa el modelo los fragmentos recuperados, revisando la fidelidad de las respuestas erróneas."
         },
         "rationale": {
           "en": "With 95% recall at 5, retrieval is rarely the bottleneck: in most failures the answer was in front of the model. Checking whether answers are supported by the passages separates misreading, distraction and answering from memory.",
-          "es": "Con 95% de recall en 5, la recuperación rara vez es el cuello de botella: en la mayoría de las fallas la respuesta estaba frente al modelo. Revisar si las respuestas se apoyan en los pasajes separa la mala lectura, la distracción y el responder de memoria."
+          "es": "Con 95% de recall en 5, la recuperación rara vez es el cuello de botella: en la mayoría de las fallas la respuesta estaba frente al modelo. Revisar si las respuestas se apoyan en los fragmentos separa la mala lectura, la distracción y el responder de memoria."
         }
       },
       {
         "id": "b",
         "text": {
           "en": "At retrieval: switch to a better embedding model, to push the correct passage up to first place more often.",
-          "es": "En la recuperación: cambiar a un mejor modelo de embeddings para subir el pasaje correcto al primer lugar."
+          "es": "En la recuperación: cambiar a un mejor modelo de embeddings para subir el fragmento correcto al primer lugar."
         },
         "rationale": {
           "en": "Retrieval already finds the passage 95% of the time, so missing passages explain at most 5 of the 30 points of error; better ranking within the top 5 may help a little, but most failures happen with the answer already in the context.",
-          "es": "La recuperación ya encuentra el pasaje el 95% de las veces, así que los pasajes faltantes explican como mucho 5 de los 30 puntos de error; ordenar mejor dentro de los 5 primeros puede ayudar algo, pero la mayoría de las fallas ocurren con la respuesta ya en el contexto."
+          "es": "La recuperación ya encuentra el fragmento el 95% de las veces, así que los fragmentos faltantes explican como mucho 5 de los 30 puntos de error; ordenar mejor dentro de los 5 primeros puede ayudar algo, pero la mayoría de las fallas ocurren con la respuesta ya en el contexto."
         }
       },
       {
@@ -697,18 +697,18 @@
         },
         "rationale": {
           "en": "Bad chunking would show up as low recall; here the passages with the answer are being retrieved.",
-          "es": "Un mal chunking se vería como recall bajo; aquí los pasajes con la respuesta sí se están recuperando."
+          "es": "Un mal chunking se vería como recall bajo; aquí los fragmentos con la respuesta sí se están recuperando."
         }
       },
       {
         "id": "d",
         "text": {
           "en": "At the index: retrieve 50 passages instead of 5, so the correct one is missed less often.",
-          "es": "En el índice: recuperar 50 pasajes en vez de 5, para perder el correcto con menos frecuencia."
+          "es": "En el índice: recuperar 50 fragmentos en vez de 5, para perder el correcto con menos frecuencia."
         },
         "rationale": {
           "en": "Recall is already high, and 50 passages add distractors and context length, which can make generation worse.",
-          "es": "El recall ya es alto, y 50 pasajes suman distractores y largo de contexto, lo que puede empeorar la generación."
+          "es": "El recall ya es alto, y 50 fragmentos suman distractores y largo de contexto, lo que puede empeorar la generación."
         }
       }
     ],
@@ -843,7 +843,7 @@
         },
         "rationale": {
           "en": "Adding or fixing a document only requires reindexing it, with no retraining, and the retrieved passages give each answer traceable sources.",
-          "es": "Agregar o corregir un documento solo requiere reindexarlo, sin reentrenar, y los pasajes recuperados le dan a cada respuesta fuentes verificables."
+          "es": "Agregar o corregir un documento solo requiere reindexarlo, sin reentrenar, y los fragmentos recuperados le dan a cada respuesta fuentes verificables."
         }
       },
       {
@@ -876,7 +876,7 @@
         },
         "rationale": {
           "en": "RAG reduces hallucinations but does not prevent them: the model can still ignore, misread or go beyond the passages.",
-          "es": "RAG reduce las alucinaciones, pero no las evita: el modelo todavía puede ignorar, malinterpretar o ir más allá de los pasajes."
+          "es": "RAG reduce las alucinaciones, pero no las evita: el modelo todavía puede ignorar, malinterpretar o ir más allá de los fragmentos."
         }
       }
     ],

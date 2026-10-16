@@ -93,14 +93,14 @@
     "difficulty": { "steps": 2, "specialization": 1, "distractors": 2 },
     "prompt": {
       "en": "A model that predicts 30-day hospital readmission reaches an AUC of 0.97 in validation but 0.62 from its first week in production. Its most important feature is the number of follow-up appointments in the patient's record, which the hospital fills in during the weeks after discharge. What is the most likely cause?",
-      "es": "Un modelo que predice el reingreso hospitalario a 30 días logra un AUC de 0,97 en validación pero de 0,62 desde su primera semana en producción. Su atributo más importante es el número de consultas de seguimiento registradas en la historia clínica del paciente, que el hospital completa durante las semanas posteriores al alta. ¿Cuál es la causa más probable?"
+      "es": "Un modelo que predice el reingreso hospitalario a 30 días logra un AUC de 0,97 en validación pero de 0,62 desde su primera semana en producción. Su variable más importante es el número de consultas de seguimiento registradas en la historia clínica del paciente, que el hospital completa durante las semanas posteriores al alta. ¿Cuál es la causa más probable?"
     },
     "options": [
       {
         "id": "a",
         "text": {
           "en": "Target leakage: the historical feature already included events after discharge, unknown when predicting.",
-          "es": "Fuga del objetivo: el atributo histórico ya incluía eventos posteriores al alta, que se desconocen al predecir."
+          "es": "Target leakage: la variable histórica ya incluía eventos posteriores al alta, que se desconocen al predecir."
         },
         "rationale": {
           "en": "Historical records were complete, so the count included appointments scheduled because of the problems that led to readmission. At discharge the field is mostly empty, so the signal disappears in production.",
@@ -115,7 +115,7 @@
         },
         "rationale": {
           "en": "Drift could lower performance gradually, but a collapse right at deployment, driven by a feature filled in after the event, points to leakage.",
-          "es": "El drift podría bajar el rendimiento de forma gradual, pero un derrumbe justo al desplegar, causado por un atributo que se completa después del evento, apunta a una fuga."
+          "es": "El drift podría bajar el rendimiento de forma gradual, pero un derrumbe justo al desplegar, causado por una variable que se completa después del evento, apunta a una fuga."
         }
       },
       {
@@ -144,7 +144,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "The test for leakage is temporal: for each feature, ask whether its value would be available, with the same content, at the moment the prediction is made. Building training data from snapshots taken at prediction time, rather than from the final state of each record, prevents this whole class of errors.",
-      "es": "La prueba para detectar fugas es temporal: para cada atributo, preguntar si su valor estaría disponible, con el mismo contenido, en el momento en que se hace la predicción. Construir los datos de entrenamiento con instantáneas tomadas al momento de predecir, y no con el estado final de cada registro, evita toda esta clase de errores."
+      "es": "La prueba para detectar fugas es temporal: para cada variable, preguntar si su valor estaría disponible, con el mismo contenido, en el momento en que se hace la predicción. Construir los datos de entrenamiento con instantáneas tomadas al momento de predecir, y no con el estado final de cada registro, evita toda esta clase de errores."
     },
     "sources": [
       {
@@ -171,14 +171,14 @@
     "difficulty": { "steps": 1, "specialization": 1, "distractors": 2 },
     "prompt": {
       "en": "You want to detect whether the distribution of a continuous feature, such as transaction amount, changed between the training data and last week's traffic. Labels for last week are not available yet. Which check fits best?",
-      "es": "Quieres detectar si la distribución de un atributo continuo, como el monto de las transacciones, cambió entre los datos de entrenamiento y el tráfico de la semana pasada. Las etiquetas de la semana pasada todavía no están disponibles. ¿Qué verificación es la más adecuada?"
+      "es": "Quieres detectar si la distribución de una variable continua, como el monto de las transacciones, cambió entre los datos de entrenamiento y el tráfico de la semana pasada. Las etiquetas de la semana pasada todavía no están disponibles. ¿Qué verificación es la más adecuada?"
     },
     "options": [
       {
         "id": "a",
         "text": {
           "en": "A two-sample Kolmogorov–Smirnov test comparing both samples of the feature.",
-          "es": "Un test de Kolmogorov–Smirnov de dos muestras que compare ambas muestras del atributo."
+          "es": "Un test de Kolmogorov–Smirnov de dos muestras que compare ambas muestras de la variable."
         },
         "rationale": {
           "en": "The KS test compares whole distributions without needing labels, so it detects shifts in location, spread or shape.",
@@ -187,7 +187,7 @@
       },
       {
         "id": "b",
-        "text": { "en": "A t-test on the means of the feature in both periods.", "es": "Un test t sobre las medias del atributo en ambos períodos." },
+        "text": { "en": "A t-test on the means of the feature in both periods.", "es": "Un test t sobre las medias de la variable en ambos períodos." },
         "rationale": {
           "en": "A t-test only detects a change in the mean; a distribution can change its shape or spread while keeping the same mean.",
           "es": "Un test t solo detecta un cambio en la media; una distribución puede cambiar de forma o de dispersión manteniendo la misma media."
@@ -208,7 +208,7 @@
         "id": "d",
         "text": {
           "en": "Checking that the feature's minimum and maximum stayed within the training range.",
-          "es": "Revisar que el mínimo y el máximo del atributo sigan dentro del rango de entrenamiento."
+          "es": "Revisar que el mínimo y el máximo de la variable sigan dentro del rango de entrenamiento."
         },
         "rationale": {
           "en": "Values can stay within the old range while their distribution changes completely.",

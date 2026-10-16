@@ -331,14 +331,14 @@
     "difficulty": { "steps": 2, "specialization": 2, "distractors": 1 },
     "prompt": {
       "en": "A model trained with rotary position embeddings (RoPE) on 4,096-token sequences is run on 16,000-token documents with no other change. Quality collapses beyond about 4,000 tokens, even though memory is not exhausted. What best explains this?",
-      "es": "Un modelo entrenado con rotary position embeddings (RoPE) en secuencias de 4.096 tokens se usa con documentos de 16.000 tokens, sin ningún otro cambio. La calidad se derrumba pasados unos 4.000 tokens, aunque la memoria alcanza. ¿Qué lo explica mejor?"
+      "es": "Un modelo entrenado con rotary position embeddings (RoPE) en secuencias de 4.096 tokens se usa con documentos de 16.000 tokens, sin ningún otro cambio. La calidad se derrumba pasados unos 4.000 tokens, aunque la memoria no se agota. ¿Qué lo explica mejor?"
     },
     "options": [
       {
         "id": "a",
         "text": {
           "en": "Positions past 4,096 produce rotation angles unseen in training, so the model's attention is out of distribution.",
-          "es": "Las posiciones sobre 4.096 producen ángulos de rotación que el modelo no vio al entrenar, y su atención queda fuera de distribución."
+          "es": "Las posiciones más allá de 4.096 producen ángulos de rotación que el modelo no vio al entrenar, y su atención queda fuera de distribución."
         },
         "rationale": {
           "en": "RoPE encodes position as a rotation whose angle grows with the position. Beyond the training length the model meets relative distances and angle combinations it never learned to use.",
@@ -375,7 +375,7 @@
         },
         "rationale": {
           "en": "Attention does get more diluted over long contexts, but that degrades gradually; it would not cause a sharp collapse right at the training length.",
-          "es": "La atención sí se diluye en contextos largos, pero eso degrada en forma gradual; no causaría un derrumbe brusco justo en el largo de entrenamiento."
+          "es": "La atención sí se diluye en contextos largos, pero el deterioro es gradual; no causaría un derrumbe brusco justo en el largo de entrenamiento."
         }
       }
     ],
@@ -509,7 +509,7 @@
         "id": "b",
         "text": {
           "en": "Their training data spells the word wrong more often than right.",
-          "es": "En sus datos de entrenamiento la palabra aparece mal escrita más que bien."
+          "es": "En sus datos de entrenamiento la palabra aparece mal escrita más veces que bien escrita."
         },
         "rationale": {
           "en": "The word is overwhelmingly spelled correctly on the web, and the problem appears even with words the model can spell when asked.",
@@ -610,7 +610,7 @@
     "answer": ["d"],
     "explanation": {
       "en": "Temperature divides the logits before the softmax: below 1 it sharpens the distribution toward the top token, above 1 it flattens it, and as it approaches 0, sampling becomes greedy decoding. Top-k and top-p work differently: they cut off the tail of the distribution instead of reshaping it.",
-      "es": "La temperatura divide los logits antes del softmax: bajo 1 concentra la distribución en el token más probable, sobre 1 la aplana, y cuando se acerca a 0 el muestreo se vuelve decodificación greedy. Top-k y top-p funcionan distinto: cortan la cola de la distribución en vez de cambiar su forma."
+      "es": "La temperatura divide los logits antes del softmax: por debajo de 1 concentra la distribución en el token más probable, por encima de 1 la aplana, y cuando se acerca a 0 el muestreo se vuelve decodificación greedy. Top-k y top-p funcionan distinto: cortan la cola de la distribución en vez de cambiar su forma."
     },
     "sources": [
       {
@@ -689,7 +689,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "The rule minimizes training compute for a given loss. Many recent models are trained far past 20 tokens per parameter on purpose: a smaller model trained for longer costs more to train but less to run, which pays off when it will serve many requests.",
-      "es": "La regla minimiza el cómputo de entrenamiento para una pérdida dada. Muchos modelos recientes se entrenan a propósito con mucho más de 20 tokens por parámetro: un modelo más pequeño entrenado por más tiempo cuesta más de entrenar pero menos de usar, lo que conviene cuando atenderá muchas peticiones."
+      "es": "La regla minimiza el cómputo de entrenamiento para una pérdida dada. Muchos modelos recientes se entrenan a propósito con mucho más de 20 tokens por parámetro: un modelo más pequeño entrenado por más tiempo es más caro de entrenar, pero más barato de usar, lo que conviene cuando atenderá muchas peticiones."
     },
     "sources": [
       {

@@ -130,7 +130,7 @@ const STRINGS = {
       n ? `${n} ${n === 1 ? "disponible" : "disponibles"} con estos filtros` : "No hay preguntas con estos filtros",
     allCount: (n) => `Todas (${n})`,
     notEnough: (n) => `Solo hay ${n} con estos filtros`,
-    resume: (i, n) => `Tienes un quiz a medias: vas en la pregunta ${i} de ${n}.`,
+    resume: (i, n) => `Tienes un quiz a medias: vas por la pregunta ${i} de ${n}.`,
     progress: (i, n) => `${i} de ${n}`,
     levelTitle: "Dificultad estimada",
     correct: "Correcto.",

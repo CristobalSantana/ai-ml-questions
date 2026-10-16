@@ -34,7 +34,7 @@
         },
         "rationale": {
           "en": "Evaluating on a test set does not train on it. Repeated model selection can overfit a test set, but that has nothing to do with model size.",
-          "es": "Evaluar en el set de test no entrena con él. Seleccionar modelos una y otra vez puede sobreajustar el test, pero eso no depende del tamaño del modelo."
+          "es": "Evaluar en el conjunto de prueba no entrena con él. Seleccionar modelos una y otra vez puede sobreajustar ese conjunto, pero eso no depende del tamaño del modelo."
         }
       },
       {
@@ -98,14 +98,14 @@
     "difficulty": { "steps": 1, "specialization": 1, "distractors": 1 },
     "prompt": {
       "en": "Your RAG system passes 20 retrieved passages to the model, and the most relevant one usually lands in position 10. Based on the “lost in the middle” findings, which change is most likely to improve the answers?",
-      "es": "Tu sistema RAG le pasa al modelo 20 pasajes recuperados, y el más relevante suele quedar en la posición 10. Según los hallazgos de «lost in the middle», ¿qué cambio es más probable que mejore las respuestas?"
+      "es": "Tu sistema RAG le pasa al modelo 20 fragmentos recuperados, y el más relevante suele quedar en la posición 10. Según los hallazgos de «lost in the middle», ¿qué cambio es más probable que mejore las respuestas?"
     },
     "options": [
       {
         "id": "a",
         "text": {
           "en": "Reorder the passages so the most relevant ones sit at the beginning or end of the context.",
-          "es": "Reordenar los pasajes para que los más relevantes queden al principio o al final del contexto."
+          "es": "Reordenar los fragmentos para que los más relevantes queden al principio o al final del contexto."
         },
         "rationale": {
           "en": "Liu et al. (2023) found a U-shaped curve: models used information best at the start or end of the context and worst in the middle.",
@@ -116,18 +116,18 @@
         "id": "b",
         "text": {
           "en": "Add more passages, so the relevant one is surrounded by more supporting context.",
-          "es": "Agregar más pasajes, para que el relevante quede rodeado de más contexto de apoyo."
+          "es": "Agregar más fragmentos, para que el relevante quede rodeado de más contexto de apoyo."
         },
         "rationale": {
           "en": "More passages lengthen the context and add distractors; in the study, accuracy stopped improving as more documents were added.",
-          "es": "Más pasajes alargan el contexto y suman distractores; en el estudio, la exactitud dejó de mejorar al agregar más documentos."
+          "es": "Más fragmentos alargan el contexto y suman distractores; en el estudio, la exactitud dejó de mejorar al agregar más documentos."
         }
       },
       {
         "id": "c",
         "text": {
           "en": "Place the most relevant passage in the exact middle, where attention is most balanced.",
-          "es": "Poner el pasaje más relevante justo en el medio, donde la atención está más equilibrada."
+          "es": "Poner el fragmento más relevante justo en el medio, donde la atención está más equilibrada."
         },
         "rationale": {
           "en": "The middle is exactly where performance was lowest in the study.",
@@ -138,18 +138,18 @@
         "id": "d",
         "text": {
           "en": "Shuffle the passages randomly on each request, so no position is favored on average.",
-          "es": "Desordenar los pasajes al azar en cada petición, para que ninguna posición salga favorecida en promedio."
+          "es": "Desordenar los fragmentos al azar en cada petición, para que ninguna posición salga favorecida en promedio."
         },
         "rationale": {
           "en": "A random order puts the key passage in the weak middle positions much of the time; it averages the problem instead of fixing it.",
-          "es": "Un orden al azar deja el pasaje clave en las posiciones débiles del medio buena parte de las veces; promedia el problema en vez de resolverlo."
+          "es": "Un orden al azar deja el fragmento clave en las posiciones débiles del medio buena parte de las veces; promedia el problema en vez de resolverlo."
         }
       }
     ],
     "answer": ["a"],
     "explanation": {
       "en": "The effect appeared in multi-document question answering and in key-value retrieval, even for models with long context windows. Newer models show it less, so it is worth measuring on your own data, but ordering by relevance with the best passages at the edges, and passing fewer and better passages, rarely hurts.",
-      "es": "El efecto apareció al responder preguntas con varios documentos y al recuperar pares clave-valor, incluso en modelos con ventanas de contexto largas. Los modelos más nuevos lo muestran menos, así que conviene medirlo con datos propios, pero ordenar por relevancia con los mejores pasajes en los extremos, y pasar menos pasajes y mejores, rara vez empeora las cosas."
+      "es": "El efecto apareció al responder preguntas con varios documentos y al recuperar pares clave-valor, incluso en modelos con ventanas de contexto largas. Los modelos más nuevos lo muestran menos, así que conviene medirlo con datos propios, pero ordenar por relevancia con los mejores fragmentos en los extremos, y pasar menos fragmentos y mejores, rara vez empeora las cosas."
     },
     "sources": [
       {
@@ -264,7 +264,7 @@
     "difficulty": { "steps": 0, "specialization": 1, "distractors": 1 },
     "prompt": {
       "en": "What does “prompt sensitivity” refer to?",
-      "es": "¿A qué se refiere la «sensibilidad al prompt»?"
+      "es": "¿A qué se refiere la «prompt sensitivity»?"
     },
     "options": [
       {
@@ -306,7 +306,7 @@
           "en": "The prompt leaking into the answers when the model repeats its instructions.",
           "es": "Que el prompt se filtre en las respuestas cuando el modelo repite sus instrucciones."
         },
-        "rationale": { "en": "That is prompt leakage, a security issue.", "es": "Eso es filtración del prompt, un problema de seguridad." }
+        "rationale": { "en": "That is prompt leakage, a security issue.", "es": "Eso es prompt leakage, un problema de seguridad." }
       }
     ],
     "answer": ["a"],
@@ -423,7 +423,7 @@
         "id": "a",
         "text": {
           "en": "Sycophancy: the model tells the user what they seem to want to hear.",
-          "es": "Sycophancy (complacencia): el modelo le dice al usuario lo que parece querer oír."
+          "es": "Sycophancy: el modelo le dice al usuario lo que parece querer oír."
         },
         "rationale": {
           "en": "The model can often solve the problem when asked neutrally; it changes its answer to agree with the belief the user stated.",
@@ -467,7 +467,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "Sharma et al. (2023) found sycophancy across several assistants and linked it to human preference data, in which people tend to rate agreeing answers higher. Neutral phrasing helps when testing a model: asking “what is the answer?” instead of “is it 12?” avoids signaling the expected answer.",
-      "es": "Sharma et al. (2023) encontraron complacencia en varios asistentes y la vincularon con los datos de preferencias humanas, en los que las personas tienden a calificar mejor las respuestas que les dan la razón. Al probar un modelo ayuda preguntar en forma neutral: «¿cuál es la respuesta?» en vez de «¿es 12?» evita señalar la respuesta esperada."
+      "es": "Sharma et al. (2023) encontraron sycophancy en varios asistentes y la vincularon con los datos de preferencias humanas, en los que las personas tienden a calificar mejor las respuestas que les dan la razón. Al probar un modelo ayuda preguntar en forma neutral: «¿cuál es la respuesta?» en vez de «¿es 12?» evita señalar la respuesta esperada."
     },
     "sources": [
       {

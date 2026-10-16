@@ -113,7 +113,7 @@
         },
         "rationale": {
           "en": "500 photos are far too few to learn good visual features from scratch; the network would overfit.",
-          "es": "500 fotos son muy pocas para aprender buenas características visuales desde cero; la red se sobreajustaría."
+          "es": "500 fotos son muy pocas para aprender buenas features visuales desde cero; la red se sobreajustaría."
         }
       },
       {
@@ -142,7 +142,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "With very little data, a common first step is to freeze the pretrained network and train only a new final layer, then unfreeze more layers if results plateau. Data augmentation and a lower learning rate for the pretrained layers help avoid destroying the features they already learned.",
-      "es": "Con muy pocos datos, un primer paso habitual es congelar la red preentrenada y entrenar solo una capa final nueva, y después descongelar más capas si los resultados se estancan. La aumentación de datos y una tasa de aprendizaje menor para las capas preentrenadas ayudan a no destruir lo que ya aprendieron."
+      "es": "Con muy pocos datos, un primer paso habitual es congelar la red preentrenada y entrenar solo una capa final nueva, y después descongelar más capas si los resultados se estancan. El data augmentation y una tasa de aprendizaje menor para las capas preentrenadas ayudan a no destruir lo que ya aprendieron."
     },
     "sources": [
       {
@@ -373,7 +373,7 @@
     "difficulty": { "steps": 1, "specialization": 0, "distractors": 2 },
     "prompt": {
       "en": "You are training a model to read handwritten digits. Which augmentation is most likely to hurt it?",
-      "es": "Estás entrenando un modelo para leer dígitos escritos a mano. ¿Qué aumentación de datos es más probable que lo perjudique?"
+      "es": "Estás entrenando un modelo para leer dígitos escritos a mano. ¿Qué tipo de data augmentation es más probable que lo perjudique?"
     },
     "options": [
       {
@@ -412,7 +412,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "An augmentation is useful when it produces examples the model could meet in reality while keeping the label true. Horizontal flips are standard for natural photos of cats or cars, but harmful for text, digits and other inputs whose meaning depends on orientation.",
-      "es": "Una aumentación sirve cuando produce ejemplos que el modelo podría encontrar en la realidad y la etiqueta sigue siendo verdadera. Voltear horizontalmente es estándar en fotos naturales de gatos o autos, pero perjudica con texto, dígitos y otras entradas cuyo significado depende de la orientación."
+      "es": "Una transformación de data augmentation sirve cuando produce ejemplos que el modelo podría encontrar en la realidad y la etiqueta sigue siendo verdadera. Voltear horizontalmente es estándar en fotos naturales de gatos o autos, pero perjudica con texto, dígitos y otras entradas cuyo significado depende de la orientación."
     },
     "sources": [
       {
@@ -602,7 +602,7 @@
     "difficulty": { "steps": 0, "specialization": 0, "distractors": 1 },
     "prompt": {
       "en": "What does a 2 × 2 max-pooling layer with stride 2 do to a 32 × 32 feature map?",
-      "es": "¿Qué le hace una capa de max-pooling de 2 × 2 con stride 2 a un mapa de características de 32 × 32?"
+      "es": "¿Qué le hace una capa de max-pooling de 2 × 2 con stride 2 a un feature map de 32 × 32?"
     },
     "options": [
       {

@@ -207,7 +207,7 @@
         "en": "How to adapt a pretrained model: prompting, fine-tuning, PEFT, RLHF, DPO, distillation, and when to use each."
       },
       "subtopics": [
-        { "id": "prompting", "name": { "es": "Prompting y aprendizaje en contexto", "en": "Prompting and in-context learning" } },
+        { "id": "prompting", "name": { "es": "Prompting e in-context learning", "en": "Prompting and in-context learning" } },
         { "id": "chain-of-thought", "name": { "es": "Chain-of-thought", "en": "Chain-of-thought" } },
         { "id": "full-fine-tuning", "name": { "es": "Fine-tuning completo", "en": "Full fine-tuning" } },
         { "id": "peft-lora", "name": { "es": "PEFT: LoRA y QLoRA", "en": "PEFT: LoRA and QLoRA" } },
@@ -348,7 +348,7 @@
         { "id": "mechanistic-interpretability", "name": { "es": "Interpretabilidad mecanicista", "en": "Mechanistic interpretability" } },
         { "id": "fairness", "name": { "es": "Equidad y sesgo", "en": "Fairness and bias" } },
         { "id": "privacy", "name": { "es": "Privacidad (privacidad diferencial, aprendizaje federado)", "en": "Privacy (differential privacy, federated learning)" } },
-        { "id": "robustness", "name": { "es": "Robustez y ejemplos adversarios", "en": "Robustness and adversarial examples" } },
+        { "id": "robustness", "name": { "es": "Robustez y ejemplos adversariales", "en": "Robustness and adversarial examples" } },
         { "id": "ai-safety", "name": { "es": "Alineamiento y seguridad de IA", "en": "Alignment and AI safety" } },
         { "id": "governance", "name": { "es": "Regulación y gobernanza", "en": "Regulation and governance" } }
       ]
@@ -377,7 +377,7 @@
         { "id": "transformer-2017", "name": { "es": "Attention Is All You Need (Vaswani et al., 2017)", "en": "Attention Is All You Need (Vaswani et al., 2017)" } },
         { "id": "bert-2018", "name": { "es": "BERT (Devlin et al., 2018)", "en": "BERT (Devlin et al., 2018)" } },
         { "id": "pinn-2019", "name": { "es": "PINN (Raissi, Perdikaris y Karniadakis, 2019)", "en": "PINN (Raissi, Perdikaris and Karniadakis, 2019)" } },
-        { "id": "gpt3-2020", "name": { "es": "GPT-3 y el aprendizaje en contexto (Brown et al., 2020)", "en": "GPT-3 and in-context learning (Brown et al., 2020)" } },
+        { "id": "gpt3-2020", "name": { "es": "GPT-3 e in-context learning (Brown et al., 2020)", "en": "GPT-3 and in-context learning (Brown et al., 2020)" } },
         { "id": "scaling-laws-2020", "name": { "es": "Leyes de escala (Kaplan et al., 2020; Hoffmann et al., 2022)", "en": "Scaling laws (Kaplan et al., 2020; Hoffmann et al., 2022)" } },
         { "id": "rag-2020", "name": { "es": "RAG (Lewis et al., 2020)", "en": "RAG (Lewis et al., 2020)" } },
         { "id": "ddpm-2020", "name": { "es": "Difusión: DDPM (Ho et al., 2020)", "en": "Diffusion: DDPM (Ho et al., 2020)" } },
@@ -401,18 +401,18 @@
       "subtopics": [
         { "id": "double-descent", "name": { "es": "Double descent", "en": "Double descent" } },
         { "id": "grokking", "name": { "es": "Grokking", "en": "Grokking" } },
-        { "id": "lottery-ticket", "name": { "es": "Hipótesis del billete de lotería", "en": "Lottery ticket hypothesis" } },
+        { "id": "lottery-ticket", "name": { "es": "Lottery ticket hypothesis", "en": "Lottery ticket hypothesis" } },
         { "id": "shortcut-learning", "name": { "es": "Shortcut learning (atajos espurios)", "en": "Shortcut learning" } },
         { "id": "mode-collapse", "name": { "es": "Mode collapse y posterior collapse", "en": "Mode collapse and posterior collapse" } },
-        { "id": "emergent-abilities", "name": { "es": "Habilidades emergentes y su debate", "en": "Emergent abilities and the debate around them" } },
-        { "id": "in-context-learning", "name": { "es": "Aprendizaje en contexto", "en": "In-context learning" } },
-        { "id": "hallucination", "name": { "es": "Alucinación y confabulación", "en": "Hallucination and confabulation" } },
-        { "id": "sycophancy", "name": { "es": "Complacencia (sycophancy)", "en": "Sycophancy" } },
+        { "id": "emergent-abilities", "name": { "es": "Emergent abilities y su debate", "en": "Emergent abilities and the debate around them" } },
+        { "id": "in-context-learning", "name": { "es": "In-context learning", "en": "In-context learning" } },
+        { "id": "hallucination", "name": { "es": "Alucinación (confabulation)", "en": "Hallucination and confabulation" } },
+        { "id": "sycophancy", "name": { "es": "Sycophancy", "en": "Sycophancy" } },
         { "id": "reward-hacking", "name": { "es": "Reward hacking y ley de Goodhart", "en": "Reward hacking and Goodhart's law" } },
         { "id": "benchmark-contamination", "name": { "es": "Contaminación de benchmarks", "en": "Benchmark contamination" } },
         { "id": "lost-in-the-middle", "name": { "es": "Lost in the middle", "en": "Lost in the middle" } },
         { "id": "instruction-following", "name": { "es": "Degradación del seguimiento de instrucciones", "en": "Instruction-following degradation" } },
-        { "id": "prompt-sensitivity", "name": { "es": "Sensibilidad al prompt", "en": "Prompt sensitivity" } },
+        { "id": "prompt-sensitivity", "name": { "es": "Prompt sensitivity", "en": "Prompt sensitivity" } },
         { "id": "model-collapse", "name": { "es": "Model collapse por datos sintéticos", "en": "Model collapse from synthetic data" } },
         { "id": "superposition", "name": { "es": "Superposición de features", "en": "Feature superposition" } }
       ]
