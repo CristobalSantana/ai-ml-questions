@@ -411,6 +411,10 @@ Antes de cada push que cambie preguntas o el sitio, regenera `site/data` y la ve
 
 `CONFIG` en `site/app.js` también guarda la página de Ko-fi (`kofiUrl`) y el enlace para reportar errores (`reportUrl`), que abre un issue en el repositorio.
 
+### Visitas
+
+El sitio cuenta visitas con Cloudflare Web Analytics: el script `beacon.min.js` al final de `site/index.html`, con el token del sitio. No usa cookies ni identifica a quien visita, así que no hace falta un aviso de cookies. Las cifras (visitas, páginas vistas, países, de dónde llega la gente y velocidad de carga) se ven en el panel de Cloudflare, en **Analytics & Logs → Web Analytics**. Los bloqueadores de anuncios suelen bloquear el script, así que las cifras quedan algo por debajo de las reales. El service worker no intercepta esas peticiones porque van a otro dominio.
+
 ## 14. Idioma
 
 - **Inglés por defecto.** El sitio abre en inglés y se puede cambiar a español con el botón EN/ES; la elección queda guardada en el navegador.
