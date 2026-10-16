@@ -44,14 +44,14 @@
         "text": { "en": "Dropout applied to the input features", "es": "Dropout aplicado a las variables de entrada" },
         "rationale": {
           "en": "Dropout has approximate Bayesian interpretations, but it is not equivalent to a Gaussian prior with MAP.",
-          "es": "Dropout tiene interpretaciones bayesianas aproximadas, pero no equivale a un prior gaussiano con MAP."
+          "es": "El dropout tiene interpretaciones bayesianas aproximadas, pero no equivale a un prior gaussiano con MAP."
         }
       }
     ],
     "answer": ["a"],
     "explanation": {
       "en": "With Gaussian noise of variance σ² and a prior w ~ N(0, τ²I), the MAP estimate minimizes ‖y − Xw‖² + (σ²/τ²)‖w‖²: ridge with λ = σ²/τ². A narrower prior (small τ) means more regularization. A full Bayesian treatment keeps the whole posterior instead of its mode, which gives uncertainty on the predictions.",
-      "es": "Con ruido gaussiano de varianza σ² y prior w ~ N(0, τ²I), el MAP minimiza ‖y − Xw‖² + (σ²/τ²)‖w‖²: es ridge con λ = σ²/τ². Un prior más angosto (τ pequeño) significa más regularización. El enfoque bayesiano completo no se queda con la moda, sino con el posterior entero, y eso entrega incertidumbre sobre las predicciones."
+      "es": "Con ruido gaussiano de varianza σ² y prior w ~ N(0, τ²I), el MAP minimiza ‖y − Xw‖² + (σ²/τ²)‖w‖²: es ridge con λ = σ²/τ². Un prior más angosto (τ pequeño) significa más regularización. El enfoque bayesiano completo no se queda con la moda, sino con el posterior entero, y eso da una medida de la incertidumbre de las predicciones."
     },
     "sources": [
       { "kind": "book", "title": "Pattern Recognition and Machine Learning", "authors": "Christopher M. Bishop", "year": 2006 }
@@ -73,7 +73,7 @@
     "difficulty": { "steps": 1, "specialization": 2, "distractors": 2 },
     "prompt": {
       "en": "You calibrate split conformal prediction for 90% coverage on one period and apply it, without recalibrating, to data from a later period. The reported interval width does not change. What can you conclude about coverage on the later period?",
-      "es": "Calibras conformal prediction al 90% de cobertura con datos de un periodo y la aplicas, sin recalibrar, a datos de un periodo posterior. El ancho reportado de los intervalos no cambia. ¿Qué puedes concluir sobre la cobertura en el periodo posterior?"
+      "es": "Calibras split conformal prediction al 90% de cobertura con datos de un periodo y la aplicas, sin recalibrar, a datos de un periodo posterior. El ancho reportado de los intervalos no cambia. ¿Qué puedes concluir sobre la cobertura en el periodo posterior?"
     },
     "options": [
       {
@@ -95,7 +95,7 @@
         },
         "rationale": {
           "en": "The guarantee needs no particular distribution, but it does require calibration and new data to be exchangeable. Dataset shift breaks that.",
-          "es": "La garantía no necesita una distribución particular, pero sí que calibración y datos nuevos sean intercambiables. El dataset shift rompe eso."
+          "es": "La garantía no necesita una distribución particular, pero sí que los datos de calibración y los nuevos sean intercambiables. El dataset shift rompe eso."
         }
       },
       {
@@ -113,7 +113,7 @@
         "id": "d",
         "text": {
           "en": "It stays near 90% as long as the input features keep a similar distribution to calibration.",
-          "es": "Que sigue cerca del 90%, mientras las variables de entrada mantengan una distribución parecida."
+          "es": "Que sigue cerca del 90%, mientras las variables de entrada mantengan una distribución parecida a la de calibración."
         },
         "rationale": {
           "en": "If the relationship between inputs and target shifts, coverage can collapse even when the inputs look the same.",
@@ -124,7 +124,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "Split conformal prediction guarantees at least 1−α coverage in finite samples, with no assumptions about the distribution, as long as the data are exchangeable. In an experiment with New York taxi trips, intervals calibrated on June 2024 that promised 90% covered only 15% of June 2019 trips, with the same reported width: what changed was the price of a ride given its features (concept shift), not the features. Recalibrating with 2,000 labeled trips from the new month restored 90%. If only P(x) shifts and the density ratio can be estimated, a weighted version of conformal prediction exists.",
-      "es": "Split conformal garantiza una cobertura de al menos 1−α en muestras finitas, sin supuestos sobre la distribución, siempre que los datos sean intercambiables. En un experimento con viajes de taxi de Nueva York, intervalos calibrados en junio de 2024 que prometían 90% cubrieron solo el 15% de los viajes de junio de 2019, con el mismo ancho reportado: cambió el precio de los viajes dadas sus variables (concept shift), no las variables en sí. Recalibrar con 2.000 viajes etiquetados del mes nuevo restauró el 90%. Si solo cambia P(x) y se puede estimar la razón de densidades, existe una versión ponderada de conformal."
+      "es": "Split conformal garantiza una cobertura de al menos 1−α en muestras finitas, sin supuestos sobre la distribución, siempre que los datos sean intercambiables. En un experimento con viajes de taxi de Nueva York, intervalos calibrados en junio de 2024 que prometían 90% cubrieron solo el 15% de los viajes de junio de 2019, con el mismo ancho reportado: cambió el precio de los viajes dadas sus variables (concept shift), no las variables en sí. Recalibrar con 2.000 viajes etiquetados del mes nuevo restauró el 90%. Si solo cambia P(x) y se puede estimar la razón de densidades, existe una versión ponderada de conformal prediction."
     },
     "sources": [
       {
@@ -174,7 +174,7 @@
         "id": "a",
         "text": {
           "en": "A mean near 0 and uncertainty near the prior variance, since the data barely inform that point.",
-          "es": "Una media cercana a 0 e incertidumbre cercana a la a priori, porque los datos casi no informan ese punto."
+          "es": "Una media cercana a 0 e incertidumbre cercana a la a priori, porque los datos casi no informan sobre ese punto."
         },
         "rationale": {
           "en": "The RBF kernel's correlation decays with distance, so far from the data the posterior falls back to the prior. The model says it does not know, which is the behavior you want.",

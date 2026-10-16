@@ -98,7 +98,7 @@
         "id": "a",
         "text": {
           "en": "Fine-tune a model pretrained on a large image dataset such as ImageNet.",
-          "es": "Ajustar un modelo preentrenado en un gran dataset de imágenes, como ImageNet."
+          "es": "Hacer fine-tuning de un modelo preentrenado en un gran dataset, como ImageNet."
         },
         "rationale": {
           "en": "Pretrained networks already detect edges, textures and shapes; fine-tuning adapts them to the new classes with few examples.",
@@ -194,7 +194,7 @@
         "text": { "en": "0.50", "es": "0,50" },
         "rationale": {
           "en": "That is the overlap along one side, 5 out of 10; IoU compares areas, not lengths.",
-          "es": "Ese es el solapamiento en un lado, 5 de 10; el IoU compara áreas, no largos."
+          "es": "Ese es el solapamiento en un lado, 5 de 10; el IoU compara áreas, no longitudes."
         }
       }
     ],
@@ -202,7 +202,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "IoU falls fast with an offset: shifting a box by half its width in both directions leaves an IoU of only 0.14. Detection benchmarks usually count a prediction as correct above an IoU threshold such as 0.5, and COCO averages results over thresholds from 0.5 to 0.95.",
-      "es": "El IoU cae rápido con un desplazamiento: mover una caja la mitad de su ancho en ambas direcciones deja un IoU de solo 0,14. Los benchmarks de detección suelen contar una predicción como correcta sobre un umbral de IoU como 0,5, y COCO promedia los resultados entre umbrales de 0,5 a 0,95."
+      "es": "El IoU cae rápido con un desplazamiento: mover una caja la mitad de su ancho en ambas direcciones deja un IoU de solo 0,14. Los benchmarks de detección suelen contar una predicción como correcta si supera un umbral de IoU, como 0,5, y COCO promedia los resultados entre umbrales de 0,5 a 0,95."
     },
     "sources": [
       { "kind": "paper", "title": "The Pascal Visual Object Classes (VOC) Challenge", "authors": "Mark Everingham et al.", "year": 2010 },
@@ -345,7 +345,7 @@
     "answer": ["c"],
     "explanation": {
       "en": "Attention cost grows with the square of the number of tokens, so going from 224 pixels (196 tokens) to 384 (576 tokens) makes attention almost 9 times more expensive. That is why ViTs are often pretrained at low resolution and fine-tuned at a higher one, interpolating their position embeddings.",
-      "es": "El costo de la atención crece con el cuadrado del número de tokens, así que pasar de 224 píxeles (196 tokens) a 384 (576 tokens) encarece la atención casi 9 veces. Por eso los ViT suelen preentrenarse a baja resolución y ajustarse a una más alta, interpolando sus position embeddings."
+      "es": "El costo de la atención crece con el cuadrado del número de tokens, así que pasar de 224 píxeles (196 tokens) a 384 (576 tokens) encarece la atención casi 9 veces. Por eso los ViT se suelen preentrenar a baja resolución y luego se les hace fine-tuning a una más alta, interpolando sus position embeddings."
     },
     "sources": [
       {
@@ -412,7 +412,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "An augmentation is useful when it produces examples the model could meet in reality while keeping the label true. Horizontal flips are standard for natural photos of cats or cars, but harmful for text, digits and other inputs whose meaning depends on orientation.",
-      "es": "Una transformación de data augmentation sirve cuando produce ejemplos que el modelo podría encontrar en la realidad y la etiqueta sigue siendo verdadera. Voltear horizontalmente es estándar en fotos naturales de gatos o autos, pero perjudica con texto, dígitos y otras entradas cuyo significado depende de la orientación."
+      "es": "Una transformación de data augmentation sirve cuando produce ejemplos que el modelo podría encontrar en la realidad y la etiqueta sigue siendo correcta. Voltear horizontalmente es estándar en fotos naturales de gatos o autos, pero es perjudicial con texto, dígitos y otras entradas cuyo significado depende de la orientación."
     },
     "sources": [
       {
@@ -447,7 +447,7 @@
         "id": "a",
         "text": {
           "en": "It finds most objects, but its boxes are loose, so they fail the stricter thresholds.",
-          "es": "Encuentra la mayoría de los objetos, pero con cajas holgadas que fallan los umbrales estrictos."
+          "es": "Encuentra la mayoría de los objetos, pero con cajas holgadas que no pasan los umbrales estrictos."
         },
         "rationale": {
           "en": "At an IoU of 0.5 a roughly placed box counts as a hit; at 0.75 or 0.9 it must fit closely. A big drop means the detections have the right class and roughly the right place, but imprecise boxes.",
@@ -552,7 +552,7 @@
         "id": "c",
         "text": {
           "en": "It fine-tunes a small classification head on a few labeled examples of each new class it must recognize.",
-          "es": "Ajusta una pequeña capa de clasificación con algunos ejemplos etiquetados de cada clase nueva que debe reconocer."
+          "es": "Hace fine-tuning de una pequeña capa de clasificación con algunos ejemplos etiquetados de cada clase nueva que debe reconocer."
         },
         "rationale": {
           "en": "That is few-shot linear probing, which needs labeled examples; zero-shot uses only the class names.",
@@ -574,7 +574,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "Radford et al. (2021) trained CLIP on 400 million image-text pairs, and its zero-shot accuracy on ImageNet matched the original ResNet-50 without using any of ImageNet's 1.28 million labeled training images. Wording matters: “a photo of a {class}” worked better than the bare class name, and averaging several templates helped further.",
-      "es": "Radford et al. (2021) entrenaron CLIP con 400 millones de pares imagen-texto, y su exactitud zero-shot en ImageNet igualó a la ResNet-50 original sin usar ninguna de las 1,28 millones de imágenes etiquetadas de entrenamiento de ImageNet. La redacción importa: «a photo of a {clase}» funcionó mejor que el nombre de la clase solo, y promediar varias plantillas ayudó aún más."
+      "es": "Radford et al. (2021) entrenaron CLIP con 400 millones de pares imagen-texto, y su exactitud zero-shot en ImageNet igualó a la ResNet-50 original sin usar ninguno de los 1,28 millones de imágenes etiquetadas de entrenamiento de ImageNet. La redacción importa: «a photo of a {clase}» funcionó mejor que el nombre de la clase solo, y promediar varias plantillas ayudó aún más."
     },
     "sources": [
       {
@@ -613,7 +613,7 @@
         },
         "rationale": {
           "en": "A stride of 2 moves the window 2 pixels at a time, so the blocks do not overlap and each side is halved. Taking the maximum keeps the strongest response in each region.",
-          "es": "Un stride de 2 mueve la ventana de a 2 píxeles, así que los bloques no se solapan y cada lado queda a la mitad. Tomar el máximo conserva la respuesta más fuerte de cada región."
+          "es": "Un stride de 2 mueve la ventana de 2 en 2 píxeles, así que los bloques no se solapan y cada lado queda a la mitad. Tomar el máximo conserva la respuesta más fuerte de cada región."
         }
       },
       {

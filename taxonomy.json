@@ -72,10 +72,10 @@
       },
       "subtopics": [
         { "id": "learning-paradigms", "name": { "es": "Tipos de aprendizaje (supervisado, no supervisado, autosupervisado, por refuerzo)", "en": "Learning paradigms (supervised, unsupervised, self-supervised, reinforcement)" } },
-        { "id": "generalization", "name": { "es": "Generalización, overfitting y underfitting", "en": "Generalization, overfitting and underfitting" } },
+        { "id": "generalization", "name": { "es": "Generalización, sobreajuste y subajuste", "en": "Generalization, overfitting and underfitting" } },
         { "id": "bias-variance", "name": { "es": "Sesgo y varianza", "en": "Bias and variance" } },
         { "id": "regularization", "name": { "es": "Regularización (L1, L2, early stopping)", "en": "Regularization (L1, L2, early stopping)" } },
-        { "id": "data-splits", "name": { "es": "Train, validación y test; validación cruzada", "en": "Train, validation and test; cross-validation" } },
+        { "id": "data-splits", "name": { "es": "Entrenamiento, validación y prueba; validación cruzada", "en": "Train, validation and test; cross-validation" } },
         { "id": "loss-functions", "name": { "es": "Funciones de pérdida", "en": "Loss functions" } },
         { "id": "feature-engineering", "name": { "es": "Feature engineering y escalamiento", "en": "Feature engineering and scaling" } },
         { "id": "class-imbalance", "name": { "es": "Desbalance de clases", "en": "Class imbalance" } },
@@ -173,7 +173,7 @@
         { "id": "reservoir-computing", "name": { "es": "Reservoir computing (echo state networks)", "en": "Reservoir computing (echo state networks)" } },
         { "id": "spiking", "name": { "es": "Redes spiking", "en": "Spiking networks" } },
         { "id": "hyperdimensional", "name": { "es": "Computación hiperdimensional (HDC)", "en": "Hyperdimensional computing (HDC)" } },
-        { "id": "choosing-architecture", "name": { "es": "Cómo elegir arquitectura (sesgos inductivos)", "en": "Choosing an architecture (inductive biases)" } }
+        { "id": "choosing-architecture", "name": { "es": "Cómo elegir una arquitectura (sesgos inductivos)", "en": "Choosing an architecture (inductive biases)" } }
       ]
     },
     {
@@ -231,13 +231,13 @@
         { "id": "sparse-vs-dense", "name": { "es": "Vectores sparse y densos (SPLADE, embeddings)", "en": "Sparse and dense vectors (SPLADE, embeddings)" } },
         { "id": "embeddings-similarity", "name": { "es": "Embeddings y similitud (coseno, producto punto)", "en": "Embeddings and similarity (cosine, dot product)" } },
         { "id": "ann-indexes", "name": { "es": "Búsqueda aproximada (HNSW, IVF, PQ)", "en": "Approximate search (HNSW, IVF, PQ)" } },
-        { "id": "vector-databases", "name": { "es": "Bases vectoriales y cómo elegir", "en": "Vector databases and how to choose" } },
+        { "id": "vector-databases", "name": { "es": "Bases vectoriales y cómo elegirlas", "en": "Vector databases and how to choose" } },
         { "id": "chunking", "name": { "es": "Chunking", "en": "Chunking" } },
         { "id": "hybrid-search", "name": { "es": "Búsqueda híbrida", "en": "Hybrid search" } },
         { "id": "reranking", "name": { "es": "Reranking (cross-encoders)", "en": "Reranking (cross-encoders)" } },
         { "id": "rag-architecture", "name": { "es": "Arquitectura RAG", "en": "RAG architecture" } },
         { "id": "rag-evaluation", "name": { "es": "Evaluación de RAG", "en": "RAG evaluation" } },
-        { "id": "rag-failures", "name": { "es": "Fallos típicos de RAG", "en": "Typical RAG failures" } }
+        { "id": "rag-failures", "name": { "es": "Fallas típicas de RAG", "en": "Typical RAG failures" } }
       ]
     },
     {
@@ -302,7 +302,7 @@
       "id": "vision",
       "name": { "es": "Visión por computador", "en": "Computer vision" },
       "description": {
-        "es": "Qué es la visión por computador y cómo funciona: convoluciones, clasificación, detección, segmentación, ViT y visión con lenguaje.",
+        "es": "Qué es la visión por computador y cómo funciona: convoluciones, clasificación, detección, segmentación, ViT y modelos de visión y lenguaje.",
         "en": "What computer vision is and how it works: convolutions, classification, detection, segmentation, ViT and vision-language models."
       },
       "subtopics": [
@@ -340,7 +340,7 @@
       "id": "responsible",
       "name": { "es": "Interpretabilidad, equidad y seguridad", "en": "Interpretability, fairness and safety" },
       "description": {
-        "es": "Entender y confiar en un modelo: interpretabilidad, equidad, privacidad, robustez y seguridad de IA.",
+        "es": "Entender un modelo y confiar en él: interpretabilidad, equidad, privacidad, robustez y seguridad de IA.",
         "en": "Understanding and trusting a model: interpretability, fairness, privacy, robustness and AI safety."
       },
       "subtopics": [
@@ -357,7 +357,7 @@
       "id": "papers",
       "name": { "es": "Papers clave", "en": "Landmark papers" },
       "description": {
-        "es": "Los papers que definieron el campo. Su contenido no cambia, por eso son la parte más estable del banco.",
+        "es": "Los papers que definieron el campo. Su contenido no cambia, y por eso son la parte más estable del banco de preguntas.",
         "en": "The papers that defined the field. Their content does not change, which makes them the most stable part of the bank."
       },
       "subtopics": [
@@ -406,7 +406,7 @@
         { "id": "mode-collapse", "name": { "es": "Mode collapse y posterior collapse", "en": "Mode collapse and posterior collapse" } },
         { "id": "emergent-abilities", "name": { "es": "Emergent abilities y su debate", "en": "Emergent abilities and the debate around them" } },
         { "id": "in-context-learning", "name": { "es": "In-context learning", "en": "In-context learning" } },
-        { "id": "hallucination", "name": { "es": "Alucinación (confabulation)", "en": "Hallucination and confabulation" } },
+        { "id": "hallucination", "name": { "es": "Alucinación y confabulación", "en": "Hallucination and confabulation" } },
         { "id": "sycophancy", "name": { "es": "Sycophancy", "en": "Sycophancy" } },
         { "id": "reward-hacking", "name": { "es": "Reward hacking y ley de Goodhart", "en": "Reward hacking and Goodhart's law" } },
         { "id": "benchmark-contamination", "name": { "es": "Contaminación de benchmarks", "en": "Benchmark contamination" } },

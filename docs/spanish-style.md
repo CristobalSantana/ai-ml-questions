@@ -40,5 +40,21 @@ Write what a Spanish-speaking practitioner would say, not a word-for-word transl
 | overconfidence | exceso de confianza | sobreconfianza |
 | library (software) | biblioteca | librería |
 | attention, layer, loss, weights | atención, capa, pérdida, pesos | |
+| data leakage | data leakage, target leakage | fuga de datos, which in Spanish usually means a security breach |
+| weather, when it is contrasted with climate | tiempo meteorológico | clima, which is climate |
+| momentum (physics) | momento | momentum, which reads as the optimizer term |
+| provide, output | proporcionar, dar, devolver | entregar |
+
+## Constructions to avoid
+
+These came up in the October 2026 review of every Spanish text:
+
+- **Thresholds with «bajo» or «sobre».** Write «por debajo de 1», «por encima de 1», «más allá de 4.096» or «de menos de 1 punto».
+- **An infinitive that does something.** "Dropping the middle loses what the user said" is not «Descartar el medio pierde lo que…» but «Al descartar el medio se pierde lo que…».
+- **«Seguro de» + infinitive.** "Safe to read" is «leerlo es seguro»; «seguro de leer» means "sure of reading".
+- **«Alcanzar a» + infinitive** («antes de alcanzar a olvidar»). Write «antes de que tenga tiempo de olvidar».
+- **«Después de que» + indicative.** It takes the subjunctive: «después de que la tasa de aprendizaje llegue a su máximo».
+- **Bare English nouns used as Spanish words** («un shift», «conformal»). Write the full term: «un dataset shift», «conformal prediction».
+- **Straight or single quotes.** Spanish texts use «», as the interface does.
 
 When a new term comes up, look at how Spanish-speaking practitioners write it, and add it to this page so every question uses it the same way.

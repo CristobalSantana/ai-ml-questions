@@ -249,7 +249,7 @@
           "en": "Predicting each word's dictionary definition from its spelling.",
           "es": "Predecir la definición de diccionario de cada palabra a partir de su ortografía."
         },
-        "rationale": { "en": "word2vec learns from raw text alone, with no dictionaries.", "es": "word2vec aprende solo de texto plano, sin diccionarios." }
+        "rationale": { "en": "word2vec learns from raw text alone, with no dictionaries.", "es": "word2vec aprende solo de texto en bruto, sin diccionarios." }
       },
       {
         "id": "c",
@@ -363,7 +363,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "In Sutskever et al. (2014), the encoder read the whole sentence into one vector and the decoder generated the translation from it; the authors even reversed the source sentence to make learning easier. Bahdanau et al. let the decoder compute, for each word it produces, a weighted average of all the encoder states. That idea, attention, became the core of the Transformer three years later.",
-      "es": "En Sutskever et al. (2014), el encoder leía toda la oración en un vector y el decoder generaba la traducción a partir de él; los autores incluso invertían la oración de origen para facilitar el aprendizaje. Bahdanau et al. dejaron que el decoder calculara, para cada palabra que produce, un promedio ponderado de todos los estados del encoder. Esa idea, la atención, se volvió el núcleo del Transformer tres años después."
+      "es": "En Sutskever et al. (2014), el encoder codificaba toda la oración en un vector y el decoder generaba la traducción a partir de él; los autores incluso invertían la oración de origen para facilitar el aprendizaje. Bahdanau et al. dejaron que el decoder calculara, para cada palabra que produce, un promedio ponderado de todos los estados del encoder. Esa idea, la atención, se volvió el núcleo del Transformer tres años después."
     },
     "sources": [
       {
@@ -495,7 +495,7 @@
         },
         "rationale": {
           "en": "Standard attention writes the full N×N score matrix to the GPU's high-bandwidth memory and reads it back. FlashAttention splits the work into tiles kept in on-chip SRAM and combines the softmax across tiles with running statistics, so the full matrix is not stored and the real bottleneck, memory traffic, drops.",
-          "es": "La atención estándar escribe la matriz completa de puntajes de N×N en la memoria de alto ancho de banda de la GPU y la vuelve a leer. FlashAttention divide el trabajo en bloques que se mantienen en la SRAM del chip y combina el softmax entre bloques con estadísticas acumuladas, así que la matriz completa no se guarda y baja el verdadero cuello de botella, el tráfico de memoria."
+          "es": "La atención estándar escribe la matriz completa de puntajes de N×N en la memoria de alto ancho de banda de la GPU y la vuelve a leer. FlashAttention divide el trabajo en bloques que se mantienen en la SRAM del chip y combina el softmax entre bloques con estadísticas acumuladas, así que la matriz completa no se guarda y se reduce el tráfico de memoria, que es el verdadero cuello de botella."
         }
       },
       {
@@ -563,7 +563,7 @@
     "difficulty": { "steps": 1, "specialization": 1, "distractors": 1 },
     "prompt": {
       "en": "In the InstructGPT paper (Ouyang et al., 2022), human labelers compared the outputs of a 1.3-billion-parameter model fine-tuned with human feedback against those of the 175-billion-parameter GPT-3. What did they find?",
-      "es": "En el paper de InstructGPT (Ouyang et al., 2022), evaluadores humanos compararon las respuestas de un modelo de 1.300 millones de parámetros ajustado con feedback humano con las del GPT-3 de 175.000 millones. ¿Qué encontraron?"
+      "es": "En el paper de InstructGPT (Ouyang et al., 2022), evaluadores humanos compararon las respuestas de un modelo de 1.300 millones de parámetros con fine-tuning a partir de feedback humano con las del GPT-3 de 175.000 millones. ¿Qué encontraron?"
     },
     "options": [
       {
@@ -574,7 +574,7 @@
         },
         "rationale": {
           "en": "Labelers preferred InstructGPT 1.3B to GPT-3 175B. Doing what the prompt asked depended more on the training signal than on scale.",
-          "es": "Los evaluadores prefirieron a InstructGPT de 1.300 millones por sobre GPT-3 de 175.000 millones. Hacer lo que pedía el prompt dependió más de la señal de entrenamiento que de la escala."
+          "es": "Los evaluadores prefirieron a InstructGPT de 1.300 millones antes que a GPT-3 de 175.000 millones. Hacer lo que pedía el prompt dependió más de la señal de entrenamiento que de la escala."
         }
       },
       {
@@ -596,7 +596,7 @@
         },
         "rationale": {
           "en": "Sharing pretraining data did not make them equal; fine-tuning on demonstrations and rankings changed the behavior a lot.",
-          "es": "Compartir los datos de preentrenamiento no los igualó; el ajuste con demostraciones y rankings cambió mucho el comportamiento."
+          "es": "Compartir los datos de preentrenamiento no los igualó; el fine-tuning con demostraciones y rankings cambió mucho el comportamiento."
         }
       },
       {
@@ -614,7 +614,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "InstructGPT was trained in three steps: supervised fine-tuning on human demonstrations, a reward model trained on human rankings of outputs, and reinforcement learning with PPO against that reward. The authors also measured an 'alignment tax', small drops on some public benchmarks, and reduced it by mixing pretraining updates into the RL step (PPO-ptx).",
-      "es": "InstructGPT se entrenó en tres pasos: ajuste supervisado con demostraciones humanas, un modelo de recompensa entrenado con rankings humanos de respuestas, y aprendizaje por refuerzo con PPO contra esa recompensa. Los autores también midieron un 'impuesto de alineamiento', pequeñas caídas en algunos benchmarks públicos, y lo redujeron mezclando actualizaciones de preentrenamiento en el paso de RL (PPO-ptx)."
+      "es": "InstructGPT se entrenó en tres pasos: fine-tuning supervisado con demostraciones humanas, un modelo de recompensa entrenado con rankings humanos de respuestas, y aprendizaje por refuerzo con PPO contra esa recompensa. Los autores también midieron un 'impuesto de alineamiento', pequeñas caídas en algunos benchmarks públicos, y lo redujeron mezclando actualizaciones de preentrenamiento en el paso de RL (PPO-ptx)."
     },
     "sources": [
       {
@@ -687,7 +687,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "Rosenblatt's perceptron (1958) learns a linear decision boundary with a simple error-correcting rule, and it is guaranteed to converge when the classes are linearly separable. Minsky and Papert's analysis of what single-layer perceptrons cannot compute is often cited as one cause of the drop in neural network funding in the 1970s; multilayer networks trained with backpropagation, popularized in 1986, removed the limitation.",
-      "es": "El perceptrón de Rosenblatt (1958) aprende una frontera de decisión lineal con una regla simple de corrección de errores, y converge con garantía cuando las clases son linealmente separables. El análisis de Minsky y Papert sobre lo que los perceptrones de una capa no pueden calcular se cita a menudo como una de las causas de la caída del financiamiento de las redes neuronales en los años 70; las redes multicapa entrenadas con backpropagation, popularizadas en 1986, eliminaron la limitación."
+      "es": "El perceptrón de Rosenblatt (1958) aprende una frontera de decisión lineal con una regla simple de corrección de errores, y su convergencia está garantizada cuando las clases son linealmente separables. El análisis de Minsky y Papert sobre lo que los perceptrones de una capa no pueden calcular se cita a menudo como una de las causas de la caída del financiamiento de las redes neuronales en los años 70; las redes multicapa entrenadas con backpropagation, popularizadas en 1986, eliminaron la limitación."
     },
     "sources": [
       {

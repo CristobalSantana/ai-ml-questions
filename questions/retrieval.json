@@ -117,7 +117,7 @@
         },
         "rationale": {
           "en": "BM25 needs the same words in the query and the document, so it cannot cross languages; multilingual embeddings can.",
-          "es": "BM25 necesita las mismas palabras en la consulta y en el documento, así que no cruza idiomas; los embeddings multilingües sí."
+          "es": "BM25 necesita las mismas palabras en la consulta y en el documento, así que no funciona entre idiomas distintos; los embeddings multilingües sí."
         }
       },
       {
@@ -128,7 +128,7 @@
         },
         "rationale": {
           "en": "Conceptual questions phrased differently from the documents favor dense retrieval, which matches meaning rather than words.",
-          "es": "Las preguntas conceptuales redactadas distinto que los documentos favorecen la búsqueda densa, que compara significados y no palabras."
+          "es": "Las preguntas conceptuales redactadas de forma distinta a los documentos favorecen la búsqueda densa, que compara significados y no palabras."
         }
       }
     ],
@@ -190,7 +190,7 @@
         "id": "b",
         "text": {
           "en": "A dedicated distributed vector database, since vector search at any scale needs its own storage engine.",
-          "es": "Una base vectorial dedicada y distribuida, porque la búsqueda vectorial necesita su propio motor."
+          "es": "Una base vectorial dedicada y distribuida, porque la búsqueda vectorial, a cualquier escala, necesita su propio motor."
         },
         "rationale": {
           "en": "That pays off with hundreds of millions of vectors, heavy traffic or large-scale multi-tenancy. To start, it adds another system to run and keep in sync.",
@@ -223,7 +223,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "Choosing a vector database is a constraints problem: volume, latency, filters, update frequency, cost and what the team already knows how to run. One detail to watch: filtering after an approximate search can return fewer results than requested when the filter is very selective, so measure recall with your real filters. This question is volatile because each product's capabilities change quickly.",
-      "es": "Elegir una base vectorial es un problema de restricciones: volumen, latencia, filtros, frecuencia de actualización, costo y lo que el equipo ya sabe operar. Un detalle a vigilar: filtrar después de una búsqueda aproximada puede devolver menos resultados de los pedidos si el filtro es muy selectivo, así que conviene medir el recall con los filtros reales. La pregunta es volátil porque las capacidades de cada producto cambian rápido."
+      "es": "Elegir una base vectorial es un problema de restricciones: volumen, latencia, filtros, frecuencia de actualización, costo y lo que el equipo ya sabe operar. Un detalle a vigilar: filtrar después de una búsqueda aproximada puede devolver menos resultados de los pedidos si el filtro es muy selectivo, así que conviene medir el recall con los filtros reales. Esta pregunta puede quedar desactualizada porque las capacidades de cada producto cambian rápido."
     },
     "sources": [
       {
@@ -309,7 +309,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "BM25 combines three ideas: IDF for rarity, term frequency with saturation (the fifth occurrence of a word adds much less than the first) and normalization by document length. Decades after its introduction it remains a strong baseline, and hybrid systems still pair it with dense retrieval.",
-      "es": "BM25 combina tres ideas: el IDF para la rareza, la frecuencia del término con saturación (la quinta aparición de una palabra suma mucho menos que la primera) y la normalización por el largo del documento. Décadas después de su introducción sigue siendo una línea base fuerte, y los sistemas híbridos todavía lo combinan con recuperación densa."
+      "es": "BM25 combina tres ideas: el IDF para la rareza, la frecuencia del término con saturación (la quinta aparición de una palabra suma mucho menos que la primera) y la normalización por el largo del documento. Décadas después de su introducción sigue siendo un baseline fuerte, y los sistemas híbridos todavía lo combinan con recuperación densa."
     },
     "sources": [
       { "kind": "paper", "title": "The Probabilistic Relevance Framework: BM25 and Beyond", "authors": "Stephen Robertson & Hugo Zaragoza", "year": 2009 },
@@ -439,11 +439,11 @@
         "id": "b",
         "text": {
           "en": "Fine-tune the embedding model until it memorizes every error code in the catalog.",
-          "es": "Ajustar el modelo de embeddings hasta que memorice todos los códigos de error del catálogo."
+          "es": "Hacer fine-tuning del modelo de embeddings hasta que memorice todos los códigos de error del catálogo."
         },
         "rationale": {
           "en": "Fine-tuning helps with domain language, but memorizing thousands of arbitrary codes is unreliable and breaks when new codes appear.",
-          "es": "El ajuste ayuda con el lenguaje del dominio, pero memorizar miles de códigos arbitrarios es poco confiable y falla cuando aparecen códigos nuevos."
+          "es": "El fine-tuning ayuda con el lenguaje del dominio, pero memorizar miles de códigos arbitrarios es poco confiable y falla cuando aparecen códigos nuevos."
         }
       },
       {
@@ -512,7 +512,7 @@
         },
         "rationale": {
           "en": "A bi-encoder embeds documents once and compares vectors, which scales to millions. A cross-encoder runs the model on each query-document pair, so its attention compares them word by word, at a cost that only works for a short list.",
-          "es": "Un bi-encoder calcula los embeddings de los documentos una vez y compara vectores, lo que escala a millones. Un cross-encoder corre el modelo sobre cada par consulta-documento, así que su atención los compara palabra por palabra, con un costo que solo sirve para una lista corta."
+          "es": "Un bi-encoder calcula los embeddings de los documentos una vez y compara vectores, lo que escala a millones. Un cross-encoder corre el modelo sobre cada par consulta-documento, así que su atención los compara palabra por palabra, con un costo que solo es viable para una lista corta."
         }
       },
       {
@@ -534,7 +534,7 @@
         },
         "rationale": {
           "en": "A bi-encoder can return any number of results; 50 is a choice that balances recall against the cost of reranking.",
-          "es": "Un bi-encoder puede devolver cualquier número de resultados; 50 es una elección que equilibra recall y costo de reordenar."
+          "es": "Un bi-encoder puede devolver cualquier número de resultados; 50 es una elección que equilibra el recall y el costo del reranking."
         }
       },
       {
@@ -552,7 +552,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "This two-stage design aims the first stage at recall and the second at precision. Reranking often brings large gains for little engineering effort, since it slots in after retrieval with no re-indexing and decides which few candidates reach the generator.",
-      "es": "Este diseño en dos etapas apunta la primera al recall y la segunda a la precision. Reordenar suele traer mejoras grandes con poco esfuerzo de ingeniería, porque se agrega después de la recuperación sin reindexar y decide qué pocos candidatos llegan al generador."
+      "es": "Este diseño en dos etapas apunta la primera al recall y la segunda a la precision. El reranking suele traer mejoras grandes con poco esfuerzo de ingeniería, porque se agrega después de la recuperación sin reindexar y decide cuáles son los pocos candidatos que llegan al generador."
     },
     "sources": [
       {
@@ -675,14 +675,14 @@
         },
         "rationale": {
           "en": "With 95% recall at 5, retrieval is rarely the bottleneck: in most failures the answer was in front of the model. Checking whether answers are supported by the passages separates misreading, distraction and answering from memory.",
-          "es": "Con 95% de recall en 5, la recuperación rara vez es el cuello de botella: en la mayoría de las fallas la respuesta estaba frente al modelo. Revisar si las respuestas se apoyan en los fragmentos separa la mala lectura, la distracción y el responder de memoria."
+          "es": "Con 95% de recall en 5, la recuperación rara vez es el cuello de botella: en la mayoría de las fallas la respuesta estaba frente al modelo. Revisar si las respuestas se apoyan en los fragmentos permite distinguir entre la mala lectura, la distracción y el responder de memoria."
         }
       },
       {
         "id": "b",
         "text": {
           "en": "At retrieval: switch to a better embedding model, to push the correct passage up to first place more often.",
-          "es": "En la recuperación: cambiar a un mejor modelo de embeddings para subir el fragmento correcto al primer lugar."
+          "es": "En la recuperación: cambiar a un mejor modelo de embeddings para que el fragmento correcto quede primero con más frecuencia."
         },
         "rationale": {
           "en": "Retrieval already finds the passage 95% of the time, so missing passages explain at most 5 of the 30 points of error; better ranking within the top 5 may help a little, but most failures happen with the answer already in the context.",
@@ -697,7 +697,7 @@
         },
         "rationale": {
           "en": "Bad chunking would show up as low recall; here the passages with the answer are being retrieved.",
-          "es": "Un mal chunking se vería como recall bajo; aquí los fragmentos con la respuesta sí se están recuperando."
+          "es": "Un mal chunking se reflejaría en un recall bajo; aquí los fragmentos con la respuesta sí se están recuperando."
         }
       },
       {
@@ -715,7 +715,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "Evaluating RAG in stages pays off: measure retrieval (recall at k) and generation (faithfulness and correctness given the retrieved context) separately, then fix the weaker stage. Frameworks such as RAGAS automate these metrics, but reading 20 failures by hand usually reveals the main pattern faster.",
-      "es": "Evaluar un RAG por etapas conviene: medir por separado la recuperación (recall en k) y la generación (fidelidad y corrección dado el contexto recuperado), y luego arreglar la etapa más débil. Herramientas como RAGAS automatizan estas métricas, pero leer 20 fallas a mano suele revelar más rápido el patrón principal."
+      "es": "Conviene evaluar un RAG por etapas: medir por separado la recuperación (recall en k) y la generación (fidelidad y corrección dado el contexto recuperado), y luego arreglar la etapa más débil. Herramientas como RAGAS automatizan estas métricas, pero leer 20 fallas a mano suele revelar más rápido el patrón principal."
     },
     "sources": [
       {
@@ -758,7 +758,7 @@
         "id": "a",
         "text": {
           "en": "Store version and validity dates as metadata, and filter to current ones.",
-          "es": "Guardar versión y vigencia como metadatos, y filtrar solo los documentos vigentes."
+          "es": "Guardar versión y vigencia como metadatos, y filtrar para dejar solo los vigentes."
         },
         "rationale": {
           "en": "The problem is not similarity but validity: both versions are relevant to the query, and only metadata says which one is current. Filtering removes the outdated text before the model sees it.",
@@ -832,7 +832,7 @@
     "difficulty": { "steps": 0, "specialization": 0, "distractors": 1 },
     "prompt": {
       "en": "Compared with fine-tuning a model on the same documents, what is a main advantage of RAG?",
-      "es": "Comparado con hacer fine-tuning de un modelo con los mismos documentos, ¿cuál es una ventaja principal de RAG?"
+      "es": "Comparado con hacer fine-tuning de un modelo con los mismos documentos, ¿cuál es una de las principales ventajas de RAG?"
     },
     "options": [
       {

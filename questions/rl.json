@@ -19,7 +19,7 @@
         "id": "a",
         "text": {
           "en": "Its update uses the value of the best next action, whatever action the exploring policy takes.",
-          "es": "Actualiza con el valor de la mejor acción siguiente, sea cual sea la que toma la política que explora."
+          "es": "Actualiza con el valor de la mejor acción siguiente, sea cual sea la que tome la política que explora."
         },
         "rationale": {
           "en": "It learns the value of the greedy policy while acting with another one, such as ε-greedy.",
@@ -130,14 +130,14 @@
         },
         "rationale": {
           "en": "ε-greedy explores at every step with probability ε; schedules that lower ε over time are common, but they still apply step by step.",
-          "es": "ε-greedy explora en cada paso con probabilidad ε; es común que ε baje con el tiempo, pero igual se aplica paso a paso."
+          "es": "ε-greedy explora en cada paso con probabilidad ε; es común que ε baje con el tiempo, pero se sigue aplicando paso a paso."
         }
       }
     ],
     "answer": ["a"],
     "explanation": {
       "en": "Many implementations decay ε from about 1 toward a small value during training: early on the estimates are poor and exploring is cheap, and later exploiting pays more. DQN used this kind of schedule, annealing ε from 1.0 to 0.1 over the first million frames.",
-      "es": "Muchas implementaciones bajan ε desde cerca de 1 hasta un valor pequeño durante el entrenamiento: al principio las estimaciones son malas y explorar sale barato, y más adelante conviene más aprovechar. DQN usó este tipo de calendario, bajando ε de 1,0 a 0,1 durante el primer millón de frames."
+      "es": "Muchas implementaciones bajan ε desde cerca de 1 hasta un valor pequeño durante el entrenamiento: al principio las estimaciones son malas y explorar sale barato, y más adelante conviene más aprovechar. DQN usó este tipo de schedule, bajando ε de 1,0 a 0,1 durante el primer millón de frames."
     },
     "sources": [
       { "kind": "book", "title": "Reinforcement Learning: An Introduction (2nd ed.)", "authors": "Richard S. Sutton & Andrew G. Barto", "year": 2018 },

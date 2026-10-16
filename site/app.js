@@ -161,7 +161,7 @@ const STRINGS = {
     copyFailed: "No se pudo copiar. Selecciona el texto y cópialo a mano.",
     shareScore: (n, k, pct) =>
       `${n === 1 ? "Respondí 1 pregunta" : `Respondí ${n} preguntas`} de IA y machine learning y acerté ${k} (${pct}%).`,
-    shareTopics: (best, worst) => `Lo que mejor me fue: ${best}. Lo que más me costó: ${worst}.`,
+    shareTopics: (best, worst) => `En lo que mejor me fue: ${best}. Lo que más me costó: ${worst}.`,
     shareCta: (url) => `¿Cuánto sacas tú? ${url}`,
     supportText: "¿Te sirvió? El sitio es gratis y se mantiene con aportes voluntarios.",
     supportCta: "☕ Invítame un café en Ko-fi",
@@ -169,7 +169,7 @@ const STRINGS = {
     reviewAll: "Revisar respuestas",
     noErrors: "Sin errores. Prueba con un nivel más difícil.",
     again: "Otro quiz",
-    retryWrong: "Repetir los errores",
+    retryWrong: "Reintentar las que fallaste",
   },
 };
 

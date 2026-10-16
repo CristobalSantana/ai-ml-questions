@@ -12,7 +12,7 @@
     "difficulty": { "steps": 1, "specialization": 2, "distractors": 1 },
     "prompt": {
       "en": "As you grow a model, test error rises, peaks right where training error reaches zero, and then falls again as the model keeps growing. What explains the drop beyond that point?",
-      "es": "Al agrandar un modelo, el error de test sube, llega a un máximo justo donde el error de entrenamiento llega a cero y luego vuelve a bajar a medida que el modelo sigue creciendo. ¿Qué explica la bajada después de ese punto?"
+      "es": "Al agrandar un modelo, el error de prueba sube, llega a un máximo justo donde el error de entrenamiento llega a cero y luego vuelve a bajar a medida que el modelo sigue creciendo. ¿Qué explica la bajada después de ese punto?"
     },
     "options": [
       {
@@ -23,7 +23,7 @@
         },
         "rationale": {
           "en": "Beyond the interpolation threshold there are many interpolating solutions, and gradient-based training is biased toward low-norm, smoother ones, so test error falls again.",
-          "es": "Más allá del umbral de interpolación hay muchas soluciones que interpolan, y el entrenamiento por gradiente tiende a las de norma baja, más suaves, así que el error de test vuelve a bajar."
+          "es": "Más allá del umbral de interpolación hay muchas soluciones que interpolan, y el entrenamiento por gradiente tiende a las de norma baja, más suaves, así que el error de prueba vuelve a bajar."
         }
       },
       {
@@ -45,7 +45,7 @@
         },
         "rationale": {
           "en": "Training error is zero, so the optimizer has converged on the training data; the drop in test error happens with full convergence.",
-          "es": "El error de entrenamiento es cero, así que el optimizador sí convergió sobre los datos de entrenamiento; la bajada del error de test ocurre con convergencia completa."
+          "es": "El error de entrenamiento es cero, así que el optimizador sí convergió sobre los datos de entrenamiento; la bajada del error de prueba ocurre con convergencia completa."
         }
       },
       {
@@ -63,7 +63,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "Belkin et al. showed the double descent curve across several model families, and Nakkiran et al. observed it in deep networks when varying not only model size but also training epochs and the amount of data. The peak is sharper with label noise, and well-tuned regularization can smooth it out. It helps explain why heavily overparameterized models can generalize well.",
-      "es": "Belkin et al. mostraron la curva de double descent en varias familias de modelos, y Nakkiran et al. la observaron en redes profundas al variar no solo el tamaño del modelo, sino también las épocas de entrenamiento y la cantidad de datos. El pico es más marcado con ruido en las etiquetas, y una regularización bien ajustada puede suavizarlo. Ayuda a explicar por qué modelos muy sobreparametrizados pueden generalizar bien."
+      "es": "Belkin et al. mostraron la curva de double descent en varias familias de modelos, y Nakkiran et al. la observaron en redes profundas al variar no solo el tamaño del modelo, sino también las épocas de entrenamiento y la cantidad de datos. El pico es más marcado con ruido en las etiquetas, y una regularización bien ajustada puede suavizarlo. Este fenómeno ayuda a explicar por qué modelos muy sobreparametrizados pueden generalizar bien."
     },
     "sources": [
       {
@@ -297,7 +297,7 @@
         },
         "rationale": {
           "en": "Length correlations exist, but the term refers to sensitivity to changes that keep the meaning.",
-          "es": "Las correlaciones de largo existen, pero el término se refiere a la sensibilidad a cambios que conservan el sentido."
+          "es": "Existen correlaciones con el largo, pero el término se refiere a la sensibilidad a cambios que conservan el sentido."
         }
       },
       {
@@ -388,7 +388,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "Kalai et al. (2025) argue that hallucinations persist partly because most benchmarks grade this way, so training and model selection reward confident guesses. Their proposed fix is to penalize wrong answers, for example by subtracting points, so that saying “I don't know” becomes the better choice below a stated confidence threshold.",
-      "es": "Kalai et al. (2025) sostienen que las alucinaciones persisten en parte porque la mayoría de los benchmarks puntúa así, de modo que el entrenamiento y la selección de modelos premian las conjeturas confiadas. Proponen penalizar las respuestas incorrectas, por ejemplo restando puntos, para que decir «no sé» sea la mejor opción bajo un umbral de confianza declarado."
+      "es": "Kalai et al. (2025) sostienen que las alucinaciones persisten en parte porque la mayoría de los benchmarks puntúa así, de modo que el entrenamiento y la selección de modelos premian las conjeturas hechas con seguridad. Proponen penalizar las respuestas incorrectas, por ejemplo restando puntos, para que decir «no sé» sea la mejor opción bajo un umbral de confianza declarado."
     },
     "sources": [
       {
@@ -416,7 +416,7 @@
     "difficulty": { "steps": 0, "specialization": 1, "distractors": 1 },
     "prompt": {
       "en": "A user writes “I'm pretty sure the answer is 12” under a math problem whose answer is 15, and the model replies that 12 is correct. What is this behavior called?",
-      "es": "Un usuario escribe «estoy bastante seguro de que la respuesta es 12» bajo un problema de matemáticas cuya respuesta es 15, y el modelo responde que 12 es correcto. ¿Cómo se llama este comportamiento?"
+      "es": "Un usuario escribe «estoy bastante seguro de que la respuesta es 12» junto a un problema de matemáticas cuya respuesta es 15, y el modelo responde que 12 es correcto. ¿Cómo se llama este comportamiento?"
     },
     "options": [
       {
@@ -467,7 +467,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "Sharma et al. (2023) found sycophancy across several assistants and linked it to human preference data, in which people tend to rate agreeing answers higher. Neutral phrasing helps when testing a model: asking “what is the answer?” instead of “is it 12?” avoids signaling the expected answer.",
-      "es": "Sharma et al. (2023) encontraron sycophancy en varios asistentes y la vincularon con los datos de preferencias humanas, en los que las personas tienden a calificar mejor las respuestas que les dan la razón. Al probar un modelo ayuda preguntar en forma neutral: «¿cuál es la respuesta?» en vez de «¿es 12?» evita señalar la respuesta esperada."
+      "es": "Sharma et al. (2023) encontraron sycophancy en varios asistentes y la vincularon con los datos de preferencias humanas, en los que las personas tienden a calificar mejor las respuestas que les dan la razón. Al probar un modelo ayuda preguntar en forma neutral: «¿cuál es la respuesta?» en vez de «¿es 12?», para no señalar la respuesta esperada."
     },
     "sources": [
       {
@@ -518,7 +518,7 @@
         },
         "rationale": {
           "en": "Double descent describes test error around the point where the model starts to fit the training data exactly; the defining feature here is a long plateau at chance followed by a jump.",
-          "es": "El double descent describe el error de prueba en torno al punto en que el modelo empieza a ajustar exactamente los datos de entrenamiento; lo que define este caso es una larga meseta en el azar seguida de un salto."
+          "es": "El double descent describe el error de prueba en torno al punto en que el modelo empieza a ajustar exactamente los datos de entrenamiento; lo que define este caso es una larga meseta al nivel del azar seguida de un salto."
         }
       },
       {
@@ -536,11 +536,11 @@
         "id": "d",
         "text": {
           "en": "Data leakage: the validation set contains copies of the training examples.",
-          "es": "Fuga de datos: el conjunto de validación contiene copias de los ejemplos de entrenamiento."
+          "es": "Data leakage: el conjunto de validación contiene copias de los ejemplos de entrenamiento."
         },
         "rationale": {
           "en": "Leakage would make validation accuracy high from the start, not after 100,000 steps.",
-          "es": "Una fuga haría que la exactitud de validación fuera alta desde el inicio, no después de 100.000 pasos."
+          "es": "El data leakage haría que la exactitud de validación fuera alta desde el inicio, no después de 100.000 pasos."
         }
       }
     ],
@@ -615,7 +615,7 @@
         },
         "rationale": {
           "en": "An instruction may reduce the behavior, but the reward still pays for it, so the incentive remains.",
-          "es": "Una instrucción puede reducir la conducta, pero la recompensa la sigue pagando, así que el incentivo se mantiene."
+          "es": "Una instrucción puede reducir la conducta, pero la recompensa la sigue premiando, así que el incentivo se mantiene."
         }
       },
       {

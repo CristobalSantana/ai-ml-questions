@@ -45,7 +45,7 @@
         },
         "rationale": {
           "en": "The same inputs now imply a different default probability. This is the kind of shift a monitor that only watches the inputs cannot see.",
-          "es": "Las mismas entradas ahora implican otra probabilidad de incumplimiento. Es el tipo de shift que un monitor que solo mira las entradas no puede ver."
+          "es": "Las mismas entradas ahora implican otra probabilidad de incumplimiento. Es el tipo de shift que un monitoreo que solo mira las entradas no puede ver."
         }
       },
       {
@@ -115,7 +115,7 @@
         },
         "rationale": {
           "en": "Drift could lower performance gradually, but a collapse right at deployment, driven by a feature filled in after the event, points to leakage.",
-          "es": "El drift podría bajar el rendimiento de forma gradual, pero un derrumbe justo al desplegar, causado por una variable que se completa después del evento, apunta a una fuga."
+          "es": "El drift podría bajar el rendimiento de forma gradual, pero un derrumbe justo al desplegar, causado por una variable que se completa después del evento, apunta a target leakage."
         }
       },
       {
@@ -144,7 +144,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "The test for leakage is temporal: for each feature, ask whether its value would be available, with the same content, at the moment the prediction is made. Building training data from snapshots taken at prediction time, rather than from the final state of each record, prevents this whole class of errors.",
-      "es": "La prueba para detectar fugas es temporal: para cada variable, preguntar si su valor estaría disponible, con el mismo contenido, en el momento en que se hace la predicción. Construir los datos de entrenamiento con instantáneas tomadas al momento de predecir, y no con el estado final de cada registro, evita toda esta clase de errores."
+      "es": "La prueba para detectar leakage es temporal: para cada variable, preguntar si su valor estaría disponible, con el mismo contenido, en el momento en que se hace la predicción. Construir los datos de entrenamiento con instantáneas tomadas al momento de predecir, y no con el estado final de cada registro, evita toda esta clase de errores."
     },
     "sources": [
       {
@@ -219,7 +219,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "With large samples, the KS test flags tiny, harmless differences, so teams usually track an effect size, such as the KS statistic itself or the population stability index, and alert above a threshold. Input drift does not always hurt the model; it is a signal to check performance as soon as labels arrive.",
-      "es": "Con muestras grandes, el test KS marca diferencias mínimas e inofensivas, así que los equipos suelen seguir un tamaño de efecto, como el propio estadístico KS o el population stability index, y alertar sobre un umbral. El drift en las entradas no siempre perjudica al modelo; es una señal para revisar el rendimiento apenas lleguen las etiquetas."
+      "es": "Con muestras grandes, el test KS marca diferencias mínimas e inofensivas, así que los equipos suelen seguir un tamaño de efecto, como el propio estadístico KS o el population stability index, y alertar cuando supera un umbral. El drift en las entradas no siempre perjudica al modelo; es una señal para revisar el rendimiento apenas lleguen las etiquetas."
     },
     "sources": [
       {

@@ -52,7 +52,7 @@
         "id": "d",
         "text": {
           "en": "It is the feature whose removal would cause the largest drop in accuracy.",
-          "es": "Es la variable cuya eliminación produciría la mayor caída de accuracy."
+          "es": "Es la variable cuya eliminación produciría la mayor caída de exactitud."
         },
         "rationale": {
           "en": "Retraining without the feature can cost little when correlated features take over its role. SHAP describes the current model, not a retrained one.",
@@ -91,7 +91,7 @@
     "difficulty": { "steps": 2, "specialization": 2, "distractors": 1 },
     "prompt": {
       "en": "A recidivism tool labels people as high risk. In both groups, 60% of the people it labels high risk go on to reoffend. The groups' base rates differ (30% and 50%). What follows?",
-      "es": "Una herramienta de reincidencia etiqueta a personas como de alto riesgo. En ambos grupos, el 60% de quienes reciben esa etiqueta vuelve a delinquir. Las tasas base de los grupos difieren (30% y 50%). ¿Qué se deduce?"
+      "es": "Una herramienta de predicción de reincidencia etiqueta a personas como de alto riesgo. En ambos grupos, el 60% de quienes reciben esa etiqueta vuelve a delinquir. Las tasas base de los grupos difieren (30% y 50%). ¿Qué se deduce?"
     },
     "options": [
       {
@@ -142,7 +142,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "This was the center of the 2016 debate over the COMPAS recidivism tool: ProPublica showed that Black defendants who did not reoffend were labeled high risk more often than white defendants, the developer showed equal precision across groups, and both were right. Kleinberg et al. (2016) proved a related result for risk scores. Since the criteria conflict, choosing one is a value judgment about which errors matter more, not a purely technical decision.",
-      "es": "Este fue el centro del debate de 2016 sobre la herramienta de reincidencia COMPAS: ProPublica mostró que a los acusados negros que no reincidían se los etiquetaba de alto riesgo más seguido que a los blancos, la empresa que la desarrolló mostró igual precision entre grupos, y ambos tenían razón. Kleinberg et al. (2016) demostraron un resultado parecido para puntajes de riesgo. Como los criterios chocan, elegir uno es un juicio de valor sobre qué errores importan más, no una decisión puramente técnica."
+      "es": "Este fue el centro del debate de 2016 sobre la herramienta de predicción de reincidencia COMPAS: ProPublica mostró que a los acusados negros que no reincidían se los etiquetaba de alto riesgo con más frecuencia que a los blancos, la empresa que la desarrolló mostró igual precision entre grupos, y ambos tenían razón. Kleinberg et al. (2016) demostraron un resultado parecido para puntajes de riesgo. Como los criterios chocan, elegir uno es un juicio de valor sobre qué errores importan más, no una decisión puramente técnica."
     },
     "sources": [
       {
@@ -188,7 +188,7 @@
         },
         "rationale": {
           "en": "ε bounds how much the probability of any output can change when one person is added or removed. A smaller bound means more noise and less that can be learned about any individual.",
-          "es": "ε acota cuánto puede cambiar la probabilidad de cualquier resultado al agregar o quitar a una persona. Una cota menor significa más ruido y menos que aprender de cualquier individuo."
+          "es": "ε acota cuánto puede cambiar la probabilidad de cualquier resultado al agregar o quitar a una persona. Una cota menor significa más ruido y que se puede saber menos sobre cualquier individuo."
         }
       },
       {
@@ -225,7 +225,7 @@
     "answer": ["a"],
     "explanation": {
       "en": "Formally, an algorithm is ε-differentially private if, for any two datasets that differ in one person and any output, the probabilities differ by at most a factor of e^ε. Privacy works as a budget: every query on the same data spends part of it, and in deep learning, DP-SGD adds noise to clipped per-example gradients.",
-      "es": "Formalmente, un algoritmo tiene privacidad diferencial ε si, para dos datasets cualesquiera que difieren en una persona y para cualquier resultado, las probabilidades difieren a lo más en un factor e^ε. La privacidad funciona como un presupuesto: cada consulta sobre los mismos datos gasta una parte, y en deep learning DP-SGD agrega ruido a los gradientes recortados de cada ejemplo."
+      "es": "Formalmente, un algoritmo tiene privacidad diferencial ε si, para dos datasets cualesquiera que difieren en una persona y para cualquier resultado, las probabilidades difieren como máximo en un factor e^ε. La privacidad funciona como un presupuesto: cada consulta sobre los mismos datos gasta una parte, y en deep learning DP-SGD agrega ruido a los gradientes recortados de cada ejemplo."
     },
     "sources": [
       { "kind": "book", "title": "The Algorithmic Foundations of Differential Privacy", "authors": "Cynthia Dwork & Aaron Roth", "year": 2014 },

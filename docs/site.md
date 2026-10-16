@@ -48,7 +48,7 @@ How many can you get? https://ai-ml-questions.strangemachines.workers.dev/
 ```
 Respondí 25 preguntas de IA y machine learning y acerté 19 (76%).
 🟢 Fácil 8/8 · 🟡 Medio 8/12 · 🔴 Difícil 3/5
-Lo que mejor me fue: Redes neuronales. Lo que más me costó: Retrieval y RAG.
+En lo que mejor me fue: Redes neuronales. Lo que más me costó: Retrieval y RAG.
 ¿Cuánto sacas tú? https://ai-ml-questions.strangemachines.workers.dev/#es
 ```
 
