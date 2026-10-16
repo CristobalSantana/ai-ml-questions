@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""Genera los datos del sitio a partir del banco de preguntas.
+"""Builds the site's data from the question bank.
 
-Escribe en site/data/ la taxonomía, un índice con los conteos por área y nivel, y un archivo
-minificado de preguntas por área. Además escribe site/precache.json (lo que el service worker
-guarda para funcionar sin conexión) y actualiza la versión de site/sw.js.
+Writes to site/data/ the taxonomy, an index with the counts per area and level, and one
+minified file of questions per area. It also writes site/precache.json (what the service worker
+stores to work offline) and updates the version in site/sw.js.
 
-Uso:
-    python scripts/build_site.py                  # solo preguntas revisadas (human, llm_reviewed)
-    python scripts/build_site.py --include-drafts # también borradores, para probar el prototipo
+Usage:
+    python scripts/build_site.py                  # reviewed questions only (human, llm_reviewed)
+    python scripts/build_site.py --include-drafts # drafts too, for testing the prototype
 """
 
 import argparse
@@ -25,7 +25,7 @@ SITE = ROOT / "site"
 DATA = SITE / "data"
 PUBLISHABLE = {"human", "llm_reviewed"}
 LEVELS = ("easy", "medium", "hard")
-# Archivos del sitio que el service worker no necesita guardar.
+# Site files the service worker does not need to store.
 NOT_PRECACHED = {"sw.js", "precache.json"}
 
 
@@ -40,7 +40,7 @@ def validate():
     )
     if result.returncode != 0:
         print(result.stdout)
-        sys.exit("El banco tiene errores; corrígelos antes de generar el sitio.")
+        sys.exit("The bank has errors; fix them before building the site.")
 
 
 def build_data(include_drafts):
@@ -108,25 +108,25 @@ def bump_service_worker(files):
     text = sw.read_text(encoding="utf-8")
     new_text, n = re.subn(r'const VERSION = "[^"]*";', f'const VERSION = "{version}";', text, count=1)
     if n != 1:
-        sys.exit("No encontré la línea const VERSION en site/sw.js.")
+        sys.exit("Could not find the const VERSION line in site/sw.js.")
     sw.write_text(new_text, encoding="utf-8")
     return version
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Genera los datos del sitio.")
-    parser.add_argument("--include-drafts", action="store_true", help="incluye preguntas sin revisar (llm_draft)")
+    parser = argparse.ArgumentParser(description="Builds the site data.")
+    parser.add_argument("--include-drafts", action="store_true", help="include unreviewed questions (llm_draft)")
     args = parser.parse_args()
 
     validate()
     total, areas = build_data(args.include_drafts)
     if total == 0:
-        print("AVISO  No hay preguntas publicables. Revisa algunas o usa --include-drafts para probar.")
+        print("WARNING  No publishable questions. Review some, or use --include-drafts to test.")
     files = write_precache()
     version = bump_service_worker(files)
-    drafts = " (con borradores)" if args.include_drafts else ""
-    print(f"site/data: {total} preguntas en {areas} áreas{drafts}")
-    print(f"precache.json: {len(files) + 1} entradas · versión del service worker {version}")
+    drafts = " (drafts included)" if args.include_drafts else ""
+    print(f"site/data: {total} questions in {areas} areas{drafts}")
+    print(f"precache.json: {len(files) + 1} entries · service worker version {version}")
 
 
 if __name__ == "__main__":

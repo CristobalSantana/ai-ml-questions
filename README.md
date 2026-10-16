@@ -96,7 +96,7 @@ The questions follow the guidelines of Haladyna, Downing and Rodriguez (2002), a
 
 The validator summary also shows in what share of the bank the correct option is the longest one and in what share it is the shortest. With four options, chance gives about 25% for each; a very high share for "longest" is a clue people learn even when every question passes the 1.2× rule. In the October 2026 review it went down from 46% to 20% in English.
 
-**The review with another model checks** what depends on meaning ([`prompts/verificar.md`](prompts/verificar.md)):
+**The review with another model checks** what depends on meaning ([`prompts/review.md`](prompts/review.md)):
 
 - **Clues in the options (step 0):** the model sees only the options, without the stem, and bets on one. If it gets it right with confidence in two different orders, the wording gives the answer away and the question is rewritten.
 - **Homogeneity:** the options cover the same kind of content with the same grammatical form, none overlaps another and there are no pairs of exact opposites.
@@ -273,9 +273,9 @@ For statistics it is enough to store `(id, version, chosen option, correct, date
 ## 10. How to produce many questions
 
 1. **Pick a cell** (area × level) with few questions; the summary of `scripts/validate.py` shows the table.
-2. **Generate a batch** with [`prompts/generar.md`](prompts/generar.md). The prompt asks for each question in English and Spanish, with its Bloom level and following the writing rules. Everything generated enters as `llm_draft`.
+2. **Generate a batch** with [`prompts/generate.md`](prompts/generate.md). The prompt asks for each question in English and Spanish, with its Bloom level and following the writing rules. Everything generated enters as `llm_draft`.
 3. **Validate** with `python scripts/validate.py`: the schema, the writing rules of section 5 and whether the rubric matches the level.
-4. **Review with another model** using [`prompts/verificar.md`](prompts/verificar.md), in three steps: look only at the options (to find clues), answer without seeing the key, and audit with the key (facts, sources, writing rules, Bloom, rubric and translation). A question is rewritten or discarded if it has a clue, if the model's answer does not match the key, if two options are defensible or if the explanation has a mistake.
+4. **Review with another model** using [`prompts/review.md`](prompts/review.md), in three steps: look only at the options (to find clues), answer without seeing the key, and audit with the key (facts, sources, writing rules, Bloom, rubric and translation). A question is rewritten or discarded if it has a clue, if the model's answer does not match the key, if two options are defensible or if the explanation has a mistake.
 5. **Review by hand** every hard question, every niche one and a sample of the rest, including the Spanish version. On approval, `origin` becomes `llm_reviewed`.
 6. **Publish** when `python scripts/validate.py --publish` passes without errors.
 7. **Maintain:** the validator warns when a `review_by` date has passed; mistake reports come in as issues.
@@ -424,6 +424,7 @@ The site counts visits with Cloudflare Web Analytics: the `beacon.min.js` script
 - **Questions.** English is required and Spanish optional; if a question has no Spanish, it is shown in English. The validator summary counts how many questions each language has.
 - **Interface.** The texts are in `STRINGS`, in `site/app.js`, one set per language. Adding another language means adding it to `CONFIG.languages`, to `STRINGS`, to the schema and to the questions.
 - **This document.** `README.md` (English) and `README.es.md` (Spanish) say the same thing; a change in one goes into the other too.
+- **Code and tools.** Scripts, comments, prompts, the schema and commit messages are in English. Spanish is for content: the questions, the interface texts and `README.es.md`.
 
 Strange Machines and ml-toy-experiments are in English, which favors English for reach; Spanish has less competition and serves readers in Chile and Latin America.
 
@@ -445,8 +446,8 @@ questions/<area>.json        the questions, one file per area
 scripts/validate.py          validates the bank, the writing rules and coverage (pip install jsonschema)
 scripts/build_site.py        generates site/data, site/precache.json and the service worker version
 scripts/make_assets.py       generates the icons and og-image.png (pip install playwright)
-prompts/generar.md           prompt for generating batches of questions (in Spanish)
-prompts/verificar.md         prompt for reviewing questions with another model
+prompts/generate.md          prompt for generating batches of questions
+prompts/review.md            prompt for reviewing questions with another model
 site/index.html              the page and the tags for sharing
 site/styles.css, fonts.css   styles and fonts
 site/app.js                  the quiz logic; CONFIG and the texts (STRINGS) at the top

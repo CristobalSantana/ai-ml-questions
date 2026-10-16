@@ -1,10 +1,10 @@
-"""Genera los íconos de la PWA y la imagen para compartir (og-image.png) con Chromium.
+"""Generates the PWA icons and the share image (og-image.png) with Chromium.
 
-Uso:      python scripts/make_assets.py [carpeta del sitio, por defecto site/]
-Requiere: pip install playwright && playwright install chromium
+Usage:    python scripts/make_assets.py [site folder, site/ by default]
+Requires: pip install playwright && playwright install chromium
 
-Si cambias el nombre del sitio o el titular, edita NAME, HEADLINE y SUBTITLE y vuelve a correrlo.
-Después corre scripts/build_site.py para que el service worker tome la imagen nueva.
+If you change the site's name or headline, edit NAME, HEADLINE and SUBTITLE and run it again.
+Then run scripts/build_site.py so the service worker picks up the new image.
 """
 import sys
 from pathlib import Path
@@ -26,7 +26,7 @@ DOTS = ("#3BC27A", "#F2C232", "#F06666")
 
 def icon_svg(maskable):
     if maskable:
-        # Fondo a sangre; las pelotitas quedan dentro de la zona segura central.
+        # Full-bleed background; the dots stay inside the central safe zone.
         bg = f'<rect width="512" height="512" fill="{GRAPHITE}"/>'
         r, dx = 38, 96
     else:
@@ -106,7 +106,7 @@ def main():
         finally:
             og_path.unlink(missing_ok=True)
         browser.close()
-    print("fuentes en la imagen og:", sorted(set(loaded)))
+    print("fonts in the og image:", sorted(set(loaded)))
     for f in sorted(ICONS.iterdir()):
         print(f"icons/{f.name}", f.stat().st_size, "B")
     print("og-image.png", (SITE / "og-image.png").stat().st_size, "B")

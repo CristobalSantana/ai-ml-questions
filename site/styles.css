@@ -1,5 +1,5 @@
-/* Una hoja de respuestas en una sola columna: enunciados en la serif de las revistas científicas,
-   alternativas como burbujas que se rellenan con grafito y tres pelotitas para la dificultad. */
+/* An answer sheet in a single column: stems in the serif of scientific journals,
+   options as bubbles filled in with graphite, and three dots for difficulty. */
 :root {
   /* Color */
   --paper: #F5F6F8;
@@ -23,7 +23,7 @@
   --lift: 0 1px 2px rgb(21 25 34 / 0.06);
   --toast-shadow: 0 8px 28px rgb(21 25 34 / 0.22);
 
-  /* Tipografía: serif para el material de la pregunta, sans para la interfaz, mono para datos */
+  /* Type: serif for the question material, sans for the interface, mono for data */
   --font-serif: "STIX Two Text", "STIX Two", Georgia, "Times New Roman", serif;
   --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
@@ -121,7 +121,7 @@ code { font-family: var(--font-mono); font-size: 0.9em; }
   border: 0;
 }
 
-/* Página */
+/* Page */
 .wrap {
   max-width: 44rem;
   margin-inline: auto;
@@ -169,7 +169,7 @@ main { flex: 1; min-width: 0; }
 .masthead-side { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; }
 .bank-size { font: 400 var(--step--1)/1.2 var(--font-mono); color: var(--muted); }
 
-/* Selector de idioma */
+/* Language switch */
 .lang { display: inline-flex; border: 1px solid var(--rule-strong); border-radius: 6px; overflow: hidden; }
 .lang button {
   min-width: 2.75rem;
@@ -185,7 +185,7 @@ main { flex: 1; min-width: 0; }
 .lang button:hover { color: var(--ink); }
 .lang button[aria-pressed="true"] { background: var(--graphite); color: var(--on-graphite); }
 
-/* Pelotitas de dificultad */
+/* Difficulty dots */
 .dot {
   display: inline-block;
   flex: none;
@@ -199,7 +199,7 @@ main { flex: 1; min-width: 0; }
 .dot.medium { background: var(--medium); }
 .dot.hard { background: var(--hard); }
 
-/* Textos de apoyo */
+/* Supporting text */
 .label {
   margin: 0;
   font: 500 0.75rem/1.2 var(--font-mono);
@@ -210,7 +210,7 @@ main { flex: 1; min-width: 0; }
 
 .hint { margin: 0; font-size: 0.875rem; color: var(--muted); }
 
-/* Botones */
+/* Buttons */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -246,17 +246,17 @@ main { flex: 1; min-width: 0; }
 
 .actions { display: flex; flex-wrap: wrap; gap: 0.625rem; }
 
-/* Inicio */
+/* Home */
 .intro { display: grid; gap: 0.75rem; }
 .intro h1 {
   margin: 0;
   font: 400 var(--step-3)/1.15 var(--font-serif);
   letter-spacing: -0.01em;
   text-wrap: balance;
-  /* Ancho tope para que el titular corte en dos líneas en inglés y en español. */
+  /* Maximum width so the headline breaks into two lines in English and in Spanish. */
   max-width: 15em;
 }
-/* El texto del objetivo va en letra chica, debajo del titular. */
+/* The goal text goes in small type, under the headline. */
 .intro p { margin: 0; max-width: 36rem; font-size: 0.875rem; color: var(--muted); }
 
 .resume {
@@ -301,7 +301,7 @@ main { flex: 1; min-width: 0; }
 .chip[aria-pressed="true"] { border-color: var(--graphite); color: var(--ink); }
 .chip[aria-pressed="false"] .dot { opacity: 0.3; }
 
-/* Burbuja de hoja de respuestas: vacía si el área está fuera, rellena si está dentro */
+/* Answer-sheet bubble: empty if the area is out, filled if it is in */
 .tick {
   flex: none;
   width: 0.75rem;
@@ -347,7 +347,7 @@ main { flex: 1; min-width: 0; }
 .start-row .btn { min-width: 9rem; }
 .available { font: 400 0.875rem/1.3 var(--font-mono); color: var(--muted); }
 
-/* Pregunta */
+/* Question */
 .quiz-head { display: grid; gap: 0.25rem; }
 .quiz-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
 .progress-label {
@@ -467,7 +467,7 @@ main { flex: 1; min-width: 0; }
 @media (hover: hover) and (pointer: fine) { .keys { display: inline; } }
 @media (max-width: 30rem) { .quiz-actions .btn { width: 100%; } }
 
-/* Resultado */
+/* Results */
 .results { display: grid; gap: 2.25rem; }
 .score { margin: 0.5rem 0 0; font: 600 var(--step-4)/1 var(--font-serif); font-variant-numeric: lining-nums tabular-nums; }
 .score small { margin-left: 0.35rem; font: 400 var(--step-2)/1 var(--font-serif); color: var(--muted); }
@@ -584,7 +584,7 @@ main { flex: 1; min-width: 0; }
 }
 .review .body p { margin: 0; }
 
-/* Pie y avisos */
+/* Footer and notices */
 .foot {
   display: flex;
   flex-wrap: wrap;

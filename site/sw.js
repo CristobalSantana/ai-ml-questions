@@ -1,7 +1,7 @@
-/* Service worker: guarda el sitio y las preguntas para que funcione sin conexión.
-   scripts/build_site.py reescribe VERSION cada vez que cambia algún archivo. */
-const VERSION = "8f3080fa740c";
-const CACHE = `banco-ia-ml-${VERSION}`;
+/* Service worker: stores the site and the questions so it works offline.
+   scripts/build_site.py rewrites VERSION whenever any file changes. */
+const VERSION = "968acd98bfdb";
+const CACHE = `ai-ml-questions-${VERSION}`;
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -25,7 +25,7 @@ self.addEventListener("activate", (event) => {
   );
 });
 
-/* Responde con lo guardado y lo actualiza en segundo plano; sin conexión, la página sigue funcionando. */
+/* Answers from the cache and refreshes it in the background; offline, the page keeps working. */
 self.addEventListener("fetch", (event) => {
   const { request } = event;
   if (request.method !== "GET" || new URL(request.url).origin !== self.location.origin) return;

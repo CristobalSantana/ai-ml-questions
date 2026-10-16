@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Pregunta del banco de IA y ML",
-  "description": "Una pregunta de opción múltiple. Cada archivo de questions/ es una lista de estos objetos. Los textos son mapas por idioma: el inglés es obligatorio y el español, opcional; si falta, el sitio muestra el inglés.",
+  "title": "AI/ML Questions bank question",
+  "description": "A multiple-choice question. Each file in questions/ is a list of these objects. Texts are maps by language: English is required and Spanish optional; if Spanish is missing, the site shows the English text.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -27,58 +27,58 @@
     "id": {
       "type": "string",
       "pattern": "^[a-z]+(-[a-z]+)*-[0-9]{4}$",
-      "description": "<área>-<número de 4 dígitos>, por ejemplo llm-0001. Es permanente: si la pregunta se retira, su id no se reutiliza."
+      "description": "<area>-<4-digit number>, for example llm-0001. It is permanent: if the question is retired, its id is not reused."
     },
     "version": {
       "type": "integer",
       "minimum": 1,
-      "description": "Sube cuando cambia el enunciado, las alternativas o la respuesta, para no mezclar estadísticas de versiones distintas."
+      "description": "Goes up when the stem, the options or the answer change, so statistics from different versions are not mixed."
     },
     "area": {
       "type": "string",
-      "description": "Id de un área de taxonomy.json."
+      "description": "Id of an area in taxonomy.json."
     },
     "subtopic": {
       "type": "string",
-      "description": "Id de un subtema de esa área en taxonomy.json."
+      "description": "Id of a subtopic of that area in taxonomy.json."
     },
     "level": {
       "enum": ["easy", "medium", "hard"],
-      "description": "easy: recordar o comprender. medium: aplicar, comparar o calcular. hard: analizar o evaluar; nunca solo recordar algo de nicho."
+      "description": "easy: remember or understand. medium: apply, compare or calculate. hard: analyze or evaluate; never just recall something niche."
     },
     "bloom": {
       "enum": ["remember", "understand", "apply", "analyze", "evaluate"],
-      "description": "Proceso cognitivo que exige la pregunta, según la taxonomía de Bloom revisada (Anderson y Krathwohl, 2001). 'Crear' queda fuera porque la opción múltiple no puede evaluarlo."
+      "description": "The cognitive process the question requires, following the revised Bloom's taxonomy (Anderson and Krathwohl, 2001). 'Create' is left out because a multiple-choice question cannot assess it."
     },
     "type": {
       "enum": ["concept", "scenario", "calculation", "code", "evidence"],
-      "description": "concept: definición o mecanismo. scenario: caso con restricciones y una mejor decisión. calculation: cálculo corto. code: leer o corregir código. evidence: respuesta respaldada por un resultado experimental citado."
+      "description": "concept: a definition or a mechanism. scenario: a case with constraints and a best decision. calculation: a short calculation. code: read or fix code. evidence: an answer backed by a cited experimental result."
     },
     "format": {
       "enum": ["single", "multiple"],
-      "description": "single: una alternativa correcta. multiple: marcar todas las correctas."
+      "description": "single: one correct option. multiple: mark every correct option."
     },
     "stability": {
       "enum": ["stable", "slow", "volatile"],
-      "description": "stable: no cambia (matemáticas, papers, definiciones). slow: cambia en años (buenas prácticas). volatile: cambia en meses (herramientas, productos, fenómenos nuevos)."
+      "description": "stable: does not change (math, papers, definitions). slow: changes over years (good practices). volatile: changes over months (tools, products, new phenomena)."
     },
     "difficulty": {
       "type": "object",
       "additionalProperties": false,
       "required": ["steps", "specialization", "distractors"],
-      "description": "Rúbrica de dificultad a priori. Cada criterio va de 0 a 2; se suma al puntaje del nivel de Bloom (remember y understand 0, apply 1, analyze y evaluate 2). La suma (0 a 8) sugiere el nivel: 0–2 easy, 3–5 medium, 6–8 hard.",
+      "description": "Up-front difficulty rubric. Each criterion goes from 0 to 2 and is added to the Bloom score (remember and understand 0, apply 1, analyze and evaluate 2). The sum (0 to 8) suggests the level: 0–2 easy, 3–5 medium, 6–8 hard.",
       "properties": {
         "steps": {
           "enum": [0, 1, 2],
-          "description": "Pasos de razonamiento hasta la respuesta. 0: uno. 1: dos o tres. 2: cuatro o más."
+          "description": "Reasoning steps to the answer. 0: one. 1: two or three. 2: four or more."
         },
         "specialization": {
           "enum": [0, 1, 2],
-          "description": "0: está en cualquier curso introductorio. 1: se aprende trabajando en el área. 2: nicho o investigación."
+          "description": "0: covered in any introductory course. 1: learned by working in the field. 2: niche or research."
         },
         "distractors": {
           "enum": [0, 1, 2],
-          "description": "0: se descartan con facilidad. 1: uno es plausible. 2: varios corresponden a errores frecuentes."
+          "description": "0: easy to rule out. 1: one is plausible. 2: several match common mistakes."
         }
       }
     },
@@ -100,14 +100,14 @@
     },
     "keep_order": {
       "type": "boolean",
-      "description": "true si las alternativas tienen un orden natural (números, pasos). El sitio las muestra en el orden escrito en vez de barajarlas."
+      "description": "true if the options have a natural order (numbers, steps). The site shows them in the written order instead of shuffling them."
     },
     "answer": {
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
       "items": { "enum": ["a", "b", "c", "d", "e"] },
-      "description": "Ids de las alternativas correctas. Salvo con keep_order, el sitio baraja las alternativas al mostrarlas."
+      "description": "Ids of the correct options. Unless keep_order is set, the site shuffles the options when showing them."
     },
     "explanation": { "$ref": "#/$defs/i18n" },
     "hint": { "$ref": "#/$defs/i18n" },
@@ -124,21 +124,21 @@
     "collection": {
       "type": "string",
       "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
-      "description": "Agrupa preguntas de una misma fuente, por ejemplo strange-machines."
+      "description": "Groups questions from the same source, for example strange-machines."
     },
     "origin": {
       "enum": ["human", "llm_draft", "llm_reviewed"],
-      "description": "Solo se publican human y llm_reviewed. llm_draft es un borrador generado que nadie ha revisado."
+      "description": "Only human and llm_reviewed are published. llm_draft is a generated draft that nobody has reviewed."
     },
     "reviewed_at": {
       "type": "string",
       "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
-      "description": "Fecha de la última revisión (AAAA-MM-DD)."
+      "description": "Date of the last review (YYYY-MM-DD)."
     },
     "review_by": {
       "type": "string",
       "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
-      "description": "Fecha límite para volver a revisarla. Obligatoria si la vigencia es slow o volatile."
+      "description": "Deadline for the next review. Required if the stability is slow or volatile."
     }
   },
   "allOf": [
@@ -174,7 +174,7 @@
         "text": { "$ref": "#/$defs/i18n" },
         "rationale": {
           "$ref": "#/$defs/i18n",
-          "description": "Por qué esta alternativa es correcta o incorrecta. Se muestra después de responder."
+          "description": "Why this option is right or wrong. It is shown after answering."
         }
       }
     },

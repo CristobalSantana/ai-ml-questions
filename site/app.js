@@ -360,7 +360,7 @@ function markSeen(id) {
 function stratifiedSample(pool, n, seen) {
   const groups = new Map();
   for (const q of shuffle(pool)) {
-    // Por área y no por contenido: así reagrupar contenidos no cambia qué preguntas salen.
+    // By area, not by topic: regrouping the topics does not change which questions come up.
     const key = `${q.area}|${q.level}`;
     if (!groups.has(key)) groups.set(key, []);
     groups.get(key).push(q);

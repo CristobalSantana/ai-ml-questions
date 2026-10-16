@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Valida el banco de preguntas contra el esquema, la taxonomía y las reglas de redacción.
+"""Validates the question bank against the schema, the taxonomy and the writing rules.
 
-Uso:
-    python scripts/validate.py            # revisa todo y muestra un resumen
-    python scripts/validate.py --publish  # además falla si queda algún borrador (origin: llm_draft)
+Usage:
+    python scripts/validate.py            # checks everything and prints a summary
+    python scripts/validate.py --publish  # also fails if any draft is left (origin: llm_draft)
 
-Requiere: pip install jsonschema
+Requires: pip install jsonschema
 """
 
 import argparse
@@ -19,19 +19,19 @@ from pathlib import Path
 try:
     from jsonschema import Draft202012Validator
 except ImportError:
-    sys.exit("Falta jsonschema. Instálalo con: pip install jsonschema")
+    sys.exit("jsonschema is missing. Install it with: pip install jsonschema")
 
 ROOT = Path(__file__).resolve().parent.parent
 LEVELS = ["easy", "medium", "hard"]
 BLOOM = ["remember", "understand", "apply", "analyze", "evaluate"]
 BLOOM_SCORE = {"remember": 0, "understand": 0, "apply": 1, "analyze": 2, "evaluate": 2}
 OPTION_IDS = "abcde"
-# Suma máxima de la rúbrica (0 a 8) para cada nivel.
+# Highest rubric sum (0 to 8) for each level.
 RUBRIC_BANDS = ((2, "easy"), (5, "medium"), (8, "hard"))
 
-# Reglas de Haladyna, Downing y Rodriguez (2002) que se pueden revisar automáticamente.
-LONGEST_RATIO = 1.2  # la correcta no debe destacar por ser la más larga
-SPREAD_RATIO = 2.5  # ni las alternativas tener largos muy distintos
+# Rules from Haladyna, Downing and Rodriguez (2002) that can be checked automatically.
+LONGEST_RATIO = 1.2  # the correct option must not stand out as the longest
+SPREAD_RATIO = 2.5  # and the options must not differ too much in length
 ABSOLUTES = {
     "en": r"\b(always|never|completely|absolutely|in all cases|in every case|under no circumstances)\b",
     "es": r"\b(siempre|nunca|jamás|completamente|absolutamente|en todos los casos|en ningún caso|bajo ninguna circunstancia)\b",
@@ -51,7 +51,7 @@ def rubric_score(q):
 
 
 def rubric_level(q):
-    """Nivel que sugiere la rúbrica de dificultad de la pregunta."""
+    """The level that the question's difficulty rubric suggests."""
     score = rubric_score(q)
     return next(level for top, level in RUBRIC_BANDS if score <= top)
 
@@ -62,32 +62,32 @@ def load_json(path):
 
 
 def check_taxonomy(taxonomy, errors):
-    """Devuelve {área: {subtemas}} y {área: grupo}, y anota los problemas de la taxonomía."""
+    """Returns {area: {subtopics}} and {area: topic}, and records problems in the taxonomy."""
     areas = {}
     for area in taxonomy["areas"]:
         if area["id"] in areas:
-            errors.append(f"taxonomy.json: área repetida '{area['id']}'")
+            errors.append(f"taxonomy.json: repeated area '{area['id']}'")
         subtopics = [s["id"] for s in area["subtopics"]]
         repeated = sorted({s for s in subtopics if subtopics.count(s) > 1})
         if repeated:
-            errors.append(f"taxonomy.json: subtemas repetidos en '{area['id']}': {', '.join(repeated)}")
+            errors.append(f"taxonomy.json: repeated subtopics in '{area['id']}': {', '.join(repeated)}")
         areas[area["id"]] = set(subtopics)
 
     group_of = {}
     group_ids = [g["id"] for g in taxonomy.get("groups", [])]
     for gid in sorted({g for g in group_ids if group_ids.count(g) > 1}):
-        errors.append(f"taxonomy.json: grupo repetido '{gid}'")
+        errors.append(f"taxonomy.json: repeated topic '{gid}'")
     for group in taxonomy.get("groups", []):
         for area in group["areas"]:
             if area not in areas:
-                errors.append(f"taxonomy.json: el grupo '{group['id']}' incluye el área inexistente '{area}'")
+                errors.append(f"taxonomy.json: topic '{group['id']}' includes the nonexistent area '{area}'")
             elif area in group_of:
-                errors.append(f"taxonomy.json: el área '{area}' está en '{group_of[area]}' y en '{group['id']}'")
+                errors.append(f"taxonomy.json: area '{area}' is in both '{group_of[area]}' and '{group['id']}'")
             else:
                 group_of[area] = group["id"]
     for area in areas:
         if area not in group_of:
-            errors.append(f"taxonomy.json: el área '{area}' no está en ningún grupo")
+            errors.append(f"taxonomy.json: area '{area}' is not in any topic")
     return areas, group_of
 
 
@@ -104,19 +104,19 @@ def parse_date(value, where, field, errors):
     try:
         return date.fromisoformat(value)
     except ValueError:
-        errors.append(f"{where}: {field} no es una fecha válida ({value})")
+        errors.append(f"{where}: {field} is not a valid date ({value})")
         return None
 
 
 def question_sentence(prompt):
-    """La última oración que termina en '?', que es la pregunta propiamente tal."""
+    """The last sentence that ends in '?', which is the question proper."""
     parts = re.split(r"(?<=[.!?])\s+", prompt.strip())
     questions = [p for p in parts if p.endswith("?")]
     return questions[-1] if questions else ""
 
 
 def check_writing(q, where, errors, warnings):
-    """Pistas que delatan la respuesta sin saber el tema (Haladyna et al., 2002)."""
+    """Clues that give the answer away without knowing the topic (Haladyna et al., 2002)."""
     for lang in q["prompt"]:
         texts = {o["id"]: o["text"][lang] for o in q["options"]}
         lengths = {oid: len(t) for oid, t in texts.items()}
@@ -126,19 +126,19 @@ def check_writing(q, where, errors, warnings):
             mean = sum(others) / len(others)
             if lengths[right] >= max(lengths.values()) and lengths[right] > LONGEST_RATIO * mean:
                 warnings.append(
-                    f"{where} [{lang}]: la correcta es la alternativa más larga ({lengths[right] / mean:.2f} veces el promedio de las demás)"
+                    f"{where} [{lang}]: the correct option is the longest ({lengths[right] / mean:.2f} times the average of the others)"
                 )
         if max(lengths.values()) > SPREAD_RATIO * min(lengths.values()):
-            warnings.append(f"{where} [{lang}]: las alternativas tienen largos muy distintos ({min(lengths.values())} a {max(lengths.values())} caracteres)")
+            warnings.append(f"{where} [{lang}]: the options differ a lot in length ({min(lengths.values())} to {max(lengths.values())} characters)")
         for oid, text in texts.items():
             found = re.search(ABSOLUTES[lang], text, re.IGNORECASE)
             if found:
-                warnings.append(f"{where} [{lang}]: la alternativa {oid} usa un absoluto ('{found.group(0)}'), que delata que es falsa")
+                warnings.append(f"{where} [{lang}]: option {oid} uses an absolute ('{found.group(0)}'), which gives away that it is false")
             if re.search(FORBIDDEN[lang], text, re.IGNORECASE):
-                errors.append(f"{where} [{lang}]: la alternativa {oid} usa 'todas o ninguna de las anteriores'")
+                errors.append(f"{where} [{lang}]: option {oid} uses 'all or none of the above'")
         sentence = question_sentence(q["prompt"][lang])
         if re.search(NEGATIVE_QUESTION[lang], sentence, re.IGNORECASE):
-            warnings.append(f"{where} [{lang}]: la pregunta está en negativo; reescríbela en positivo si se puede")
+            warnings.append(f"{where} [{lang}]: the question is phrased negatively; rewrite it positively if possible")
 
 
 def check_question(q, path, areas, seen_ids, errors, warnings):
@@ -146,61 +146,61 @@ def check_question(q, path, areas, seen_ids, errors, warnings):
     where = f"{path.name} {qid}"
 
     if path.stem != q["area"]:
-        errors.append(f"{where}: está en {path.name} pero su área es '{q['area']}'")
+        errors.append(f"{where}: it is in {path.name} but its area is '{q['area']}'")
     if not qid.startswith(q["area"] + "-"):
-        errors.append(f"{where}: el id debe empezar con el área ('{q['area']}-')")
+        errors.append(f"{where}: the id must start with the area ('{q['area']}-')")
     if qid in seen_ids:
-        errors.append(f"{where}: id repetido (también en {seen_ids[qid]})")
+        errors.append(f"{where}: repeated id (also in {seen_ids[qid]})")
     seen_ids[qid] = path.name
 
     if q["area"] not in areas:
-        errors.append(f"{where}: el área '{q['area']}' no existe en taxonomy.json")
+        errors.append(f"{where}: area '{q['area']}' does not exist in taxonomy.json")
     elif q["subtopic"] not in areas[q["area"]]:
-        errors.append(f"{where}: el subtema '{q['subtopic']}' no existe en el área '{q['area']}'")
+        errors.append(f"{where}: subtopic '{q['subtopic']}' does not exist in area '{q['area']}'")
 
     option_ids = [o["id"] for o in q["options"]]
     expected = list(OPTION_IDS[: len(option_ids)])
     if option_ids != expected:
-        errors.append(f"{where}: las alternativas deben ir en orden {', '.join(expected)}")
+        errors.append(f"{where}: the options must be in the order {', '.join(expected)}")
     missing = [a for a in q["answer"] if a not in option_ids]
     if missing:
-        errors.append(f"{where}: la respuesta apunta a alternativas que no existen: {', '.join(missing)}")
+        errors.append(f"{where}: the answer points to options that do not exist: {', '.join(missing)}")
 
     if len({frozenset(field) for field in text_fields(q)}) > 1:
-        errors.append(f"{where}: todos los textos deben estar en los mismos idiomas")
+        errors.append(f"{where}: every text must be in the same languages")
 
     reviewed = parse_date(q["reviewed_at"], where, "reviewed_at", errors)
     if reviewed and reviewed > date.today():
-        errors.append(f"{where}: reviewed_at está en el futuro")
+        errors.append(f"{where}: reviewed_at is in the future")
     if "review_by" in q:
         review_by = parse_date(q["review_by"], where, "review_by", errors)
         if reviewed and review_by:
             if review_by <= reviewed:
-                errors.append(f"{where}: review_by debe ser posterior a reviewed_at")
+                errors.append(f"{where}: review_by must be later than reviewed_at")
             elif review_by < date.today():
-                warnings.append(f"{where}: venció su fecha de revisión ({q['review_by']})")
+                warnings.append(f"{where}: its review date has passed ({q['review_by']})")
 
     if q["type"] == "evidence" and not any(s["kind"] in ("experiment", "paper") for s in q["sources"]):
-        errors.append(f"{where}: una pregunta de tipo evidence necesita un experimento o paper como fuente")
+        errors.append(f"{where}: an evidence question needs an experiment or a paper as a source")
 
-    # Una pregunta difícil exige analizar o evaluar, no recordar algo de nicho.
+    # A hard question requires analyzing or evaluating, not recalling something niche.
     if q["level"] == "hard" and q["bloom"] in ("remember", "understand"):
-        errors.append(f"{where}: una pregunta difícil debe exigir analizar o evaluar (bloom es '{q['bloom']}')")
+        errors.append(f"{where}: a hard question must require analyzing or evaluating (bloom is '{q['bloom']}')")
     if q["level"] == "easy" and q["bloom"] in ("analyze", "evaluate"):
-        warnings.append(f"{where}: es fácil pero exige '{q['bloom']}'; revisa el nivel")
+        warnings.append(f"{where}: it is easy but requires '{q['bloom']}'; check the level")
 
     suggested = rubric_level(q)
     if suggested != q["level"]:
-        warnings.append(f"{where}: la rúbrica suma {rubric_score(q)} y sugiere {suggested}, pero el nivel es {q['level']}")
+        warnings.append(f"{where}: the rubric adds up to {rubric_score(q)} and suggests {suggested}, but the level is {q['level']}")
 
     check_writing(q, where, errors, warnings)
 
 
 def length_cues(questions):
-    """Qué tan seguido la correcta es la alternativa más larga o la más corta, en todo el banco.
+    """How often the correct option is the longest or the shortest one, across the whole bank.
 
-    Al azar, con cuatro alternativas, cada caso pasa en un 25% de las preguntas. Una cifra muy
-    alta en «más larga» es una pista que se aprende; una muy baja en «más corta», también.
+    By chance, with four options, each case happens in 25% of the questions. A very high share
+    for "longest" is a clue people learn; a very low share for "shortest" is one too.
     """
     parts = []
     for lang in ("en", "es"):
@@ -216,47 +216,47 @@ def length_cues(questions):
             shortest += lens[key] < min(others)
             expected += 1 / len(lens)
         if n:
-            name = {"en": "inglés", "es": "español"}[lang]
-            parts.append(f"{name}, la correcta es la más larga en {longest / n:.0%} y la más corta en {shortest / n:.0%}")
-    return "; ".join(parts) + f" (al azar, {expected / n:.0%} cada una)" if parts else "sin preguntas"
+            name = {"en": "English", "es": "Spanish"}[lang]
+            parts.append(f"{name}, the correct option is the longest in {longest / n:.0%} and the shortest in {shortest / n:.0%}")
+    return "; ".join(parts) + f" (by chance, {expected / n:.0%} each)" if parts else "no questions"
 
 
 def print_summary(questions, taxonomy, group_of, total_bytes, drafts):
     total = len(questions)
-    print(f"Preguntas: {total} en {len({q['area'] for q in questions})} de {len(group_of)} áreas")
+    print(f"Questions: {total} in {len({q['area'] for q in questions})} of {len(group_of)} areas")
     if not total:
         return
     by_level = Counter(q["level"] for q in questions)
-    print("Nivel:     " + ", ".join(f"{lvl} {by_level[lvl]}" for lvl in LEVELS))
+    print("Level:     " + ", ".join(f"{lvl} {by_level[lvl]}" for lvl in LEVELS))
     by_bloom = Counter(q["bloom"] for q in questions)
     print("Bloom:     " + ", ".join(f"{b} {by_bloom[b]}" for b in BLOOM if by_bloom[b]))
     by_stability = Counter(q["stability"] for q in questions)
-    print("Vigencia:  " + ", ".join(f"{k} {v}" for k, v in sorted(by_stability.items())))
+    print("Stability: " + ", ".join(f"{k} {v}" for k, v in sorted(by_stability.items())))
     by_type = Counter(q["type"] for q in questions)
-    print("Tipo:      " + ", ".join(f"{k} {v}" for k, v in sorted(by_type.items())))
+    print("Type:      " + ", ".join(f"{k} {v}" for k, v in sorted(by_type.items())))
     agree = sum(rubric_level(q) == q["level"] for q in questions)
-    print(f"Rúbrica:   coincide con el nivel en {agree} de {total}")
+    print(f"Rubric:    matches the level in {agree} of {total}")
     spanish = sum("es" in q["prompt"] for q in questions)
-    print(f"Idiomas:   inglés {total}, español {spanish}")
-    print("Largo:     " + length_cues(questions))
-    print(f"Tamaño:    {total_bytes / 1024:.1f} KB en total, {total_bytes / total / 1024:.2f} KB por pregunta")
-    print(f"Borradores sin revisar (llm_draft): {len(drafts)}")
+    print(f"Languages: English {total}, Spanish {spanish}")
+    print("Length:    " + length_cues(questions))
+    print(f"Size:      {total_bytes / 1024:.1f} KB in total, {total_bytes / total / 1024:.2f} KB per question")
+    print(f"Unreviewed drafts (llm_draft): {len(drafts)}")
     print()
-    names = {g["id"]: g["name"]["es"] for g in taxonomy["groups"]}
+    names = {g["id"]: g["name"]["en"] for g in taxonomy["groups"]}
     width = max(len(n) for n in names.values())
-    print(f"{'contenido'.ljust(width)}  easy  medium  hard  total")
+    print(f"{'topic'.ljust(width)}  easy  medium  hard  total")
     for gid, name in names.items():
         counts = Counter(q["level"] for q in questions if group_of.get(q["area"]) == gid)
         row = "  ".join(str(counts[lvl]).rjust(len(lvl)) for lvl in LEVELS)
         print(f"{name.ljust(width)}  {row}  {str(sum(counts.values())).rjust(5)}")
     empty = sorted(set(group_of) - {q["area"] for q in questions})
     if empty:
-        print(f"\nÁreas sin preguntas: {', '.join(empty)}")
+        print(f"\nAreas without questions: {', '.join(empty)}")
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Valida el banco de preguntas.")
-    parser.add_argument("--publish", action="store_true", help="falla si queda algún borrador sin revisar")
+    parser = argparse.ArgumentParser(description="Validates the question bank.")
+    parser.add_argument("--publish", action="store_true", help="fail if any unreviewed draft is left")
     args = parser.parse_args()
 
     errors, warnings, drafts, questions = [], [], [], []
@@ -271,12 +271,12 @@ def main():
         total_bytes += path.stat().st_size
         data = load_json(path)
         if not isinstance(data, list):
-            errors.append(f"{path.name}: debe contener una lista de preguntas")
+            errors.append(f"{path.name}: must contain a list of questions")
             continue
         for i, q in enumerate(data):
             schema_errors = list(validator.iter_errors(q))
             for e in schema_errors:
-                location = "/".join(str(p) for p in e.path) or "(raíz)"
+                location = "/".join(str(p) for p in e.path) or "(root)"
                 errors.append(f"{path.name}[{i}] {q.get('id', '?')}: {location}: {e.message}")
             if schema_errors:
                 continue
@@ -286,15 +286,15 @@ def main():
             questions.append(q)
 
     if args.publish and drafts:
-        errors.append(f"{len(drafts)} borradores sin revisar: {', '.join(drafts)}")
+        errors.append(f"{len(drafts)} unreviewed drafts: {', '.join(drafts)}")
 
     print_summary(questions, taxonomy, group_of, total_bytes, drafts)
     for w in warnings:
-        print(f"AVISO  {w}")
+        print(f"WARNING  {w}")
     for e in errors:
         print(f"ERROR  {e}")
     print()
-    print("OK" if not errors else f"{len(errors)} errores")
+    print("OK" if not errors else f"{len(errors)} error{'s' if len(errors) > 1 else ''}")
     sys.exit(1 if errors else 0)
 
 

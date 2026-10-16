@@ -96,7 +96,7 @@ Las preguntas siguen las pautas de Haladyna, Downing y Rodriguez (2002), una rev
 
 Además, el resumen del validador muestra en qué porcentaje del banco la correcta es la alternativa más larga y en cuál es la más corta. Con cuatro alternativas, lo esperable al azar es cerca de 25% en cada caso; una cifra muy alta en «más larga» es una pista que se aprende aunque cada pregunta pase la regla de 1,2 veces. En la revisión de octubre de 2026 bajó de 46% a 20% en inglés.
 
-**La verificación con otro modelo revisa** lo que depende del significado ([`prompts/verificar.md`](prompts/verificar.md)):
+**La verificación con otro modelo revisa** lo que depende del significado ([`prompts/review.md`](prompts/review.md)):
 
 - **Pistas en las alternativas (paso 0):** el modelo ve solo las alternativas, sin el enunciado, y apuesta por una. Si acierta con confianza en dos órdenes distintos, la redacción delata la respuesta y se reescribe.
 - **Homogeneidad:** las alternativas tratan el mismo tipo de contenido con la misma forma gramatical, ninguna se traslapa con otra y no hay pares de opuestos exactos.
@@ -273,9 +273,9 @@ Para las estadísticas basta guardar `(id, versión, alternativa elegida, aciert
 ## 10. Cómo producir muchas preguntas
 
 1. **Elegir una celda** (área × nivel) con pocas preguntas; el resumen de `scripts/validate.py` muestra la tabla.
-2. **Generar un lote** con [`prompts/generar.md`](prompts/generar.md). El prompt pide cada pregunta en inglés y en español, con su nivel de Bloom y siguiendo las reglas de redacción. Todo lo generado entra como `llm_draft`.
+2. **Generar un lote** con [`prompts/generate.md`](prompts/generate.md). El prompt pide cada pregunta en inglés y en español, con su nivel de Bloom y siguiendo las reglas de redacción. Todo lo generado entra como `llm_draft`.
 3. **Validar** con `python scripts/validate.py`: el esquema, las reglas de redacción de la sección 5 y que la rúbrica calce con el nivel.
-4. **Verificar con otro modelo** usando [`prompts/verificar.md`](prompts/verificar.md), en tres pasos: ver solo las alternativas (busca pistas), responder sin ver la clave, y auditar con la clave (hechos, fuentes, reglas de redacción, Bloom, rúbrica y traducción). Se reescribe o descarta toda pregunta con una pista, donde no coincida con la clave, donde dos alternativas sean defendibles o donde la explicación tenga un error.
+4. **Verificar con otro modelo** usando [`prompts/review.md`](prompts/review.md), en tres pasos: ver solo las alternativas (busca pistas), responder sin ver la clave, y auditar con la clave (hechos, fuentes, reglas de redacción, Bloom, rúbrica y traducción). Se reescribe o descarta toda pregunta con una pista, donde no coincida con la clave, donde dos alternativas sean defendibles o donde la explicación tenga un error.
 5. **Revisar a mano** todas las difíciles, todas las de nicho y una muestra de las demás, incluida su versión en español. Al aprobar, `origin` pasa a `llm_reviewed`.
 6. **Publicar** cuando `python scripts/validate.py --publish` pasa sin errores.
 7. **Mantener:** el validador avisa cuando vence un `review_by`; los reportes de errores entran como issues.
@@ -424,6 +424,7 @@ El sitio cuenta visitas con Cloudflare Web Analytics: el script `beacon.min.js` 
 - **Preguntas.** El inglés es obligatorio y el español opcional; si una pregunta no tiene español, se muestra en inglés. El resumen del validador cuenta cuántas preguntas tiene cada idioma.
 - **Interfaz.** Los textos están en `STRINGS`, en `site/app.js`, uno por idioma. Agregar otro idioma es agregarlo a `CONFIG.languages`, a `STRINGS`, al esquema y a las preguntas.
 - **Este documento.** `README.md` (inglés) y `README.es.md` (español) dicen lo mismo; un cambio en uno va también en el otro.
+- **Código y herramientas.** Los scripts, los comentarios, los prompts, el esquema y los mensajes de commit están en inglés. El español queda para el contenido: las preguntas, los textos de la interfaz y `README.es.md`.
 
 Strange Machines y ml-toy-experiments están en inglés, lo que favorece al inglés por alcance; el español tiene menos competencia y queda disponible para el público de Chile y Latinoamérica.
 
@@ -445,8 +446,8 @@ questions/<área>.json        las preguntas, un archivo por área
 scripts/validate.py          valida el banco, las reglas de redacción y la cobertura (pip install jsonschema)
 scripts/build_site.py        genera site/data, site/precache.json y la versión del service worker
 scripts/make_assets.py       genera los íconos y og-image.png (pip install playwright)
-prompts/generar.md           prompt para generar lotes de preguntas
-prompts/verificar.md         prompt para verificar preguntas con otro modelo
+prompts/generate.md          prompt para generar lotes de preguntas (en inglés)
+prompts/review.md            prompt para verificar preguntas con otro modelo (en inglés)
 site/index.html              la página y las etiquetas para compartir
 site/styles.css, fonts.css   estilos y fuentes
 site/app.js                  la lógica del quiz; CONFIG y los textos (STRINGS) al inicio
