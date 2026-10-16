@@ -54,7 +54,7 @@ Enunciado:
 Alternativas:
 
 5. Exactamente una correcta. Ningún experto debería poder defender otra.
-6. Todas homogéneas en contenido y en estructura gramatical, y de largo parecido. La correcta no puede ser la más larga, la más matizada ni la única con una justificación.
+6. Todas homogéneas en contenido y en estructura gramatical, y de largo parecido. La correcta no puede destacar por ser la más larga, la más matizada ni la única con una justificación. En el lote, la correcta debe ser la más larga solo en cerca de una de cada cuatro preguntas, y la más corta en otra cuarta parte, como pasaría al azar.
 7. Sin absolutos (siempre, nunca, completamente, en todos los casos): delatan a las falsas.
 8. Nada de "todas las anteriores", "ninguna de las anteriores" ni combinaciones como "A y B".
 9. Cada distractor es un error que alguien comete de verdad: una confusión conocida, un paso mal hecho, una idea que fue cierta antes. Nada absurdo ni de relleno.

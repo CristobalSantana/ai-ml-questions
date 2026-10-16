@@ -67,7 +67,7 @@ Review this multiple-choice question, which includes the correct answer and the 
 {{pregunta_completa_en_json}}
 
 1. Check, claim by claim, that the marked answer is correct, that every `rationale` is true, that the `explanation` has no factual errors, and that the cited sources exist and support what is claimed. Do not assume a source exists because its title sounds plausible.
-2. Check the item-writing rules of Haladyna, Downing and Rodriguez (2002): the central idea is in the stem; the stem is positive; options are homogeneous in content and grammar and similar in length; the correct option is not the longest or most qualified; there are no absolutes (always, never), no "all/none of the above", no overlapping options and no pair of exact opposites; every distractor is a plausible, real mistake.
+2. Check the item-writing rules of Haladyna, Downing and Rodriguez (2002): the central idea is in the stem; the stem is positive; options are homogeneous in content and grammar and similar in length; the correct option does not stand out as the longest or most qualified; there are no absolutes (always, never), no "all/none of the above", no overlapping options and no pair of exact opposites; every distractor is a plausible, real mistake.
 3. Score difficulty with this rubric, from 0 to 2 per criterion, without looking at the question's `difficulty` field:
 
 | Criterion | 0 | 1 | 2 |
