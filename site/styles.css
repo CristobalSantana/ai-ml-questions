@@ -135,7 +135,8 @@ code { font-family: var(--font-mono); font-size: 0.9em; }
 
 main { flex: 1; min-width: 0; }
 .screen { display: grid; gap: 2rem; min-width: 0; }
-.status { margin: 0; color: var(--muted); }
+/* While the questions load, the line fills the screen so the footer does not jump down when they arrive. */
+.status { margin: 0; color: var(--muted); min-height: 100vh; min-height: 100svh; }
 
 .masthead {
   display: flex;

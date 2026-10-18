@@ -2,8 +2,9 @@
 """Builds the site's data from the question bank.
 
 Writes to site/data/ the taxonomy, an index with the counts per area and level, and one
-minified file of questions per area. It also writes site/precache.json (what the service worker
-stores to work offline) and updates the version in site/sw.js.
+minified file of questions per area. It also writes the number of questions and topics into
+site/index.html (so the header does not change size when the data arrives), site/precache.json
+(what the service worker stores to work offline) and the version in site/sw.js.
 
 Usage:
     python scripts/build_site.py                  # reviewed questions only (human, llm_reviewed)
@@ -82,7 +83,19 @@ def build_data(include_drafts):
         "files": files,
     }
     write_json(DATA / "index.json", index)
-    return total, len(counts)
+    topics = sum(any(area in counts for area in group["areas"]) for group in taxonomy["groups"])
+    return total, len(counts), topics
+
+
+def write_bank_size(total, topics):
+    """Puts the counts in the header of index.html, in English, as app.js shows them (bankSize)."""
+    page = SITE / "index.html"
+    label = f"{total} {'question' if total == 1 else 'questions'} · {topics} {'topic' if topics == 1 else 'topics'}"
+    span = f'<span class="bank-size" id="bank-size" data-total="{total}" data-topics="{topics}">{label}</span>'
+    text, n = re.subn(r'<span class="bank-size" id="bank-size"[^>]*>[^<]*</span>', span, page.read_text(encoding="utf-8"), count=1)
+    if n != 1:
+        sys.exit('Could not find <span class="bank-size" id="bank-size"> in site/index.html.')
+    page.write_text(text, encoding="utf-8")
 
 
 def write_precache():
@@ -119,9 +132,10 @@ def main():
     args = parser.parse_args()
 
     validate()
-    total, areas = build_data(args.include_drafts)
+    total, areas, topics = build_data(args.include_drafts)
     if total == 0:
         print("WARNING  No publishable questions. Review some, or use --include-drafts to test.")
+    write_bank_size(total, topics)
     files = write_precache()
     version = bump_service_worker(files)
     drafts = " (drafts included)" if args.include_drafts else ""

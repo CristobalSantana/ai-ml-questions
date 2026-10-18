@@ -27,7 +27,7 @@ taxonomy.json                8 topics, 17 areas and 203 subtopics, in English an
 schema/question.schema.json  the format of a question (JSON Schema 2020-12)
 questions/<area>.json        the questions, one file per area
 scripts/validate.py          validates the bank, the writing rules and coverage (pip install jsonschema)
-scripts/build_site.py        generates site/data, site/precache.json and the service worker version
+scripts/build_site.py        generates site/data, the counts in the header, site/precache.json and the service worker version
 scripts/item_stats.py        statistics of each question from an export of the answers
 scripts/make_assets.py       generates the icons and og-image.png (pip install playwright)
 prompts/generate.md          prompt for generating batches of questions

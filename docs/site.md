@@ -62,6 +62,8 @@ LinkedIn builds the link card from the Open Graph tags in `index.html`: the titl
 
 ## Offline and installable
 
+**The page does not move while it loads.** `index.html` preloads the fonts of the first screen, and `fonts.css` uses `font-display: optional`, so text never switches fonts after it appears; on a slow first visit the system font stays until the next visit. `build_site.py` writes the number of questions and topics into the header, and the loading line fills the screen, so neither the header nor the footer jumps when the data arrives. Cloudflare Web Analytics shows the result under Core Web Vitals, as CLS.
+
 With `manifest.webmanifest` and `sw.js`, the site can be installed on a phone and works offline. On the first visit, the service worker stores what `precache.json` lists (the page, the fonts, the icons and every question); after that it answers from what it stored and updates it in the background. `scripts/build_site.py` changes the service worker version whenever a file changes, so browsers download the new files.
 
 ## Languages

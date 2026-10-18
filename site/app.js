@@ -799,7 +799,10 @@ function applyStaticText() {
   $("#kofi-foot").href = CONFIG.kofiUrl;
   $("#github-foot").href = CONFIG.repoUrl;
   $("#github-foot").hidden = !CONFIG.repoUrl;
-  if (bank.total) $("#bank-size").textContent = T.bankSize(bank.total, bank.groups.length);
+  // Before the data arrives, the counts written into index.html by build_site.py keep the header from changing size.
+  const size = $("#bank-size");
+  const total = bank.total || Number(size.dataset.total);
+  if (total) size.textContent = T.bankSize(total, bank.groups.length || Number(size.dataset.topics));
 }
 
 function setLanguage(next, { save = true } = {}) {

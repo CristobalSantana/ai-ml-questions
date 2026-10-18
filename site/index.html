@@ -25,6 +25,13 @@
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="theme-color" content="#F5F6F8" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0F1116" media="(prefers-color-scheme: dark)">
+<!-- The fonts of the first screen, requested at once so the text does not switch fonts, and move, after it appears. -->
+<link rel="preload" href="fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/ibm-plex-sans-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/ibm-plex-sans-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/ibm-plex-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/ibm-plex-mono-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/stix-two-text-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="fonts.css">
 <link rel="stylesheet" href="styles.css">
 <script src="app.js" defer></script>
@@ -40,7 +47,7 @@
       <span class="badge" data-i18n="alpha">alpha</span>
     </div>
     <div class="masthead-side">
-      <span class="bank-size" id="bank-size"></span>
+      <span class="bank-size" id="bank-size" data-total="103" data-topics="8">103 questions · 8 topics</span>
       <div class="lang" role="group" aria-label="Language" data-i18n-aria="language">
         <button type="button" data-lang="en" aria-pressed="true" lang="en">EN</button>
         <button type="button" data-lang="es" aria-pressed="false" lang="es">ES</button>
