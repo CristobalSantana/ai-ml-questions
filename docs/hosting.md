@@ -32,7 +32,7 @@ python scripts/validate.py                    # checks the bank and prints a sum
 python scripts/build_site.py                  # reviewed questions only
 python scripts/build_site.py --include-drafts # drafts too
 python -m http.server 8000 --directory site   # open http://localhost:8000
-python scripts/make_assets.py                 # icons, og-image.png and README screenshots (pip install playwright pillow)
+python scripts/make_assets.py                 # icons, og-image.png, README screenshots, social preview (pip install playwright pillow)
 ```
 
 The service worker only works on `localhost` or over HTTPS. `http.server` serves only files, so each answer the site sends ends in a 501 error in the browser console, which does no harm. To try the Worker as well, `npx wrangler dev` serves the site and the Worker together with a local database ([Statistics](statistics.md#seeing-the-data)).
