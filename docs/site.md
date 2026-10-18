@@ -1,6 +1,6 @@
 # Website
 
-`site/` is a static site: HTML, CSS and JavaScript with no frameworks, with the fonts bundled. Its only external script is Cloudflare Web Analytics ([Hosting](hosting.md#visits)).
+`site/` is a static site: HTML, CSS and JavaScript with no frameworks, with the fonts bundled. Its only external script is Cloudflare Web Analytics ([Hosting](hosting.md#visits)). Each answer is sent anonymously to the site's Worker for the statistics of each question ([Statistics](statistics.md)).
 
 ## Quiz rules
 
@@ -13,6 +13,7 @@
 - **Long quizzes:** 200 questions take about 2 to 3 hours, so progress is saved in the browser.
 - **At the end:** score by topic and level, review of mistakes, a result to share and a Ko-fi button.
 - **On each question:** a link to report a mistake and, for `volatile` questions, the date of the last review.
+- **Answers:** each final answer is sent once, anonymously: in study mode on choosing, in exam mode on moving on. `CONFIG.answersUrl` in `site/app.js` says where; empty stops sending ([Statistics](statistics.md#what-is-recorded)).
 - **Only questions** with `origin` `human` or `llm_reviewed` are published. While the bank is in alpha, drafts are published too ([Hosting](hosting.md#building-and-testing)).
 
 ## Name

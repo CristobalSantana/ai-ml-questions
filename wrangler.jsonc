@@ -1,10 +1,21 @@
-// Cloudflare Workers: publishes the site/ folder as static assets.
+// Cloudflare Workers: publishes the site/ folder as static assets, and worker/index.js handles
+// whatever is not a file, which today is only POST /api/answers (docs/statistics.md).
 // Workers Builds runs `npx wrangler deploy` on every push to main.
 // The name must match the Worker's name in the Cloudflare dashboard.
 {
   "name": "ai-ml-questions",
+  "main": "worker/index.js",
   "compatibility_date": "2025-09-01",
   "assets": {
-    "directory": "./site"
-  }
+    "directory": "./site",
+    "binding": "ASSETS"
+  },
+  // Anonymous answers to each question. migrations/0001_answers.sql creates the table.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "ai-ml-questions",
+      "database_id": "3a7a4bd6-17c5-495a-bbfe-be22e4f6d1b6"
+    }
+  ]
 }

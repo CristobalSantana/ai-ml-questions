@@ -7,6 +7,9 @@ const CONFIG = {
   // Template for reporting mistakes; {title} and {body} are replaced. Empty hides the link.
   reportUrl: "https://github.com/CristobalSantana/ai-ml-questions/issues/new?title={title}&body={body}",
   ogTitle: "How much do you know about AI and machine learning?", // same as og:title in index.html
+  // Where each answer is sent, anonymously, for the statistics of each question; worker/index.js
+  // stores it (docs/statistics.md). Empty stops sending.
+  answersUrl: "api/answers",
   languages: ["en", "es"],
   defaultLanguage: "en",
   counts: [10, 25, 50, 100, 200],
@@ -183,6 +186,7 @@ const esc = (value) =>
   String(value).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 const rich = (value) => esc(value).replace(/`([^`]+)`/g, "<code>$1</code>");
 const areaOf = (id) => id.replace(/-\d{4}$/, "");
+const randomId = () => Array.from(crypto.getRandomValues(new Uint8Array(8)), (b) => b.toString(16).padStart(2, "0")).join("");
 
 function shuffle(list) {
   const out = [...list];
@@ -343,7 +347,7 @@ function refocus(selector) {
 }
 
 /* Quiz */
-let quiz = null; // { v, mode, index, items: [{ id, order, choice }] }
+let quiz = null; // { v, mode, index, sid, items: [{ id, order, choice, first, sent }] }
 let lastResult = null;
 
 const saveQuiz = () => quiz && store.set(KEY.quiz, quiz);
@@ -354,6 +358,30 @@ function markSeen(id) {
   let entries = Object.entries(seen);
   if (entries.length > SEEN_LIMIT) entries = entries.sort((a, b) => b[1] - a[1]).slice(0, SEEN_LIMIT);
   store.set(KEY.seen, Object.fromEntries(entries));
+}
+
+/* Sends a final answer once. Only the quiz's random id, the question, the option chosen, the
+   language, the mode and whether this browser had answered it before travel; the Worker stores
+   no IP address. */
+function sendAnswer(item) {
+  // Offline it waits: in study mode it is tried again on moving on; after that the answer is lost.
+  if (!CONFIG.answersUrl || item.sent || item.choice === null || navigator.onLine === false) return;
+  item.sent = true;
+  const q = bank.questions.get(item.id);
+  const body = JSON.stringify({
+    quiz: quiz.sid,
+    question: q.id,
+    version: q.version,
+    choice: item.choice,
+    lang,
+    mode: quiz.mode,
+    first: item.first === true,
+  });
+  try {
+    if (!navigator.sendBeacon(CONFIG.answersUrl, body)) throw new Error("beacon refused");
+  } catch {
+    fetch(CONFIG.answersUrl, { method: "POST", body, keepalive: true }).catch(() => {});
+  }
 }
 
 /* Spreads the quiz across topic and level, preferring questions not seen recently. */
@@ -381,15 +409,22 @@ function stratifiedSample(pool, n, seen) {
 async function startQuiz({ ids = null, mode = prefs.mode } = {}) {
   const areas = ids ? [...new Set(ids.map(areaOf))] : areasOf(selectedGroups());
   await loadAreas(areas);
+  const seen = store.get(KEY.seen, {});
   let picked;
   if (ids) {
     picked = shuffle(ids.map((id) => bank.questions.get(id)).filter(Boolean));
   } else {
     const pool = [...bank.questions.values()].filter((q) => areas.includes(q.area) && prefs.levels.includes(q.level));
-    picked = stratifiedSample(pool, Math.min(prefs.count, pool.length), store.get(KEY.seen, {}));
+    picked = stratifiedSample(pool, Math.min(prefs.count, pool.length), seen);
   }
   if (!picked.length) return;
-  quiz = { v: 2, mode, index: 0, items: picked.map((q) => ({ id: q.id, order: optionOrder(q), choice: null })) };
+  quiz = {
+    v: 2,
+    mode,
+    index: 0,
+    sid: randomId(),
+    items: picked.map((q) => ({ id: q.id, order: optionOrder(q), choice: null, first: !seen[q.id] })),
+  };
   saveQuiz();
   showScreen("quiz");
   renderQuestion(true);
@@ -484,6 +519,7 @@ function choose(oid) {
   if (quiz.mode === "study" && item.choice !== null) return;
   item.choice = oid;
   markSeen(item.id);
+  if (quiz.mode === "study") sendAnswer(item); // in study mode the first choice is final
   saveQuiz();
   renderQuestion(false);
   if (quiz.mode === "study") announce(verdictText(bank.questions.get(item.id), item));
@@ -493,6 +529,7 @@ function choose(oid) {
 function goNext() {
   const item = quiz.items[quiz.index];
   if (item.choice === null) return;
+  sendAnswer(item); // in exam mode the choice is final on moving on
   if (quiz.index < quiz.items.length - 1) {
     quiz.index++;
     saveQuiz();
@@ -520,13 +557,16 @@ async function resume() {
   if (!saved) return;
   await loadAreas([...new Set(saved.items.map((i) => areaOf(i.id)))]);
   saved.items = saved.items.filter((i) => bank.questions.has(i.id));
+  saved.sid ??= randomId(); // a quiz saved before answers were sent
   for (const item of saved.items) {
+    item.first ??= false;
     // If the question changed since the quiz was saved, its options are laid out again.
     const q = bank.questions.get(item.id);
     const ids = q.options.map((o) => o.id);
     if (item.order.length !== ids.length || !item.order.every((id) => ids.includes(id))) {
       item.order = optionOrder(q);
       item.choice = null;
+      item.sent = false;
     }
   }
   if (!saved.items.length) {

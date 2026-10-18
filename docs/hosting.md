@@ -11,18 +11,18 @@ Where the questions live, how the site is built and published, and how visits ar
 - **Hosting:** Cloudflare (Workers with static assets, or Pages) or GitHub Pages. On Cloudflare, requests for static assets are free and unlimited.
 - **Accepted trade-off:** the answers travel to the browser, so anyone who opens the developer tools can see them. On a practice site without rankings this does not matter: cheating only hurts the cheater.
 
-## When a backend is needed (phase 2)
+## When a backend is needed
 
 | Need | Why | Option |
 |---|---|---|
-| Calibrating difficulty with real data | Right and wrong answers must be stored per question | Cloudflare Worker + D1 |
+| Calibrating difficulty with real data | Right and wrong answers must be stored per question | Cloudflare Worker + D1, in use since October 2026 ([Statistics](statistics.md)) |
 | Reporting mistakes from the site | A form that stores the report | Worker + D1, or no backend: a link that opens a GitHub issue (the current solution) |
 | Rankings or certificates | Answers must be graded on the server so nobody can cheat | Worker + D1 |
 | Accounts and progress across devices | Authentication is needed | Supabase (Postgres and Auth) |
 
 **Recommendation: Cloudflare D1**, because it lives next to the hosting. Its free plan gives 5 million rows read and 100,000 rows written per day, with 5 GB of storage; since September 1, 2026, once the daily limit is reached, queries fail until midnight UTC, which is acceptable for statistics. Supabase's free plan gives 500 MB per project and pauses projects after a week without activity, which complicates a site with sporadic traffic. Firebase offers nothing this project needs.
 
-For statistics it is enough to store `(id, version, chosen option, correct, date)`, with no IP addresses or user identifiers.
+The statistics store, for each answer, the question and its version, the chosen option, whether it was correct, the date, the language, the mode, a random id per quiz and whether it was a first attempt, with no IP addresses or user identifiers ([Statistics](statistics.md#what-is-recorded)).
 
 ## Building and testing
 
@@ -35,13 +35,13 @@ python -m http.server 8000 --directory site   # open http://localhost:8000
 python scripts/make_assets.py                 # icons and og-image.png (pip install playwright)
 ```
 
-The service worker only works on `localhost` or over HTTPS.
+The service worker only works on `localhost` or over HTTPS. `http.server` serves only files, so each answer the site sends ends in a 501 error in the browser console, which does no harm. To try the Worker as well, `npx wrangler dev` serves the site and the Worker together with a local database ([Statistics](statistics.md#seeing-the-data)).
 
 Before each push that changes questions or the site, regenerate `site/data` and the service worker version. While the questions are still drafts (`llm_draft`), the site is published with `python scripts/build_site.py --include-drafts`; once they are reviewed, without that option.
 
 ## Publishing on Cloudflare
 
-The site is published as a Cloudflare Worker called `ai-ml-questions`, connected to the repository through Workers Builds. [`wrangler.jsonc`](../wrangler.jsonc) tells it to publish the `site/` folder as is, as static files, with no build step, because `site/data` is already generated in the repository.
+The site is published as a Cloudflare Worker called `ai-ml-questions`, connected to the repository through Workers Builds. [`wrangler.jsonc`](../wrangler.jsonc) tells it to publish the `site/` folder as is, as static files, with no build step, because `site/data` is already generated in the repository. Cloudflare serves those files without running any code; only the requests that match no file reach [`worker/index.js`](../worker/index.js), which stores the answers in the D1 database `ai-ml-questions` (the `DB` binding).
 
 - Every push to `main` republishes the site on its own; the status of each deployment is in the Cloudflare dashboard, under the Worker, in the **Deployments** or **Builds** tab.
 - The `name` in `wrangler.jsonc` must match the Worker's name in the dashboard.

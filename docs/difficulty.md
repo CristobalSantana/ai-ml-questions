@@ -61,9 +61,9 @@ The sum goes from 0 to 8: 0–2 is green, 3–5 yellow and 6–8 red.
 - In the model review, a second model estimates Bloom and scores the rubric without seeing what the generator chose. If the sums differ by 2 points or more, the person reviewing decides.
 - All 103 questions are scored, and in every one the rubric matches the level.
 
-## After the fact: Bayesian update (phase 2)
+## After the fact: Bayesian update
 
-Once there are anonymous statistics, each question starts from a Beta prior centered on its band, with mean m = 0.80 (green), 0.55 (yellow) or 0.33 (red) and a weight equivalent to n₀ = 10 answers. If n people then answer it and k get it right, the estimate is:
+The site records each answer anonymously, and [`scripts/item_stats.py`](../scripts/item_stats.py) computes what follows ([Statistics](statistics.md)). Each question starts from a Beta prior centered on its band, with mean m = 0.80 (green), 0.55 (yellow) or 0.33 (red) and a weight equivalent to n₀ = 10 answers. If n people then answer it and k get it right, the estimate is:
 
 ```
 p = (n₀ · m + k) / (n₀ + n)
@@ -72,12 +72,12 @@ p = (n₀ · m + k) / (n₀ + n)
 For example, a red question answered by 40 people, 30 of whom get it right, ends up at p = (3.3 + 30) / 50 ≈ 0.67 and turns yellow.
 
 - **Color change:** when the question has at least 30 answers and p falls in another band, so it does not change because of luck in the first answers.
-- **Review:** if p stays below 0.30 with 30 answers or more, it is close to chance, which often reveals a wrong key or an ambiguous question.
+- **Review:** if p stays less than 5 points above guessing with 30 answers or more (below 0.30 with four options), it is close to chance, which often reveals a wrong key or an ambiguous question.
 - **Recalibrating the rubric:** since the rubric is stored next to the measured level, with enough data a logistic regression of correctness on Bloom and the three criteria can be fitted. That shows which criteria really predict difficulty, and the rubric becomes a model trained on the answers.
 
 ## Discrimination and reliability
 
-- **Discrimination:** whether the people who score better on the rest of the quiz get the question right more often. A point-biserial correlation below 0.10 means the question does not tell levels apart; a negative one usually reveals a wrong key.
+- **Discrimination:** whether the people who score better on the rest of the quiz get the question right more often. A point-biserial correlation below 0.10 means the question does not tell levels apart; a negative one usually reveals a wrong key. Since each quiz draws different questions, the rest of the quiz is scored against what was expected of each question ([Statistics](statistics.md#what-the-script-computes)).
 - **Reliability:** Cronbach's alpha measures the reliability of a fixed test, not the difficulty of a question, and assumes everyone answers the same questions. Since each quiz is drawn at random from the bank, an item response theory model (Rasch or 2PL) fits better. It estimates difficulty and discrimination on a common scale even when each person sees different questions, and its marginal reliability plays the role of alpha.
 
 ## Reference
