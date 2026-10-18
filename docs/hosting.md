@@ -47,7 +47,7 @@ The site is published as a Cloudflare Worker called `ai-ml-questions`, connected
 - The `name` in `wrangler.jsonc` must match the Worker's name in the dashboard.
 - The public address is https://ai-ml-questions.strangemachines.workers.dev/. If it changes, or if a custom domain is added under **Domains & Routes**, update `CONFIG.siteUrl` in `site/app.js` and the `og:url` and `og:image` tags in `site/index.html`, because LinkedIn needs absolute URLs.
 
-`CONFIG` in `site/app.js` also holds the Ko-fi page (`kofiUrl`) and the link for reporting mistakes (`reportUrl`), which opens an issue in the repository.
+`CONFIG` in `site/app.js` also holds the Ko-fi page (`kofiUrl`), the repository linked from the footer (`repoUrl`) and the link for reporting mistakes (`reportUrl`), which opens an issue in the repository. The repository's "Sponsor" button comes from [`.github/FUNDING.yml`](../.github/FUNDING.yml) and appears once Sponsorships is enabled in the repository's Settings → General → Features.
 
 ## Visits
 

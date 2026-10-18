@@ -97,6 +97,7 @@ Only questions with at least 30 answers are flagged (`--min-n` changes the numbe
 - **First attempts are per browser:** a person who uses two devices answers for the first time twice.
 - **Study mode** shows explanations along the way, which can help with later questions in the same quiz. The JSON splits p by mode to check whether that matters.
 - **Versions:** the Worker only accepts answers to the current version, and the script analyzes only that one. Answers to older versions stay in the table.
+- **Order:** since October 18, 2026, each quiz goes from easiest to hardest. A question's place in the quiz now depends on its level, and the people who leave early only answer easy questions.
 
 ## Next steps
 

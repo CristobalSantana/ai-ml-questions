@@ -7,11 +7,13 @@
 - **Count:** 10, 25, 50, 100 or 200 questions. If fewer questions match the chosen filters, an "All (N)" option appears.
 - **Filters:** levels and topics. Collection and stability are left for later.
 - **Sampling:** stratified by area and level, so a mixed quiz is not dominated by the area with the most questions. It uses the 17 areas, not the 8 topics, so regrouping topics does not change which questions come up. It never repeats a question within a quiz and avoids recently seen ones (history stored in the browser).
+- **Order:** from easiest to hardest, by level and then by the rubric score, so a quiz warms up instead of opening with a hard question. In the first answers recorded, half of the people who missed their first question left right there. Retrying the mistakes follows the same order.
 - **Shuffled options** in each quiz, except with `keep_order`; that is why the answer is stored by id and not by position. In 500,000 test shuffles, the correct option landed in each position between 24.9% and 25.1% of the time.
 - **Visible difficulty:** each question shows a green, yellow or red dot with the level written next to it, so it does not rely on color alone.
 - **Modes:** study (explanation after each answer) and exam (score and explanations at the end).
 - **Long quizzes:** 200 questions take about 2 to 3 hours, so progress is saved in the browser.
 - **At the end:** score by topic and level, review of mistakes, a result to share and a Ko-fi button.
+- **Footer:** links to Ko-fi and to the repository on GitHub (`CONFIG.kofiUrl` and `CONFIG.repoUrl`).
 - **On each question:** a link to report a mistake and, for `volatile` questions, the date of the last review.
 - **Answers:** each final answer is sent once, anonymously: in study mode on choosing, in exam mode on moving on. `CONFIG.answersUrl` in `site/app.js` says where; empty stops sending ([Statistics](statistics.md#what-is-recorded)).
 - **Only questions** with `origin` `human` or `llm_reviewed` are published. While the bank is in alpha, drafts are published too ([Hosting](hosting.md#building-and-testing)).

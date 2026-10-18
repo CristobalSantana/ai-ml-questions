@@ -6,6 +6,7 @@ const CONFIG = {
   kofiUrl: "https://ko-fi.com/strangemachines", // your Ko-fi page
   // Template for reporting mistakes; {title} and {body} are replaced. Empty hides the link.
   reportUrl: "https://github.com/CristobalSantana/ai-ml-questions/issues/new?title={title}&body={body}",
+  repoUrl: "https://github.com/CristobalSantana/ai-ml-questions", // linked from the footer; empty hides the link
   ogTitle: "How much do you know about AI and machine learning?", // same as og:title in index.html
   // Where each answer is sent, anonymously, for the statistics of each question; worker/index.js
   // stores it (docs/statistics.md). Empty stops sending.
@@ -51,6 +52,7 @@ const STRINGS = {
     next: "Next",
     finish: "See results",
     kofiFoot: "☕ Support on Ko-fi",
+    githubFoot: "Open source on GitHub",
     level: { easy: "Easy", medium: "Medium", hard: "Hard" },
     kind: { paper: "Paper", book: "Book", docs: "Docs", post: "Post", experiment: "Experiment", article: "Article" },
     bankSize: (n, t) => `${n} ${n === 1 ? "question" : "questions"} · ${t} ${t === 1 ? "topic" : "topics"}`,
@@ -126,6 +128,7 @@ const STRINGS = {
     next: "Siguiente",
     finish: "Ver resultado",
     kofiFoot: "☕ Apoyar en Ko-fi",
+    githubFoot: "Código abierto en GitHub",
     level: { easy: "Fácil", medium: "Medio", hard: "Difícil" },
     kind: { paper: "Paper", book: "Libro", docs: "Docs", post: "Post", experiment: "Experimento", article: "Artículo" },
     bankSize: (n, t) => `${n} ${n === 1 ? "pregunta" : "preguntas"} · ${t} ${t === 1 ? "contenido" : "contenidos"}`,
@@ -384,6 +387,14 @@ function sendAnswer(item) {
   }
 }
 
+/* Easiest first: by level, then by the rubric score (0 to 8, docs/difficulty.md). A quiz that opens
+   with a hard question loses most people at the first mistake. Ties keep a random order. */
+const LEVEL_RANK = { easy: 0, medium: 1, hard: 2 };
+const BLOOM_SCORE = { remember: 0, understand: 0, apply: 1, analyze: 2, evaluate: 2 };
+const rubricScore = (q) => (BLOOM_SCORE[q.bloom] ?? 0) + Object.values(q.difficulty ?? {}).reduce((sum, x) => sum + x, 0);
+const easiestFirst = (list) =>
+  shuffle(list).sort((a, b) => LEVEL_RANK[a.level] - LEVEL_RANK[b.level] || rubricScore(a) - rubricScore(b));
+
 /* Spreads the quiz across topic and level, preferring questions not seen recently. */
 function stratifiedSample(pool, n, seen) {
   const groups = new Map();
@@ -403,7 +414,7 @@ function stratifiedSample(pool, n, seen) {
       else queues.splice(i, 1);
     }
   }
-  return shuffle(out);
+  return easiestFirst(out);
 }
 
 async function startQuiz({ ids = null, mode = prefs.mode } = {}) {
@@ -412,7 +423,7 @@ async function startQuiz({ ids = null, mode = prefs.mode } = {}) {
   const seen = store.get(KEY.seen, {});
   let picked;
   if (ids) {
-    picked = shuffle(ids.map((id) => bank.questions.get(id)).filter(Boolean));
+    picked = easiestFirst(ids.map((id) => bank.questions.get(id)).filter(Boolean));
   } else {
     const pool = [...bank.questions.values()].filter((q) => areas.includes(q.area) && prefs.levels.includes(q.level));
     picked = stratifiedSample(pool, Math.min(prefs.count, pool.length), seen);
@@ -786,6 +797,8 @@ function applyStaticText() {
   for (const button of document.querySelectorAll("[data-lang]")) button.setAttribute("aria-pressed", String(button.dataset.lang === lang));
   $("#brand").title = T.home;
   $("#kofi-foot").href = CONFIG.kofiUrl;
+  $("#github-foot").href = CONFIG.repoUrl;
+  $("#github-foot").hidden = !CONFIG.repoUrl;
   if (bank.total) $("#bank-size").textContent = T.bankSize(bank.total, bank.groups.length);
 }
 
