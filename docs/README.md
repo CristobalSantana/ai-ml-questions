@@ -18,7 +18,9 @@ The specification of [AI/ML Questions](../README.md): what the question bank con
 
 ```
 README.md, README.es.md      short introduction, in English and Spanish
+CONTRIBUTING.md              how to report mistakes, review questions and propose new ones
 docs/                        this documentation
+docs/images/                 the screenshots in the READMEs, made by scripts/make_assets.py
 LICENSE, LICENSE-QUESTIONS   licenses for the code (MIT) and the questions (CC BY-SA 4.0)
 wrangler.jsonc               configuration of the Cloudflare Worker: publishes site/ and binds the D1 database
 worker/index.js              the Worker's code: stores each answer, anonymously
@@ -29,7 +31,7 @@ questions/<area>.json        the questions, one file per area
 scripts/validate.py          validates the bank, the writing rules and coverage (pip install jsonschema)
 scripts/build_site.py        generates site/data, the counts in the header, site/precache.json and the service worker version
 scripts/item_stats.py        statistics of each question from an export of the answers
-scripts/make_assets.py       generates the icons and og-image.png (pip install playwright)
+scripts/make_assets.py       generates the icons, og-image.png and the README screenshots (pip install playwright pillow)
 prompts/generate.md          prompt for generating batches of questions
 prompts/review.md            prompt for reviewing questions with another model
 prompts/*.es.md              the same two prompts in Spanish, the language they were first written in

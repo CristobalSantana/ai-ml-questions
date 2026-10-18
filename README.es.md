@@ -6,9 +6,16 @@ Preguntas de opción múltiple gratuitas para aprender inteligencia artificial y
 
 **Pruébalo: https://ai-ml-questions.strangemachines.workers.dev/#es**
 
-- 103 preguntas en inglés y en español, en 8 contenidos y tres niveles.
-- Modo estudio, con la explicación después de cada respuesta, o modo examen, con el resultado al final.
-- Sin cuenta y sin cookies. Las respuestas se registran de forma anónima para mejorar las preguntas ([detalle](docs/statistics.md), en inglés). Una vez cargado funciona sin conexión, y se puede instalar en el teléfono.
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/question-es-dark.png">
+  <img src="docs/images/question-es-light.png" width="600" alt="Una pregunta de nivel medio sobre la temperatura de muestreo, respondida en modo estudio. La alternativa elegida, 0,73, aparece marcada como incorrecta y 0,98 como correcta; bajo cada alternativa, una línea explica por qué, y después vienen la explicación y la fuente.">
+</picture>
+
+- **103 preguntas en inglés y en español**, en 8 contenidos y tres niveles. El modo estudio muestra la explicación después de cada respuesta; el modo examen, el resultado al final.
+- **La respuesta no se nota en la redacción.** Las preguntas siguen las reglas de redacción de Haladyna, y un validador las revisa: por ejemplo, avisa cuando la alternativa correcta es bastante más larga que las demás.
+- **Medidas con respuestas reales.** Las respuestas se registran de forma anónima y sin cookies; cuando una pregunta reúne suficientes, muestran su dificultad real y qué distractores no engañan a nadie ([detalle](docs/statistics.md), en inglés).
+- **Preguntas abiertas.** Son archivos JSON con un esquema, bajo CC BY-SA 4.0, así que puedes reutilizarlas en un curso, en tarjetas de estudio o en tu propia app.
+- **Sin cuenta.** Una vez cargado funciona sin conexión, y se puede instalar en el teléfono.
 
 **Versión alfa.** Las preguntas son borradores que todavía no revisa una persona. Si encuentras un error, usa el enlace «Reportar un error» bajo la pregunta o [abre un issue](https://github.com/CristobalSantana/ai-ml-questions/issues).
 
@@ -27,7 +34,17 @@ Preguntas de opción múltiple gratuitas para aprender inteligencia artificial y
 
 ## Cómo se hacen las preguntas
 
-Cada pregunta sigue reglas de redacción que evitan que la respuesta se note en cómo está escrita, declara su nivel en la taxonomía de Bloom y recibe una dificultad estimada con una rúbrica. Un validador revisa el formato y las reglas, y un segundo modelo revisa los hechos, las fuentes y la traducción antes de que una persona apruebe la pregunta. Cuando una pregunta junta suficientes respuestas, estas muestran su dificultad real, si distingue a quienes saben más y qué distractores no engañan a nadie. El detalle está en [`docs/`](docs/README.md), en inglés.
+Cada pregunta declara su nivel en la taxonomía de Bloom y recibe una dificultad estimada con una rúbrica. Un validador revisa el formato y las reglas de redacción, y un segundo modelo revisa los hechos, las fuentes y la traducción antes de que una persona apruebe la pregunta. Cuando una pregunta reúne suficientes respuestas, estas también muestran si distingue a quienes saben más. El detalle está en [`docs/`](docs/README.md), en inglés.
+
+## Cómo aportar
+
+Lo que más sirve ahora es revisar preguntas, porque una persona todavía no las ha revisado todas:
+
+- **Reporta un error** con el enlace bajo cada pregunta, o [abre un issue](https://github.com/CristobalSantana/ai-ml-questions/issues).
+- **Revisa las preguntas de un área que conozcas:** la respuesta correcta, las explicaciones y las fuentes.
+- **Mejora el español** o **propón preguntas nuevas**.
+
+[CONTRIBUTING.md](CONTRIBUTING.md) explica cómo, en inglés. Puedes escribir los issues y pull requests en español.
 
 ## Probarlo en tu computadora
 
@@ -55,4 +72,4 @@ python -m http.server 8000 --directory site   # luego abre http://localhost:8000
 
 Las preguntas están bajo [CC BY-SA 4.0](LICENSE-QUESTIONS): puedes reutilizarlas si citas la fuente y compartes con la misma licencia. El código está bajo [MIT](LICENSE), y las fuentes tipográficas bajo la SIL Open Font License.
 
-Si el sitio te sirve, puedes apoyarlo en [Ko-fi](https://ko-fi.com/strangemachines).
+Si el sitio te sirve, una estrella en GitHub ayuda a que más personas lo encuentren. También puedes apoyarlo en [Ko-fi](https://ko-fi.com/strangemachines).

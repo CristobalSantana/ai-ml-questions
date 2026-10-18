@@ -1,19 +1,34 @@
-"""Generates the PWA icons and the share image (og-image.png) with Chromium.
+"""Generates the PWA icons, the share image (og-image.png) and the screenshots in the READMEs, with Chromium.
 
 Usage:    python scripts/make_assets.py [site folder, site/ by default]
-Requires: pip install playwright && playwright install chromium
+Requires: pip install playwright pillow && playwright install chromium
 
 If you change the site's name or headline, edit NAME, HEADLINE and SUBTITLE and run it again.
 Then run scripts/build_site.py so the service worker picks up the new image.
+
+The screenshots show SCREENSHOT_QUESTION answered in study mode, in English and Spanish, in light
+and dark, and go to docs/images/. They are taken from the site as it is in the site folder, so
+build its data first, and run this again when that question changes.
 """
+import functools
+import json
 import sys
+import threading
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
+from PIL import Image
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE = (Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "site").resolve()
 ICONS = SITE / "icons"
+IMAGES = ROOT / "docs" / "images"
+
+# The question in the READMEs, answered with a wrong option so that both marks show.
+SCREENSHOT_QUESTION = "llm-0008"
+SCREENSHOT_CHOICE = "b"
+SCREENSHOT_WIDTH = 760
 
 NAME = "AI/ML Questions"
 HEADLINE = "How much do you know about AI and machine learning?"
@@ -78,6 +93,83 @@ OG_HTML = f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 </body></html>"""
 
 
+class QuietHandler(SimpleHTTPRequestHandler):
+    def log_message(self, *args):
+        pass
+
+
+def screenshot_quiz():
+    """A saved study quiz of 10 questions, stopped at the 5th: SCREENSHOT_QUESTION, already answered."""
+    index = json.loads((SITE / "data" / "index.json").read_text(encoding="utf-8"))
+    questions = {
+        q["id"]: q for path in index["files"] for q in json.loads((SITE / path).read_text(encoding="utf-8"))
+    }
+    if SCREENSHOT_QUESTION not in questions:
+        return None
+    others = sorted(set(questions) - {SCREENSHOT_QUESTION})[:9]
+    items = []
+    for n, qid in enumerate(others[:4] + [SCREENSHOT_QUESTION] + others[4:]):
+        q = questions[qid]
+        choice = SCREENSHOT_CHOICE if qid == SCREENSHOT_QUESTION else q["answer"][0] if n < 4 else None
+        items.append({"id": qid, "order": [o["id"] for o in q["options"]], "choice": choice, "first": False, "sent": True})
+    return {"v": 2, "mode": "study", "index": 4, "sid": "0" * 16, "items": items}
+
+
+def make_screenshots(browser):
+    """Takes the screenshots from a local copy of the site. The quiz is saved already answered and
+    is only resumed, so no answer is sent anywhere."""
+    quiz = screenshot_quiz()
+    if quiz is None:
+        print(f"Skipped the screenshots: {SCREENSHOT_QUESTION} is not in site/data (run scripts/build_site.py).")
+        return []
+    IMAGES.mkdir(parents=True, exist_ok=True)
+    server = ThreadingHTTPServer(("127.0.0.1", 0), functools.partial(QuietHandler, directory=str(SITE)))
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+    base = f"http://127.0.0.1:{server.server_port}/"
+    saved = json.dumps(json.dumps(quiz))
+    paths = []
+    try:
+        for lang in ("en", "es"):
+            for scheme in ("light", "dark"):
+                context = browser.new_context(
+                    viewport={"width": SCREENSHOT_WIDTH, "height": 900},
+                    device_scale_factor=2,
+                    color_scheme=scheme,
+                    service_workers="block",
+                )
+                # Without this, Cloudflare Web Analytics would count each screenshot as a visit.
+                context.route(
+                    "**/*",
+                    lambda route: route.abort() if "cloudflareinsights" in route.request.url else route.continue_(),
+                )
+                context.add_init_script(f"localStorage.setItem('aiml:quiz', {saved});")
+                page = context.new_page()
+                # The fonts use font-display: optional, so a first visit may keep the fallback
+                # font; on the reload they come from the cache.
+                page.goto(f"{base}#{lang}")
+                page.wait_for_selector("#resume-go", state="visible")
+                page.reload()
+                page.wait_for_selector("#resume-go", state="visible")
+                page.click("#resume-go")
+                page.wait_for_selector(".feedback")
+                page.evaluate("document.fonts.ready")
+                foot = page.locator(".q-foot").bounding_box()
+                path = IMAGES / f"question-{lang}-{scheme}.png"
+                page.screenshot(
+                    path=str(path),
+                    full_page=True,
+                    clip={"x": 0, "y": 0, "width": SCREENSHOT_WIDTH, "height": foot["y"] + foot["height"] + 32},
+                )
+                context.close()
+                # 256 colors are enough for the interface and make the file about three times smaller.
+                image = Image.open(path).convert("RGB")
+                image.quantize(256, method=Image.Quantize.FASTOCTREE, dither=Image.Dither.NONE).save(path, optimize=True)
+                paths.append(path)
+    finally:
+        server.shutdown()
+    return paths
+
+
 def main():
     ICONS.mkdir(exist_ok=True)
     (ICONS / "icon.svg").write_text(icon_svg(False) + "\n", encoding="utf-8")
@@ -105,11 +197,14 @@ def main():
             page.screenshot(path=str(SITE / "og-image.png"))
         finally:
             og_path.unlink(missing_ok=True)
+        screenshots = make_screenshots(browser)
         browser.close()
     print("fonts in the og image:", sorted(set(loaded)))
     for f in sorted(ICONS.iterdir()):
         print(f"icons/{f.name}", f.stat().st_size, "B")
     print("og-image.png", (SITE / "og-image.png").stat().st_size, "B")
+    for path in screenshots:
+        print(path.relative_to(ROOT).as_posix(), path.stat().st_size, "B")
 
 
 if __name__ == "__main__":

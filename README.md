@@ -6,9 +6,16 @@ Free multiple-choice questions for learning artificial intelligence and machine 
 
 **Try it: https://ai-ml-questions.strangemachines.workers.dev/**
 
-- 103 questions in English and Spanish, in 8 topics and three levels.
-- Study mode, with the explanation after each answer, or exam mode, with the results at the end.
-- No account and no cookies. Answers are recorded anonymously to improve the questions ([details](docs/statistics.md)). Once loaded it works offline, and it can be installed on a phone.
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/question-en-dark.png">
+  <img src="docs/images/question-en-light.png" width="600" alt="A medium question on sampling temperature, answered in study mode. The chosen option, 0.73, is marked wrong and 0.98 right; under each option a line explains why, followed by the explanation and the source.">
+</picture>
+
+- **103 questions in English and Spanish**, in 8 topics and three levels. Study mode shows the explanation after each answer; exam mode, the results at the end.
+- **The answer does not show in the wording.** The questions follow Haladyna's item-writing rules, and a validator checks them: for example, it warns when the correct option is noticeably longer than the others.
+- **Measured with real answers.** Answers are recorded anonymously, with no cookies; once a question has enough of them, they show its real difficulty and which distractors nobody falls for ([details](docs/statistics.md)).
+- **Open questions.** They are JSON files with a schema, under CC BY-SA 4.0, so you can reuse them in a course, in flashcards or in your own app.
+- **No account.** Once loaded it works offline, and it can be installed on a phone.
 
 **Alpha version.** The questions are drafts that a person has not reviewed yet. If you find a mistake, use the "Report a mistake" link under the question or [open an issue](https://github.com/CristobalSantana/ai-ml-questions/issues).
 
@@ -27,7 +34,17 @@ Free multiple-choice questions for learning artificial intelligence and machine 
 
 ## How the questions are made
 
-Each question follows item-writing rules that keep the answer from showing in the wording, states its level in Bloom's taxonomy, and gets an estimated difficulty from a rubric. A validator checks the format and the rules, and a second model checks facts, sources and the translation before a person approves the question. Once a question has enough answers, they show its real difficulty, whether it tells apart people who know more, and which distractors nobody falls for. The details are in [`docs/`](docs/README.md).
+Each question states its level in Bloom's taxonomy and gets an estimated difficulty from a rubric. A validator checks the format and the writing rules, and a second model checks facts, sources and the translation before a person approves the question. Once a question has enough answers, they also show whether it tells apart people who know more. The details are in [`docs/`](docs/README.md).
+
+## Contributing
+
+The most useful help right now is checking questions, because a person has not reviewed them all yet:
+
+- **Report a mistake** with the link under each question, or [open an issue](https://github.com/CristobalSantana/ai-ml-questions/issues).
+- **Review the questions of an area you know:** the key, the explanations and the sources.
+- **Improve the Spanish**, or **propose new questions**.
+
+[CONTRIBUTING.md](CONTRIBUTING.md) explains how. Issues and pull requests can be written in English or Spanish.
 
 ## Run it locally
 
@@ -55,4 +72,4 @@ python -m http.server 8000 --directory site   # then open http://localhost:8000
 
 The questions are under [CC BY-SA 4.0](LICENSE-QUESTIONS): you can reuse them if you credit the source and share under the same license. The code is under [MIT](LICENSE), and the fonts under the SIL Open Font License.
 
-If the site helps you, you can support it on [Ko-fi](https://ko-fi.com/strangemachines).
+If the site helps you, a star on GitHub helps more people find it. You can also support it on [Ko-fi](https://ko-fi.com/strangemachines).
