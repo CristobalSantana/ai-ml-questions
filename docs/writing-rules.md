@@ -17,7 +17,7 @@ The full rules, as given to the model that drafts questions, are in [`prompts/ge
 | The question is phrased positively: no "not" or "except"; no «no», «excepto» or «salvo» | Warning |
 | A `hard` question is `analyze` or `evaluate` | Error |
 
-The validator summary also shows in what share of the bank the correct option is the longest one and in what share it is the shortest. With four options, chance gives about 25% for each; a very high share for "longest" is a clue people learn even when every question passes the 1.2× rule. In the October 2026 review it went down from 46% to 20% in English.
+The validator summary also shows in what share of the bank the correct option is the longest one and in what share it is the shortest. With four options, chance gives about 25% for each; a very high share for "longest" is a clue people learn even when every question passes the 1.2× rule. In the October 2026 review it went down from 49% to 20% in English: from 46 to 19 of the 93 questions whose options are shuffled (questions with `keep_order` are left out).
 
 ## What the model review checks
 
