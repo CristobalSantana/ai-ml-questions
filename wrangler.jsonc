@@ -1,5 +1,6 @@
 // Cloudflare Workers: publishes the site/ folder as static assets, and worker/index.js handles
-// whatever is not a file, which today is only POST /api/answers (docs/statistics.md).
+// whatever is not a file: POST /api/answers (docs/statistics.md), and POST /api/waitlist and
+// /api/interest (docs/waitlist.md).
 // Workers Builds runs `npx wrangler deploy` on every push to main.
 // The name must match the Worker's name in the Cloudflare dashboard.
 {
@@ -10,12 +11,20 @@
     "directory": "./site",
     "binding": "ASSETS"
   },
-  // Anonymous answers to each question. migrations/0001_answers.sql creates the table.
   "d1_databases": [
+    // Anonymous answers to each question. migrations/0001_answers.sql creates the table.
     {
       "binding": "DB",
       "database_name": "ai-ml-questions",
       "database_id": "3a7a4bd6-17c5-495a-bbfe-be22e4f6d1b6"
+    },
+    // The waitlist of the Interview mode: emails, kept apart from the answers.
+    // migrations-waitlist/0001_waitlist.sql creates its tables.
+    {
+      "binding": "WAITLIST",
+      "database_name": "ai-ml-questions-waitlist",
+      "database_id": "2c3f06c2-0357-4dc8-a298-ba878a0b19a1",
+      "migrations_dir": "migrations-waitlist"
     }
   ]
 }

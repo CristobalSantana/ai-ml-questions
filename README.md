@@ -51,7 +51,7 @@ The most useful help right now is checking questions, because a person has not r
 ```bash
 pip install jsonschema pytest
 python scripts/validate.py                    # checks the questions
-python -m pytest tests                        # tests the validator and the updates
+python -m pytest tests                        # tests the validator, the updates and the waitlist script
 python scripts/build_site.py --include-drafts # builds site/data
 python -m http.server 8000 --directory site   # then open http://localhost:8000
 ```
@@ -67,7 +67,7 @@ python -m http.server 8000 --directory site   # then open http://localhost:8000
 | `scripts/` | The validator, the site builder and the statistics of each question |
 | `prompts/` | Prompts for generating and reviewing questions, in English and in their original Spanish |
 | `site/` | The website |
-| `worker/`, `migrations/` | The Cloudflare Worker that stores the anonymous answers, and their table |
+| `worker/`, `migrations/`, `migrations-waitlist/` | The Cloudflare Worker that stores the anonymous answers and the waitlist, and their tables |
 | `docs/` | The full documentation |
 
 ## License

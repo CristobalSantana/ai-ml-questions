@@ -14,7 +14,7 @@
 - **Modes:** study (explanation after each answer) and exam (score and explanations at the end).
 - **Long quizzes:** 200 questions take about 2 to 3 hours, so progress is saved in the browser.
 - **At the end:** score by topic and level, review of mistakes, a result to share and a Ko-fi button.
-- **Footer:** links to Ko-fi and to the repository on GitHub (`CONFIG.kofiUrl` and `CONFIG.repoUrl`).
+- **Footer:** links to Ko-fi, to the repository on GitHub and to the privacy page (`CONFIG.kofiUrl`, `CONFIG.repoUrl` and `CONFIG.privacyUrl`).
 - **On each question:** a link to report a mistake and, for `volatile` questions, the date of the last review.
 - **Answers:** each final answer is sent once, anonymously: in study mode on choosing, in exam mode on moving on. `CONFIG.answersUrl` in `site/app.js` says where; empty stops sending ([Statistics](statistics.md#what-is-recorded)).
 - **Only questions** with `origin` `human` or `llm_reviewed` are published. While the bank is in alpha, drafts are published too ([Hosting](hosting.md#building-and-testing)).
@@ -32,9 +32,9 @@ To end the alpha, delete the `<span class="badge">` from `site/index.html`.
 
 ## Screens
 
-1. **Home:** the name, the language switch (EN/ES) and the site's goal. Then difficulty (the three dots), topics, number of questions and mode, with how many questions are available for those filters. If there is an unfinished quiz, it offers to resume it. Under the start button, the latest [updates](#updates).
+1. **Home:** the name, the language switch (EN/ES) and the site's goal. Then difficulty (the three dots), topics, number of questions and mode, with how many questions are available for those filters. Under the two modes, an "Interview · coming soon" card that opens the [waitlist](waitlist.md). If there is an unfinished quiz, it offers to resume it. Under the start button, the latest [updates](#updates).
 2. **Question:** the dot with the level written next to it, the type of reasoning, the topic and subtopic, the stem, and the options as answer-sheet bubbles. In study mode, answering marks the correct option and shows each option's rationale, the explanation and the sources. On a computer, keys 1 to 4 (or A to D) choose and Enter moves on. The language can be switched mid-quiz without losing progress.
-3. **Results:** score, correct answers by difficulty and by topic, the message to share, Ko-fi and the review of mistakes, with the option to retry only the missed questions.
+3. **Results:** score, correct answers by difficulty and by topic, the invitation to the Interview waitlist, the message to share, Ko-fi and the review of mistakes, with the option to retry only the missed questions.
 
 ## Updates
 
@@ -77,7 +77,7 @@ LinkedIn builds the link card from the Open Graph tags in `index.html`: the titl
 
 **The page does not move while it loads.** `index.html` preloads the fonts of the first screen, and `fonts.css` uses `font-display: optional`, so text never switches fonts after it appears; on a slow first visit the system font stays until the next visit. `build_site.py` writes the number of questions and topics into the header, and the loading line fills the screen, so neither the header nor the footer jumps when the data arrives. Cloudflare Web Analytics shows the result under Core Web Vitals, as CLS.
 
-With `manifest.webmanifest` and `sw.js`, the site can be installed on a phone and works offline. On the first visit, the service worker stores what `precache.json` lists (the page, the fonts, the icons and every question); after that it answers from what it stored and updates it in the background. `scripts/build_site.py` changes the service worker version whenever a file changes, so browsers download the new files.
+With `manifest.webmanifest` and `sw.js`, the site can be installed on a phone and works offline. On the first visit, the service worker stores what `precache.json` lists (the pages, the fonts, the icons and every question); after that it answers from what it stored and updates it in the background. `scripts/build_site.py` changes the service worker version whenever a file changes, so browsers download the new files.
 
 ## Languages
 

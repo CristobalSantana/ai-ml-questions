@@ -104,6 +104,16 @@
               <input type="radio" name="mode" value="exam" id="mode-exam">
               <span><b data-i18n="exam">Exam</b><small data-i18n="examHint">See your score and the explanations at the end.</small></span>
             </label>
+            <!-- Not a mode yet: it opens the waitlist (docs/waitlist.md). Its fields belong to the
+                 form #waitlist-home, outside this one, through their form attribute. -->
+            <div class="mode soon" id="interview">
+              <button type="button" class="soon-head" id="interview-toggle" aria-expanded="false" aria-controls="interview-panel">
+                <span class="soon-title"><b data-i18n="interview">Interview</b><span class="badge" data-i18n="soon">coming soon</span></span>
+                <small data-i18n="interviewHint">Practice for machine learning job interviews.</small>
+                <span class="soon-arrow" aria-hidden="true"></span>
+              </button>
+              <div class="soon-panel" id="interview-panel" hidden></div>
+            </div>
           </div>
         </section>
 
@@ -112,6 +122,7 @@
           <span class="available" id="available"></span>
         </div>
       </form>
+      <form id="waitlist-home" data-waitlist="home" novalidate></form>
 
       <section class="updates" id="updates" aria-labelledby="updates-title" hidden>
         <h2 class="label" id="updates-title" data-i18n="updates">Updates</h2>
@@ -146,6 +157,7 @@
   <footer class="foot">
     <a id="kofi-foot" href="https://ko-fi.com/strangemachines" target="_blank" rel="noopener" data-i18n="kofiFoot">☕ Support on Ko-fi</a>
     <a id="github-foot" href="https://github.com/CristobalSantana/ai-ml-questions" target="_blank" rel="noopener" data-i18n="githubFoot">Open source on GitHub</a>
+    <a id="privacy-foot" href="privacy#en" data-i18n="privacy">Privacy</a>
   </footer>
 </div>
 

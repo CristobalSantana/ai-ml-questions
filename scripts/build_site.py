@@ -144,6 +144,15 @@ def write_bank_size(total, topics):
     page.write_text(text, encoding="utf-8")
 
 
+def served_path(name):
+    """The address Cloudflare serves a file at: pages drop .html (privacy.html is served at privacy)
+    and index.html is ./. Storing the .html address would store a redirect, which the service
+    worker cannot use to answer a navigation."""
+    if name == "index.html":
+        return "./"
+    return name[: -len(".html")] if name.endswith(".html") else name
+
+
 def write_precache():
     files = sorted(
         p.relative_to(SITE).as_posix()
@@ -153,8 +162,9 @@ def write_precache():
         and not p.name.startswith(".")
         and p.suffix != ".txt"
     )
-    write_json(SITE / "precache.json", ["./", *files])
-    return files
+    entries = list(dict.fromkeys(["./", *(served_path(name) for name in files)]))
+    write_json(SITE / "precache.json", entries)
+    return files, len(entries)
 
 
 def bump_service_worker(files):
@@ -182,11 +192,11 @@ def main():
     if total == 0:
         print("WARNING  No publishable questions. Review some, or use --include-drafts to test.")
     write_bank_size(total, topics)
-    files = write_precache()
+    files, entries = write_precache()
     version = bump_service_worker(files)
     drafts = " (drafts included)" if args.include_drafts else ""
     print(f"site/data: {total} questions in {areas} areas{drafts}")
-    print(f"precache.json: {len(files) + 1} entries · service worker version {version}")
+    print(f"precache.json: {entries} entries · service worker version {version}")
 
 
 if __name__ == "__main__":

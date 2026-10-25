@@ -2,6 +2,13 @@
   {
     "date": "2026-10-25",
     "text": {
+      "en": "A waitlist for the upcoming Interview mode, and a privacy page.",
+      "es": "Lista de espera para el modo Entrevista, que viene pronto, y una página de privacidad."
+    }
+  },
+  {
+    "date": "2026-10-25",
+    "text": {
       "en": "Each question shows the type of reasoning it asks for (Bloom's taxonomy) next to the difficulty.",
       "es": "Cada pregunta muestra el tipo de razonamiento que pide (taxonomía de Bloom) al lado de la dificultad."
     }

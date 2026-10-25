@@ -51,7 +51,7 @@ Lo que más sirve ahora es revisar preguntas, porque una persona todavía no las
 ```bash
 pip install jsonschema pytest
 python scripts/validate.py                    # revisa las preguntas
-python -m pytest tests                        # prueba el validador y las actualizaciones
+python -m pytest tests                        # prueba el validador, las actualizaciones y el script de la lista de espera
 python scripts/build_site.py --include-drafts # genera site/data
 python -m http.server 8000 --directory site   # luego abre http://localhost:8000
 ```
@@ -67,7 +67,7 @@ python -m http.server 8000 --directory site   # luego abre http://localhost:8000
 | `scripts/` | El validador, el generador del sitio y las estadísticas de cada pregunta |
 | `prompts/` | Prompts para generar y revisar preguntas, en inglés y en su versión original en español |
 | `site/` | El sitio |
-| `worker/`, `migrations/` | El Worker de Cloudflare que guarda las respuestas anónimas, y su tabla |
+| `worker/`, `migrations/`, `migrations-waitlist/` | El Worker de Cloudflare que guarda las respuestas anónimas y la lista de espera, y sus tablas |
 | `docs/` | La documentación completa, en inglés |
 
 ## Licencia

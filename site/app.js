@@ -11,6 +11,14 @@ const CONFIG = {
   // Where each answer is sent, anonymously, for the statistics of each question; worker/index.js
   // stores it (docs/statistics.md). Empty stops sending.
   answersUrl: "api/answers",
+  // The waitlist of the Interview mode (docs/waitlist.md): where the emails go, where the count of
+  // opened Interview cards goes, and the prices shown, in US$. Empty waitlistUrl hides the card and
+  // the invitation; earlyPrice null shows only the full price.
+  waitlistUrl: "api/waitlist",
+  interestUrl: "api/interest",
+  interviewPrice: 15,
+  earlyPrice: 10,
+  privacyUrl: "privacy", // site/privacy.html; Cloudflare serves pages without .html
   languages: ["en", "es"],
   defaultLanguage: "en",
   counts: [10, 25, 50, 100, 200],
@@ -19,7 +27,15 @@ const CONFIG = {
 const LEVELS = ["easy", "medium", "hard"];
 const LETTERS = "ABCDE";
 const EMOJI = { easy: "🟢", medium: "🟡", hard: "🔴" };
-const KEY = { lang: "aiml:lang", prefs: "aiml:prefs", quiz: "aiml:quiz", seen: "aiml:seen" };
+const KEY = {
+  lang: "aiml:lang",
+  prefs: "aiml:prefs",
+  quiz: "aiml:quiz",
+  seen: "aiml:seen",
+  waitlist: "aiml:waitlist", // this browser signed up: the date, nothing else
+  interest: "aiml:interest", // this browser was already counted as opening the Interview card
+};
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // the same check as the Worker
 const SEEN_LIMIT = 3000;
 const UPDATES_SHOWN = 3; // updates on the home screen, in whole days (at least this many); older ones are folded
 
@@ -57,6 +73,23 @@ const STRINGS = {
     updates: "Updates",
     olderUpdates: (n) => `Earlier updates (${n})`,
     day: (y, m, d) => `${m}/${d}/${y}`,
+    privacy: "Privacy",
+    interview: "Interview",
+    soon: "coming soon",
+    interviewHint: "Practice for machine learning job interviews.",
+    interviewWhat:
+      "Questions like those in an ML interview: debugging models, reading code, production and databases. Every option explains why it is right or wrong.",
+    interviewPrice: (full, early) => `US$${full}, one-time payment.${early ? ` US$${early} if you sign up now.` : ""}`,
+    resultsInterview: "Preparing for an ML interview? Interview mode is coming soon.",
+    emailLabel: "Your email",
+    emailPlaceholder: "you@example.com",
+    notifyMe: "Notify me",
+    waitlistPrivacy: "I will only use your email to tell you when it opens. You can ask me to delete it at any time.",
+    waitlistSending: "Sending…",
+    waitlistDone: "Done. I will write to you once, when it opens.",
+    waitlistJoined: "You are on the list. I will write to you once, when it opens.",
+    waitlistInvalid: "Check the email: it looks incomplete.",
+    waitlistError: "It could not be sent. Check your connection and try again.",
     level: { easy: "Easy", medium: "Medium", hard: "Hard" },
     // The type of reasoning (Bloom's revised taxonomy), shown apart from the difficulty.
     bloom: { remember: "Remember", understand: "Understand", apply: "Apply", analyze: "Analyze", evaluate: "Evaluate" },
@@ -140,6 +173,23 @@ const STRINGS = {
     updates: "Actualizaciones",
     olderUpdates: (n) => `Actualizaciones anteriores (${n})`,
     day: (y, m, d) => `${d}/${m}/${y}`,
+    privacy: "Privacidad",
+    interview: "Entrevista",
+    soon: "próximamente",
+    interviewHint: "Práctica para entrevistas de trabajo en machine learning.",
+    interviewWhat:
+      "Preguntas como las de una entrevista de ML: depurar modelos, leer código, producción y bases de datos. Cada alternativa explica por qué es correcta o incorrecta.",
+    interviewPrice: (full, early) => `US$${full}, pago único.${early ? ` Si te anotas ahora, US$${early}.` : ""}`,
+    resultsInterview: "¿Te preparas para una entrevista de ML? El modo Entrevista viene pronto.",
+    emailLabel: "Tu correo",
+    emailPlaceholder: "tu@correo.com",
+    notifyMe: "Avísame",
+    waitlistPrivacy: "Solo usaré tu correo para avisarte cuando abra. Puedes pedir que lo borre cuando quieras.",
+    waitlistSending: "Enviando…",
+    waitlistDone: "Listo. Te escribiré una vez, cuando abra.",
+    waitlistJoined: "Ya estás en la lista. Te escribiré una vez, cuando abra.",
+    waitlistInvalid: "Revisa el correo: parece incompleto.",
+    waitlistError: "No se pudo enviar. Revisa la conexión e inténtalo de nuevo.",
     level: { easy: "Fácil", medium: "Medio", hard: "Difícil" },
     bloom: { remember: "Recordar", understand: "Comprender", apply: "Aplicar", analyze: "Analizar", evaluate: "Evaluar" },
     bloomLabel: "Razonamiento",
@@ -754,6 +804,8 @@ function renderResults(res) {
       <div class="bars">${topicRows}</div>
     </details>
 
+    ${interviewInvite()}
+
     <section class="panel share" aria-labelledby="r-share">
       <h2 class="label" id="r-share">${T.share}</h2>
       <label class="visually-hidden" for="share-text">${T.shareLabel}</label>
@@ -796,6 +848,111 @@ function finish() {
   showScreen("results");
   window.scrollTo(0, 0);
   $("#results-title").focus({ preventScroll: true });
+}
+
+/* Waitlist of the Interview mode (docs/waitlist.md). The email goes to the Worker and the browser
+   only remembers that it signed up; the reply is the same whether or not the email was already
+   on the list. */
+const joined = () => Boolean(store.get(KEY.waitlist, null));
+const privacyHref = () => `${CONFIG.privacyUrl}#${lang}`;
+
+/* The fields belong to an empty form outside (#waitlist-home, #waitlist-results) through their
+   form attribute, because the home card sits inside the setup form and forms cannot nest. */
+function waitlistFields(place) {
+  const form = `waitlist-${place}`;
+  return `<div class="waitlist-row">
+      <label class="visually-hidden" for="${form}-email">${T.emailLabel}</label>
+      <input type="email" id="${form}-email" name="email" form="${form}" autocomplete="email" inputmode="email" maxlength="254" placeholder="${esc(T.emailPlaceholder)}" required>
+      <button type="submit" class="btn primary" form="${form}">${T.notifyMe}</button>
+    </div>
+    <div class="hp" aria-hidden="true"><label>Website <input type="text" name="website" form="${form}" tabindex="-1" autocomplete="off"></label></div>
+    <p class="hint">${T.waitlistPrivacy} <a href="${esc(privacyHref())}">${T.privacy}</a></p>
+    <p class="waitlist-status" id="${form}-status" role="status"></p>`;
+}
+
+const priceLine = () => T.interviewPrice(CONFIG.interviewPrice, CONFIG.earlyPrice);
+
+function renderInterview() {
+  $("#interview").hidden = !CONFIG.waitlistUrl;
+  const typed = $("#waitlist-home-email")?.value ?? "";
+  $("#interview-panel").innerHTML = joined()
+    ? `<p class="waitlist-done">${T.waitlistJoined}</p>`
+    : `<p>${T.interviewWhat}</p><p class="price">${priceLine()}</p>${waitlistFields("home")}`;
+  const input = $("#waitlist-home-email");
+  if (input) input.value = typed; // switching the language keeps what was typed
+}
+
+/* On the results screen, under the score, unless this browser already signed up. */
+function interviewInvite() {
+  if (!CONFIG.waitlistUrl || joined()) return "";
+  return `<section class="panel invite" id="r-interview" aria-labelledby="r-interview-title">
+      <h2 class="label" id="r-interview-title">${T.interview} · ${T.soon}</h2>
+      <p>${T.resultsInterview} ${priceLine()}</p>
+      <form id="waitlist-results" data-waitlist="results" novalidate></form>
+      ${waitlistFields("results")}
+    </section>`;
+}
+
+function toggleInterview() {
+  const button = $("#interview-toggle");
+  const open = button.getAttribute("aria-expanded") !== "true";
+  button.setAttribute("aria-expanded", String(open));
+  $("#interview-panel").hidden = !open;
+  if (open) countInterest();
+}
+
+/* One count per browser, the first time it opens the Interview card: the language and nothing else. */
+function countInterest() {
+  if (!CONFIG.interestUrl || store.get(KEY.interest, null) || navigator.onLine === false) return;
+  store.set(KEY.interest, new Date().toISOString().slice(0, 10));
+  const body = JSON.stringify({ lang });
+  try {
+    if (!navigator.sendBeacon(CONFIG.interestUrl, body)) throw new Error("beacon refused");
+  } catch {
+    fetch(CONFIG.interestUrl, { method: "POST", body, keepalive: true }).catch(() => {});
+  }
+}
+
+async function joinWaitlist(form) {
+  const place = form.dataset.waitlist;
+  const fields = [...form.elements];
+  const input = fields.find((el) => el.name === "email");
+  const button = fields.find((el) => el.type === "submit");
+  const status = $(`#waitlist-${place}-status`);
+  const email = input.value.trim();
+  if (!EMAIL.test(email) || email.length > 254) {
+    input.setAttribute("aria-invalid", "true");
+    status.textContent = T.waitlistInvalid;
+    input.focus();
+    return;
+  }
+  input.removeAttribute("aria-invalid");
+  button.disabled = true;
+  status.textContent = T.waitlistSending;
+  try {
+    const website = fields.find((el) => el.name === "website")?.value ?? "";
+    const res = await fetch(CONFIG.waitlistUrl, { method: "POST", body: JSON.stringify({ email, lang, place, website }) });
+    if (res.status === 400) {
+      input.setAttribute("aria-invalid", "true");
+      status.textContent = T.waitlistInvalid;
+      button.disabled = false;
+      return;
+    }
+    if (!res.ok) throw new Error(String(res.status));
+  } catch {
+    status.textContent = T.waitlistError;
+    button.disabled = false;
+    return;
+  }
+  store.set(KEY.waitlist, new Date().toISOString().slice(0, 10));
+  const done = `<p class="waitlist-done">${T.waitlistDone}</p>`;
+  if (place === "results") {
+    $("#r-interview").innerHTML = done;
+    renderInterview(); // the home card no longer asks
+  } else {
+    $("#interview-panel").innerHTML = done;
+  }
+  announce(T.waitlistDone);
 }
 
 /* Sharing and notices */
@@ -850,6 +1007,8 @@ function applyStaticText() {
   $("#kofi-foot").href = CONFIG.kofiUrl;
   $("#github-foot").href = CONFIG.repoUrl;
   $("#github-foot").hidden = !CONFIG.repoUrl;
+  $("#privacy-foot").href = privacyHref();
+  renderInterview();
   // Before the data arrives, the counts written into index.html by build_site.py keep the header from changing size.
   const size = $("#bank-size");
   const total = bank.total || Number(size.dataset.total);
@@ -962,6 +1121,15 @@ function wireEvents() {
 
   $("#resume-go").addEventListener("click", resume);
   $("#resume-drop").addEventListener("click", discardQuiz);
+
+  $("#interview-toggle").addEventListener("click", toggleInterview);
+  // The waitlist forms on the home screen and on the results screen.
+  document.addEventListener("submit", (e) => {
+    const form = e.target;
+    if (!(form instanceof HTMLFormElement) || !form.dataset.waitlist) return;
+    e.preventDefault();
+    joinWaitlist(form);
+  });
 
   $("#question").addEventListener("click", (e) => {
     const option = e.target.closest(".option");

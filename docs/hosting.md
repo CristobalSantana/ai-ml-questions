@@ -17,6 +17,7 @@ Where the questions live, how the site is built and published, and how visits ar
 |---|---|---|
 | Calibrating difficulty with real data | Right and wrong answers must be stored per question | Cloudflare Worker + D1, in use since October 2026 ([Statistics](statistics.md)) |
 | Reporting mistakes from the site | A form that stores the report | Worker + D1, or no backend: a link that opens a GitHub issue (the current solution) |
+| Waitlist for a paid mode | Emails must be stored | Worker + a second D1 database, in use since October 2026 ([Waitlist](waitlist.md)) |
 | Rankings or certificates | Answers must be graded on the server so nobody can cheat | Worker + D1 |
 | Accounts and progress across devices | Authentication is needed | Supabase (Postgres and Auth) |
 
@@ -29,7 +30,7 @@ The statistics store, for each answer, the question and its version, the chosen 
 ```bash
 pip install jsonschema pytest
 python scripts/validate.py                    # checks the bank and prints a summary
-python -m pytest tests                        # tests the validator and the updates
+python -m pytest tests                        # tests the validator, the updates and the waitlist script
 python scripts/build_site.py                  # reviewed questions only
 python scripts/build_site.py --include-drafts # drafts too
 python -m http.server 8000 --directory site   # open http://localhost:8000
@@ -42,7 +43,7 @@ Before each push that changes questions or the site, regenerate `site/data` and 
 
 ## Publishing on Cloudflare
 
-The site is published as a Cloudflare Worker called `ai-ml-questions`, connected to the repository through Workers Builds. [`wrangler.jsonc`](../wrangler.jsonc) tells it to publish the `site/` folder as is, as static files, with no build step, because `site/data` is already generated in the repository. Cloudflare serves those files without running any code; only the requests that match no file reach [`worker/index.js`](../worker/index.js), which stores the answers in the D1 database `ai-ml-questions` (the `DB` binding).
+The site is published as a Cloudflare Worker called `ai-ml-questions`, connected to the repository through Workers Builds. [`wrangler.jsonc`](../wrangler.jsonc) tells it to publish the `site/` folder as is, as static files, with no build step, because `site/data` is already generated in the repository. Cloudflare serves those files without running any code; only the requests that match no file reach [`worker/index.js`](../worker/index.js), which stores the answers in the D1 database `ai-ml-questions` (the `DB` binding) and the waitlist in `ai-ml-questions-waitlist` (the `WAITLIST` binding), apart so the answers never sit next to emails.
 
 - Every push to `main` republishes the site on its own; the status of each deployment is in the Cloudflare dashboard, under the Worker, in the **Deployments** or **Builds** tab.
 - The `name` in `wrangler.jsonc` must match the Worker's name in the dashboard.

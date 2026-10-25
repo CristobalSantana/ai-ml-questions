@@ -10,3 +10,7 @@ node_modules/
 answers.sql
 answers.json
 stats.json
+
+# Exports of the waitlist: personal data, never committed (docs/waitlist.md)
+waitlist.sql
+emails.csv
