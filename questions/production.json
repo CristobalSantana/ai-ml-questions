@@ -92,8 +92,8 @@
     "stability": "stable",
     "difficulty": { "steps": 2, "specialization": 1, "distractors": 2 },
     "prompt": {
-      "en": "A model that predicts 30-day hospital readmission reaches an AUC of 0.97 in validation but 0.62 from its first week in production. Its most important feature is the number of follow-up appointments in the patient's record, which the hospital fills in during the weeks after discharge. What is the most likely cause?",
-      "es": "Un modelo que predice el reingreso hospitalario a 30 días logra un AUC de 0,97 en validación pero de 0,62 desde su primera semana en producción. Su variable más importante es el número de consultas de seguimiento registradas en la historia clínica del paciente, que el hospital completa durante las semanas posteriores al alta. ¿Cuál es la causa más probable?"
+      "en": "A model that predicts 30-day hospital readmission reaches an AUC of 0.97 in validation but 0.62 from its first week in production. Its most important feature is the number of follow-up appointments in the patient's record, filled in during the weeks after discharge. What is the most likely cause?",
+      "es": "Un modelo que predice el reingreso hospitalario a 30 días logra un AUC de 0,97 en validación pero de 0,62 desde su primera semana en producción. Su variable más importante es el número de consultas de seguimiento registradas en la historia clínica del paciente, que se completa en las semanas posteriores al alta. ¿Cuál es la causa más probable?"
     },
     "options": [
       {

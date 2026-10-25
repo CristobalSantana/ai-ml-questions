@@ -49,8 +49,9 @@ Lo que más sirve ahora es revisar preguntas, porque una persona todavía no las
 ## Probarlo en tu computadora
 
 ```bash
-pip install jsonschema
+pip install jsonschema pytest
 python scripts/validate.py                    # revisa las preguntas
+python -m pytest tests                        # prueba el validador
 python scripts/build_site.py --include-drafts # genera site/data
 python -m http.server 8000 --directory site   # luego abre http://localhost:8000
 ```

@@ -48,16 +48,16 @@ La suma de la rúbrica más el puntaje de Bloom (`remember` y `understand` 0, `a
 
 Enunciado:
 
-1. La idea central va en el enunciado: quien lo lee debe poder responder sin mirar las alternativas.
+1. La idea central va en el enunciado, que termina con la pregunta misma: quien lo lee debe poder responder sin mirar las alternativas.
 2. Redacta en positivo. Evita "¿cuál NO…?"; si es imprescindible, destaca la negación.
-3. Sin relleno: cada frase del enunciado es necesaria para responder.
+3. Sin relleno: cada frase del enunciado es necesaria para responder. Como máximo 300 caracteres en inglés y 350 en español; el código va en su propio campo, en 15 líneas como máximo.
 4. Si una palabra se repite en todas las alternativas, muévela al enunciado.
 5. El enunciado no debe apuntar a la respuesta. Si el nombre de un método o de un paper delata la alternativa correcta (ResNet y «residual», DDPM y «denoising»), cambia la redacción del enunciado o de las alternativas.
 
 Alternativas:
 
 6. Exactamente una correcta. Ningún experto debería poder defender otra.
-7. Todas homogéneas en contenido y en estructura gramatical, y de largo parecido. La correcta no puede destacar por ser la más larga, la más matizada ni la única con una justificación. En el lote, la correcta debe ser la más larga solo en cerca de una de cada cuatro preguntas, y la más corta en otra cuarta parte, como pasaría al azar.
+7. Todas homogéneas en contenido y en estructura gramatical, de largo parecido y terminadas igual, con o sin punto. Cada una tiene como máximo 150 caracteres en inglés y 170 en español. La correcta no puede destacar por ser la más larga, la más matizada ni la única con una justificación. En el lote, la correcta debe ser la más larga solo en cerca de una de cada cuatro preguntas, y la más corta en otra cuarta parte, como pasaría al azar.
 8. Sin absolutos (siempre, nunca, completamente, en todos los casos): delatan a las falsas.
 9. Nada de "todas las anteriores", "ninguna de las anteriores" ni combinaciones como "A y B".
 10. Cada distractor es un error que alguien comete de verdad: una confusión conocida, un paso mal hecho, una idea que fue cierta antes. Nada absurdo ni de relleno.

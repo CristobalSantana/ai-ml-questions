@@ -10,12 +10,25 @@ The full rules, as given to the model that drafts questions, are in [`prompts/ge
 
 | Rule | Result |
 |---|---|
+| The stem ends with the question itself, a "?" | Error |
+| The stem has at most 300 characters in English and 350 in Spanish | Error |
+| Each option has at most 150 characters in English and 170 in Spanish | Error |
+| Code has at most 15 lines | Error |
 | The correct option is not longer than 1.2 times the distractors' average | Warning |
 | The longest option is at most 2.5 times as long as the shortest | Warning |
 | No option uses absolutes: always, never, completely; siempre, nunca, completamente… | Warning |
 | No option says "all/none of the above" or «todas/ninguna de las anteriores» | Error |
+| No option combines others, such as "A and B": the site shuffles the options | Error |
+| No two options say the same thing | Error |
+| No option is contained in another | Warning |
+| All options end the same way, with or without a period | Warning |
+| With `keep_order`, the numbers in the options are in order | Warning |
 | The question is phrased positively: no "not" or "except"; no «no», «excepto» or «salvo» | Warning |
 | A `hard` question is `analyze` or `evaluate` | Error |
+
+The length limits keep a question readable on a phone: 300 characters are about ten lines on a phone and five on a computer. Spanish gets more room because it runs 10% to 15% longer. Code goes in its own field, which the site shows apart from the stem.
+
+Errors stop a question from being published; warnings point at something to check. GitHub runs the validator and the tests in [`tests/`](../tests/) on every push and pull request: errors make the check fail, and errors and warnings both appear on the line of the question. Each test breaks one rule on purpose to show that the validator catches it.
 
 The validator summary also shows in what share of the bank the correct option is the longest one and in what share it is the shortest. With four options, chance gives about 25% for each; a very high share for "longest" is a clue people learn even when every question passes the 1.2× rule. In the October 2026 review it went down from 49% to 20% in English: from 46 to 19 of the 93 questions whose options are shuffled (questions with `keep_order` are left out).
 
@@ -27,7 +40,7 @@ A second model reviews what depends on meaning ([`prompts/review.md`](../prompts
 - **Homogeneity:** the options cover the same kind of content with the same grammatical form, none overlaps another and there are no pairs of exact opposites.
 - **Plausible distractors:** each one matches a mistake people actually make.
 - **The central idea is in the stem:** the question can be answered without looking at the options.
-- **The stem does not point to the answer:** for example, a question about ResNet whose correct option is the only one that says "residual".
+- **The stem does not point to the answer:** for example, a question about ResNet whose correct option is the only one that says "residual". An automatic check for words of the stem that appear only in the correct option flagged 34 of the 103 questions, almost all for harmless repeats such as "model", so it is left to this review.
 
 ## Also
 

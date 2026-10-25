@@ -44,12 +44,14 @@ Write questions in your own words: do not copy them from books, courses or other
    - **`origin`** of a new question is `human` if you wrote it yourself and `llm_draft` if a model drafted it. Leave it as it is in existing questions; it changes to `llm_reviewed` when a review is approved.
    - **`reviewed_at`** is the date of the last review; update it if you checked the question against its sources. `slow` and `volatile` questions also need a later `review_by`.
    - English is required and Spanish optional, but every text of a question must have the same languages.
-3. Run the validator:
+   - **Length:** the stem has at most 300 characters in English and 350 in Spanish, and each option at most 150 and 170. Code goes in its own field, in at most 15 lines.
+3. Run the checks:
    ```bash
-   pip install jsonschema
+   pip install jsonschema pytest
    python scripts/validate.py
+   python -m pytest tests
    ```
-   It must end without errors. Warnings point at possible problems, such as a clue in the wording; check them.
+   They must end without errors. Warnings point at possible problems, such as a clue in the wording; check them. GitHub runs the same checks on every pull request and shows each problem on the line of the question.
 4. To see your question on the site, follow [Run it locally](README.md#run-it-locally). Commit only your changes to `questions/`: the files that `build_site.py` writes in `site/` are regenerated after merging.
 5. In the pull request, say what you changed and which sources you checked.
 

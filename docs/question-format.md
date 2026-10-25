@@ -28,13 +28,13 @@ For now every question has a single answer (`format: "single"`) with 3 to 5 opti
 | `type`, `format` | The values above. |
 | `stability` | `stable`, `slow` or `volatile` ([Question bank](question-bank.md#target-composition)). |
 | `difficulty` | The up-front rubric: `steps`, `specialization` and `distractors`, from 0 to 2 each ([Difficulty](difficulty.md#up-front-rubric)). |
-| `prompt` | The stem. |
-| `options` | 3 to 5 options, each with `id` (a–e), `text` and `rationale`. |
+| `prompt` | The stem. It ends with the question itself and has at most 300 characters in English and 350 in Spanish. |
+| `options` | 3 to 5 options, each with `id` (a–e), `text` (at most 150 characters in English and 170 in Spanish) and `rationale`. |
 | `keep_order` | Optional. With `true`, the site shows the options in the written order instead of shuffling them. |
 | `answer` | List with the correct ids. |
 | `explanation` | What is shown after answering, with context that does not fit in the options. |
 | `hint` | Optional. |
-| `code` | Required for `code` questions: `lang` and `source`. |
+| `code` | Required for `code` questions: `lang` and `source`, in at most 15 lines. |
 | `sources` | At least one: `kind`, `title` and, when they exist, `authors`, `year`, `url`. |
 | `tags`, `collection` | Optional, for filtering. |
 | `origin` | `human`, `llm_draft` (an unreviewed draft) or `llm_reviewed`. |

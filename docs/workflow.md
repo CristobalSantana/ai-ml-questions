@@ -4,7 +4,7 @@ How questions are produced, checked and published at scale.
 
 1. **Pick a cell** (area × level) with few questions; the summary of `python scripts/validate.py` shows the table by topic and level.
 2. **Generate a batch** with [`prompts/generate.md`](../prompts/generate.md). The prompt asks for each question in English and Spanish, with its Bloom level and following the [writing rules](writing-rules.md) and the [Spanish style](spanish-style.md). Ask for small batches (5 to 10 questions): quality drops in large ones. Everything generated enters as `llm_draft`.
-3. **Validate** with `python scripts/validate.py`: the schema, the writing rules and whether the rubric matches the level ([Difficulty](difficulty.md)).
+3. **Validate** with `python scripts/validate.py`: the schema, the writing rules, the length limits and whether the rubric matches the level ([Difficulty](difficulty.md)). GitHub runs it, with the tests in `tests/`, on every pull request.
 4. **Review with another model** using [`prompts/review.md`](../prompts/review.md), in three steps: look only at the options (to find clues), answer without seeing the key, and audit with the key (facts, sources, writing rules, Bloom, rubric and translation). A question is rewritten or discarded if it has a clue, if the model's answer does not match the key, if two options are defensible or if the explanation has a mistake.
 5. **Review by hand** every hard question, every niche one and a sample of the rest, including the Spanish version. On approval, `origin` becomes `llm_reviewed`.
 6. **Publish** when `python scripts/validate.py --publish` passes without errors, then rebuild the site ([Hosting](hosting.md#building-and-testing)).

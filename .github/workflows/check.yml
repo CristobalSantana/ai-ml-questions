@@ -1,0 +1,28 @@
+# Checks the questions on every push to main and every pull request: the validator (schema,
+# writing rules and length limits) and the tests in tests/. Errors fail the check and appear on the
+# line of the question in the pull request; warnings appear too, without failing it.
+name: Check the questions
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install the dependencies
+        run: pip install jsonschema pytest
+      - name: Validate the questions
+        run: python scripts/validate.py
+      - name: Test the validator
+        if: ${{ !cancelled() }}
+        run: python -m pytest tests

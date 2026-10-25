@@ -6,10 +6,16 @@ Usage:
     python scripts/validate.py --publish  # also fails if any draft is left (origin: llm_draft)
 
 Requires: pip install jsonschema
+
+GitHub runs it on every push and pull request (.github/workflows/check.yml); errors make the
+check fail, and both errors and warnings appear on the line of the question. tests/ checks that
+each rule catches what it should.
 """
 
 import argparse
+import itertools
 import json
+import os
 import re
 import sys
 from collections import Counter
@@ -44,6 +50,17 @@ NEGATIVE_QUESTION = {
     "en": r"\b(not|except)\b",
     "es": r"\b(no|excepto|salvo)\b",
 }
+# An option made only of other options' letters, such as "A and B" or "Both A and C". The site
+# shuffles the options, so the letters would point to the wrong ones.
+COMBINATION = r"^\s*(?:(?i:both|ambas|todas)\s+)?\(?[A-E]\)?(?:\s*,\s*\(?[A-E]\)?)*\s+(?i:and|or|y|e|o|u)\s+\(?[A-E]\)?\.?\s*$"
+# Options shorter than this are not compared for overlap: "0.5" inside "0.55" means nothing.
+MIN_OVERLAP = 12
+
+# Length limits, in characters: a longer stem or option is hard to read on a phone. Spanish runs
+# 10% to 15% longer than English, so it gets more room. Code goes in its own field.
+MAX_PROMPT = {"en": 300, "es": 350}
+MAX_OPTION = {"en": 150, "es": 170}
+MAX_CODE_LINES = 15
 
 
 def rubric_score(q):
@@ -115,9 +132,49 @@ def question_sentence(prompt):
     return questions[-1] if questions else ""
 
 
+def normalized(text):
+    """The words and numbers of a text, in lowercase, to compare options."""
+    return " ".join(re.findall(r"\w+", text.lower()))
+
+
+def first_number(text, lang):
+    """The first number in a text, read with the language's separators: 4,096.5 or 4.096,5."""
+    found = re.search(r"-?\d[\d.,]*", text)
+    if not found:
+        return None
+    digits = found.group(0).rstrip(".,")
+    digits = digits.replace(",", "") if lang == "en" else digits.replace(".", "").replace(",", ".")
+    try:
+        return float(digits)
+    except ValueError:
+        return None
+
+
+def check_options(q, texts, lang, where, errors, warnings):
+    """Options that repeat or overlap, that differ in form, or that break their natural order."""
+    words = {oid: normalized(text) for oid, text in texts.items()}
+    if len(set(words.values())) < len(words):
+        errors.append(f"{where} [{lang}]: two options say the same thing")
+    for a, b in itertools.permutations(words, 2):
+        if len(words[a]) >= MIN_OVERLAP and words[a] != words[b] and f" {words[a]} " in f" {words[b]} ":
+            warnings.append(f"{where} [{lang}]: option {a} is contained in option {b}; options should not overlap")
+    if len({text.rstrip()[-1:] in ".!?" for text in texts.values()}) > 1:
+        warnings.append(f"{where} [{lang}]: some options end with a period and others do not")
+    if q.get("keep_order"):
+        numbers = [first_number(text, lang) for text in texts.values()]
+        if None not in numbers and numbers not in (sorted(numbers), sorted(numbers, reverse=True)):
+            warnings.append(f"{where} [{lang}]: keep_order is set, but the numbers in the options are not in order")
+
+
 def check_writing(q, where, errors, warnings):
-    """Clues that give the answer away without knowing the topic (Haladyna et al., 2002)."""
+    """Clues that give the answer away without knowing the topic (Haladyna et al., 2002), and the
+    length limits."""
     for lang in q["prompt"]:
+        prompt = q["prompt"][lang]
+        if len(prompt) > MAX_PROMPT[lang]:
+            errors.append(f"{where} [{lang}]: the stem has {len(prompt)} characters; the limit is {MAX_PROMPT[lang]}")
+        if not prompt.rstrip().endswith("?"):
+            errors.append(f"{where} [{lang}]: the stem must end with the question itself, a '?'")
         texts = {o["id"]: o["text"][lang] for o in q["options"]}
         lengths = {oid: len(t) for oid, t in texts.items()}
         right = q["answer"][0]
@@ -131,12 +188,17 @@ def check_writing(q, where, errors, warnings):
         if max(lengths.values()) > SPREAD_RATIO * min(lengths.values()):
             warnings.append(f"{where} [{lang}]: the options differ a lot in length ({min(lengths.values())} to {max(lengths.values())} characters)")
         for oid, text in texts.items():
+            if len(text) > MAX_OPTION[lang]:
+                errors.append(f"{where} [{lang}]: option {oid} has {len(text)} characters; the limit is {MAX_OPTION[lang]}")
             found = re.search(ABSOLUTES[lang], text, re.IGNORECASE)
             if found:
                 warnings.append(f"{where} [{lang}]: option {oid} uses an absolute ('{found.group(0)}'), which gives away that it is false")
             if re.search(FORBIDDEN[lang], text, re.IGNORECASE):
                 errors.append(f"{where} [{lang}]: option {oid} uses 'all or none of the above'")
-        sentence = question_sentence(q["prompt"][lang])
+            if re.search(COMBINATION, text):
+                errors.append(f"{where} [{lang}]: option {oid} combines other options ('{text.strip()}'), but the site shuffles them")
+        check_options(q, texts, lang, where, errors, warnings)
+        sentence = question_sentence(prompt)
         if re.search(NEGATIVE_QUESTION[lang], sentence, re.IGNORECASE):
             warnings.append(f"{where} [{lang}]: the question is phrased negatively; rewrite it positively if possible")
 
@@ -182,6 +244,10 @@ def check_question(q, path, areas, seen_ids, errors, warnings):
 
     if q["type"] == "evidence" and not any(s["kind"] in ("experiment", "paper") for s in q["sources"]):
         errors.append(f"{where}: an evidence question needs an experiment or a paper as a source")
+    if "code" in q:
+        lines = len(q["code"]["source"].rstrip("\n").splitlines())
+        if lines > MAX_CODE_LINES:
+            errors.append(f"{where}: the code has {lines} lines; the limit is {MAX_CODE_LINES}")
 
     # A hard question requires analyzing or evaluating, not recalling something niche.
     if q["level"] == "hard" and q["bloom"] in ("remember", "understand"):
@@ -254,6 +320,28 @@ def print_summary(questions, taxonomy, group_of, total_bytes, drafts):
         print(f"\nAreas without questions: {', '.join(empty)}")
 
 
+def github_location(message):
+    """The file, and line if there is one, that a message is about, for a GitHub annotation."""
+    found = re.match(r"(\S+?\.json)(?:\[\d+\])? ([a-z0-9]+(?:-[a-z0-9]+)*-\d{4})\b", message)
+    if not found:
+        name = message.split(":", 1)[0]
+        return f"file={name}" if name.endswith(".json") and " " not in name else ""
+    path = ROOT / "questions" / found.group(1)
+    needle = f'"id": "{found.group(2)}"'
+    lines = path.read_text(encoding="utf-8").splitlines() if path.exists() else []
+    line = next((n for n, text in enumerate(lines, 1) if needle in text), 1)
+    return f"file=questions/{found.group(1)},line={line}"
+
+
+def report(kind, message):
+    """Prints an error or a warning; in GitHub Actions, as an annotation on the right line."""
+    if os.environ.get("GITHUB_ACTIONS") == "true":
+        location = github_location(message)
+        print(f"::{kind}{' ' + location if location else ''}::{message.replace('%', '%25')}")
+    else:
+        print(f"{kind.upper()}  {message}")
+
+
 def main():
     parser = argparse.ArgumentParser(description="Validates the question bank.")
     parser.add_argument("--publish", action="store_true", help="fail if any unreviewed draft is left")
@@ -290,9 +378,9 @@ def main():
 
     print_summary(questions, taxonomy, group_of, total_bytes, drafts)
     for w in warnings:
-        print(f"WARNING  {w}")
+        report("warning", w)
     for e in errors:
-        print(f"ERROR  {e}")
+        report("error", e)
     print()
     print("OK" if not errors else f"{len(errors)} error{'s' if len(errors) > 1 else ''}")
     sys.exit(1 if errors else 0)

@@ -49,8 +49,9 @@ The most useful help right now is checking questions, because a person has not r
 ## Run it locally
 
 ```bash
-pip install jsonschema
+pip install jsonschema pytest
 python scripts/validate.py                    # checks the questions
+python -m pytest tests                        # tests the validator
 python scripts/build_site.py --include-drafts # builds site/data
 python -m http.server 8000 --directory site   # then open http://localhost:8000
 ```

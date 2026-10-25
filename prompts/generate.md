@@ -48,16 +48,16 @@ The rubric sum plus the Bloom score (`remember` and `understand` 0, `apply` 1, `
 
 Stem:
 
-1. The central idea goes in the stem: a reader should be able to answer without looking at the options.
+1. The central idea goes in the stem, which ends with the question itself: a reader should be able to answer without looking at the options.
 2. Phrase it positively. Avoid "which one is NOT…?"; if it is unavoidable, highlight the negation.
-3. No filler: every sentence in the stem is needed to answer.
+3. No filler: every sentence in the stem is needed to answer. At most 300 characters in English and 350 in Spanish; code goes in its own field, in at most 15 lines.
 4. If a word repeats in every option, move it to the stem.
 5. The stem must not point to the answer. If the name of a method or paper spells out the correct option (ResNet and "residual", DDPM and "denoising"), reword the stem or the options.
 
 Options:
 
 6. Exactly one correct option. No expert should be able to defend another one.
-7. All homogeneous in content and grammatical structure, and of similar length. The correct option must not stand out as the longest, the most qualified or the only one with a justification. Across the batch, the correct option should be the longest in only about one question in four, and the shortest in about another quarter, as chance would give.
+7. All homogeneous in content and grammatical structure, of similar length and ending the same way, with or without a period. Each has at most 150 characters in English and 170 in Spanish. The correct option must not stand out as the longest, the most qualified or the only one with a justification. Across the batch, the correct option should be the longest in only about one question in four, and the shortest in about another quarter, as chance would give.
 8. No absolutes (always, never, completely, in all cases): they give away the false options.
 9. No "all of the above", "none of the above" or combinations such as "A and B".
 10. Each distractor is a mistake people actually make: a known confusion, a step done wrong, an idea that used to be true. Nothing absurd and no filler.
