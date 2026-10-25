@@ -32,9 +32,21 @@ To end the alpha, delete the `<span class="badge">` from `site/index.html`.
 
 ## Screens
 
-1. **Home:** the name, the language switch (EN/ES) and the site's goal. Then difficulty (the three dots), topics, number of questions and mode, with how many questions are available for those filters. If there is an unfinished quiz, it offers to resume it.
+1. **Home:** the name, the language switch (EN/ES) and the site's goal. Then difficulty (the three dots), topics, number of questions and mode, with how many questions are available for those filters. If there is an unfinished quiz, it offers to resume it. Under the start button, the latest [updates](#updates).
 2. **Question:** the dot with the level written next to it, the type of reasoning, the topic and subtopic, the stem, and the options as answer-sheet bubbles. In study mode, answering marks the correct option and shows each option's rationale, the explanation and the sources. On a computer, keys 1 to 4 (or A to D) choose and Enter moves on. The language can be switched mid-quiz without losing progress.
 3. **Results:** score, correct answers by difficulty and by topic, the message to share, Ko-fi and the review of mistakes, with the option to retry only the missed questions.
+
+## Updates
+
+The home screen lists the latest changes under the start button: one short sentence per change, grouped by day, newest first. The date is written 10/25/2026 in English and 25/10/2026 in Spanish. The most recent days are shown until there are at least three changes (`UPDATES_SHOWN` in `site/app.js`), so the home screen stays short however many updates pile up; older ones are folded under "Earlier updates (N)" («Actualizaciones anteriores (N)»), which opens the whole list.
+
+The list lives in `updates.json`, at the root of the repository:
+
+```json
+{ "date": "2026-10-25", "text": { "en": "One sentence.", "es": "Una oración." } }
+```
+
+Each update needs a date as YYYY-MM-DD and one sentence in each language, of up to 140 characters in English and 160 in Spanish. Updates of the same day keep the order of the file. `scripts/build_site.py` checks them and copies them into `site/data/index.json`, so after editing `updates.json` the site has to be built again; `tests/test_updates.py` fails if the two differ.
 
 ## Sharing on LinkedIn
 

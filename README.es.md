@@ -51,7 +51,7 @@ Lo que más sirve ahora es revisar preguntas, porque una persona todavía no las
 ```bash
 pip install jsonschema pytest
 python scripts/validate.py                    # revisa las preguntas
-python -m pytest tests                        # prueba el validador
+python -m pytest tests                        # prueba el validador y las actualizaciones
 python scripts/build_site.py --include-drafts # genera site/data
 python -m http.server 8000 --directory site   # luego abre http://localhost:8000
 ```
@@ -62,6 +62,7 @@ python -m http.server 8000 --directory site   # luego abre http://localhost:8000
 |---|---|
 | `questions/` | Las preguntas, un archivo JSON por área |
 | `taxonomy.json` | Contenidos, áreas y subtemas, en inglés y en español |
+| `updates.json` | Las actualizaciones que muestra el inicio del sitio |
 | `schema/` | El formato de una pregunta |
 | `scripts/` | El validador, el generador del sitio y las estadísticas de cada pregunta |
 | `prompts/` | Prompts para generar y revisar preguntas, en inglés y en su versión original en español |

@@ -21,6 +21,7 @@ const LETTERS = "ABCDE";
 const EMOJI = { easy: "🟢", medium: "🟡", hard: "🔴" };
 const KEY = { lang: "aiml:lang", prefs: "aiml:prefs", quiz: "aiml:quiz", seen: "aiml:seen" };
 const SEEN_LIMIT = 3000;
+const UPDATES_SHOWN = 3; // updates on the home screen, in whole days (at least this many); older ones are folded
 
 /* Interface text. Each language has the same keys; translating the site means editing this object. */
 const STRINGS = {
@@ -53,6 +54,9 @@ const STRINGS = {
     finish: "See results",
     kofiFoot: "☕ Support on Ko-fi",
     githubFoot: "Open source on GitHub",
+    updates: "Updates",
+    olderUpdates: (n) => `Earlier updates (${n})`,
+    day: (y, m, d) => `${m}/${d}/${y}`,
     level: { easy: "Easy", medium: "Medium", hard: "Hard" },
     // The type of reasoning (Bloom's revised taxonomy), shown apart from the difficulty.
     bloom: { remember: "Remember", understand: "Understand", apply: "Apply", analyze: "Analyze", evaluate: "Evaluate" },
@@ -133,6 +137,9 @@ const STRINGS = {
     finish: "Ver resultado",
     kofiFoot: "☕ Apoyar en Ko-fi",
     githubFoot: "Código abierto en GitHub",
+    updates: "Actualizaciones",
+    olderUpdates: (n) => `Actualizaciones anteriores (${n})`,
+    day: (y, m, d) => `${d}/${m}/${y}`,
     level: { easy: "Fácil", medium: "Medio", hard: "Difícil" },
     bloom: { remember: "Recordar", understand: "Comprender", apply: "Aplicar", analyze: "Analizar", evaluate: "Evaluar" },
     bloomLabel: "Razonamiento",
@@ -249,6 +256,7 @@ const bank = {
   subtopicName: new Map(),
   counts: {},
   total: 0,
+  updates: [], // updates.json, newest first
   questions: new Map(),
   loaded: new Set(),
 };
@@ -263,6 +271,7 @@ async function loadMeta() {
   const [taxonomy, index] = await Promise.all([getJSON("data/taxonomy.json"), getJSON("data/index.json")]);
   bank.counts = index.counts;
   bank.total = index.total;
+  bank.updates = Array.isArray(index.updates) ? index.updates : [];
   for (const area of taxonomy.areas) {
     for (const sub of area.subtopics) bank.subtopicName.set(`${area.id}/${sub.id}`, sub.name);
   }
@@ -349,6 +358,32 @@ function renderSetup() {
   $("#start").disabled = available === 0;
   $(`#mode-${prefs.mode}`).checked = true;
   renderResume();
+}
+
+/* Updates, under the start button: one line per change, grouped by day, newest first. The most
+   recent days are shown until there are UPDATES_SHOWN lines; the rest are folded, with their count. */
+function renderUpdates() {
+  const days = [];
+  for (const update of bank.updates) {
+    const text = tx(update.text);
+    if (!text) continue;
+    if (days.at(-1)?.date === update.date) days.at(-1).items.push(text);
+    else days.push({ date: update.date, items: [text] });
+  }
+  let shown = 0;
+  let lines = 0;
+  while (shown < days.length && lines < UPDATES_SHOWN) lines += days[shown++].items.length;
+  const older = days.slice(shown);
+  const day = ({ date, items }) => {
+    const [y, m, d] = date.split("-");
+    return `<li><time datetime="${esc(date)}">${esc(T.day(y, m, d))}</time>
+      <ul>${items.map((text) => `<li>${rich(text)}</li>`).join("")}</ul></li>`;
+  };
+  $("#updates").hidden = days.length === 0;
+  $("#updates-list").innerHTML = days.slice(0, shown).map(day).join("");
+  $("#updates-older").hidden = older.length === 0;
+  $("#updates-older-label").textContent = T.olderUpdates(older.reduce((n, d) => n + d.items.length, 0));
+  $("#updates-older-list").innerHTML = older.map(day).join("");
 }
 
 function refocus(selector) {
@@ -819,6 +854,7 @@ function applyStaticText() {
   const size = $("#bank-size");
   const total = bank.total || Number(size.dataset.total);
   if (total) size.textContent = T.bankSize(total, bank.groups.length || Number(size.dataset.topics));
+  renderUpdates();
 }
 
 function setLanguage(next, { save = true } = {}) {

@@ -1,6 +1,6 @@
 /* Service worker: stores the site and the questions so it works offline.
    scripts/build_site.py rewrites VERSION whenever any file changes. */
-const VERSION = "5d891644cb7d";
+const VERSION = "b73941a4e378";
 const CACHE = `ai-ml-questions-${VERSION}`;
 
 self.addEventListener("install", (event) => {

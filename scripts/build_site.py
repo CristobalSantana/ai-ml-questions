@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Builds the site's data from the question bank.
 
-Writes to site/data/ the taxonomy, an index with the counts per area and level, and one
-minified file of questions per area. It also writes the number of questions and topics into
-site/index.html (so the header does not change size when the data arrives), site/precache.json
-(what the service worker stores to work offline) and the version in site/sw.js.
+Writes to site/data/ the taxonomy, an index with the counts per area and level and the updates
+listed on the home screen (from updates.json), and one minified file of questions per area. It
+also writes the number of questions and topics into site/index.html (so the header does not change
+size when the data arrives), site/precache.json (what the service worker stores to work offline)
+and the version in site/sw.js.
 
 Usage:
     python scripts/build_site.py                  # reviewed questions only (human, llm_reviewed)
@@ -28,6 +29,8 @@ PUBLISHABLE = {"human", "llm_reviewed"}
 LEVELS = ("easy", "medium", "hard")
 # Site files the service worker does not need to store.
 NOT_PRECACHED = {"sw.js", "precache.json"}
+# The updates on the home screen are one short sentence per language; the limits keep them brief.
+MAX_UPDATE = {"en": 140, "es": 160}
 
 
 def write_json(path, obj):
@@ -81,10 +84,53 @@ def build_data(include_drafts):
         "total": total,
         "counts": counts,
         "files": files,
+        "updates": load_updates(),
     }
     write_json(DATA / "index.json", index)
     topics = sum(any(area in counts for area in group["areas"]) for group in taxonomy["groups"])
     return total, len(counts), topics
+
+
+def update_problems(updates):
+    """What is wrong in updates.json: each update needs a date and one short sentence per language."""
+    problems = []
+    if not isinstance(updates, list):
+        return ["updates.json must be a list of updates"]
+    for i, u in enumerate(updates, 1):
+        when = u.get("date") if isinstance(u, dict) else None
+        where = f"update {i} ({when})" if when else f"update {i}"
+        if not isinstance(u, dict) or set(u) != {"date", "text"}:
+            problems.append(f"{where}: needs exactly a date and a text")
+            continue
+        try:
+            valid = bool(re.fullmatch(r"\d{4}-\d{2}-\d{2}", when)) and date.fromisoformat(when)
+        except (TypeError, ValueError):
+            valid = False
+        if not valid:
+            problems.append(f"{where}: the date must be a real day, as YYYY-MM-DD")
+        text = u["text"] if isinstance(u["text"], dict) else {}
+        if set(text) != set(MAX_UPDATE):
+            problems.append(f"{where}: needs a text in each language ({', '.join(MAX_UPDATE)})")
+        for lang, limit in MAX_UPDATE.items():
+            sentence = text.get(lang)
+            if lang in text and not (isinstance(sentence, str) and sentence.strip()):
+                problems.append(f"{where} [{lang}]: the text is empty")
+            elif isinstance(sentence, str) and len(sentence) > limit:
+                problems.append(f"{where} [{lang}]: {len(sentence)} characters; the limit is {limit}")
+    return problems
+
+
+def load_updates():
+    """The changes listed on the home screen (updates.json), newest first. Entries of the same day
+    keep the order of the file."""
+    path = ROOT / "updates.json"
+    if not path.exists():
+        return []
+    updates = json.loads(path.read_text(encoding="utf-8"))
+    problems = update_problems(updates)
+    if problems:
+        sys.exit("updates.json has errors:\n" + "\n".join(f"  {p}" for p in problems))
+    return sorted(updates, key=lambda u: u["date"], reverse=True)
 
 
 def write_bank_size(total, topics):

@@ -51,7 +51,7 @@ The most useful help right now is checking questions, because a person has not r
 ```bash
 pip install jsonschema pytest
 python scripts/validate.py                    # checks the questions
-python -m pytest tests                        # tests the validator
+python -m pytest tests                        # tests the validator and the updates
 python scripts/build_site.py --include-drafts # builds site/data
 python -m http.server 8000 --directory site   # then open http://localhost:8000
 ```
@@ -62,6 +62,7 @@ python -m http.server 8000 --directory site   # then open http://localhost:8000
 |---|---|
 | `questions/` | The questions, one JSON file per area |
 | `taxonomy.json` | Topics, areas and subtopics, in English and Spanish |
+| `updates.json` | The updates listed on the site's home screen |
 | `schema/` | The format of a question |
 | `scripts/` | The validator, the site builder and the statistics of each question |
 | `prompts/` | Prompts for generating and reviewing questions, in English and in their original Spanish |

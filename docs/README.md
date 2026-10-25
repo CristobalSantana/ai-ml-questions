@@ -11,7 +11,7 @@ The specification of [AI/ML Questions](../README.md): what the question bank con
 | [Difficulty](difficulty.md) | Levels, Bloom's taxonomy, the difficulty rubric and how it is calibrated with real answers |
 | [Statistics](statistics.md) | What is recorded about each answer, how to get the data, and the difficulty, discrimination and distractors of each question |
 | [Workflow](workflow.md) | How questions are generated, checked and published at scale |
-| [Website](site.md) | Quiz rules, screens, sharing, offline use and languages |
+| [Website](site.md) | Quiz rules, screens, updates, sharing, offline use and languages |
 | [Hosting](hosting.md) | Where the questions live, building the site, publishing on Cloudflare and visit analytics |
 
 ## Files
@@ -26,10 +26,11 @@ wrangler.jsonc               configuration of the Cloudflare Worker: publishes s
 worker/index.js              the Worker's code: stores each answer, anonymously
 migrations/0001_answers.sql  the table of answers in D1
 taxonomy.json                8 topics, 17 areas and 203 subtopics, in English and Spanish
+updates.json                 the updates listed on the site's home screen, in English and Spanish
 schema/question.schema.json  the format of a question (JSON Schema 2020-12)
 questions/<area>.json        the questions, one file per area
 scripts/validate.py          validates the bank, the writing rules, the length limits and coverage (pip install jsonschema)
-tests/                       tests of the validator, each one breaking a rule on purpose (pip install pytest)
+tests/                       tests of the validator and of updates.json, most breaking a rule on purpose (pip install pytest)
 .github/workflows/check.yml  runs the validator and the tests on every push and pull request
 scripts/build_site.py        generates site/data, the counts in the header, site/precache.json and the service worker version
 scripts/item_stats.py        statistics of each question from an export of the answers
@@ -66,3 +67,4 @@ Everything in the repository is in English: code, comments, prompts, the schema,
 - The site records each answer anonymously in Cloudflare D1, and `scripts/item_stats.py` computes the difficulty, discrimination and distractor statistics of each question.
 - Length limits for stems and options, more writing rules in the validator, tests for it, and a check on GitHub for every pull request.
 - Each question shows its type of reasoning (Bloom) next to its difficulty, without mixing the two.
+- The home screen lists the latest updates, from `updates.json`.

@@ -29,7 +29,7 @@ The statistics store, for each answer, the question and its version, the chosen 
 ```bash
 pip install jsonschema pytest
 python scripts/validate.py                    # checks the bank and prints a summary
-python -m pytest tests                        # tests the validator
+python -m pytest tests                        # tests the validator and the updates
 python scripts/build_site.py                  # reviewed questions only
 python scripts/build_site.py --include-drafts # drafts too
 python -m http.server 8000 --directory site   # open http://localhost:8000
