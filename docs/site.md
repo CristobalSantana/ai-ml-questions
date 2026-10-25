@@ -10,6 +10,7 @@
 - **Order:** from easiest to hardest, by level and then by the rubric score, so a quiz warms up instead of opening with a hard question. In the first answers recorded, half of the people who missed their first question left right there. Retrying the mistakes follows the same order.
 - **Shuffled options** in each quiz, except with `keep_order`; that is why the answer is stored by id and not by position. In 500,000 test shuffles, the correct option landed in each position between 24.9% and 25.1% of the time.
 - **Visible difficulty:** each question shows a green, yellow or red dot with the level written next to it, so it does not rely on color alone.
+- **Type of reasoning:** next to the difficulty, an outlined tag shows what kind of thinking the question asks for, from Bloom's taxonomy: Remember, Understand, Apply, Analyze or Evaluate. It is kept apart from the difficulty on purpose ([Difficulty](difficulty.md#difficulty-is-not-the-bloom-level)).
 - **Modes:** study (explanation after each answer) and exam (score and explanations at the end).
 - **Long quizzes:** 200 questions take about 2 to 3 hours, so progress is saved in the browser.
 - **At the end:** score by topic and level, review of mistakes, a result to share and a Ko-fi button.
@@ -32,7 +33,7 @@ To end the alpha, delete the `<span class="badge">` from `site/index.html`.
 ## Screens
 
 1. **Home:** the name, the language switch (EN/ES) and the site's goal. Then difficulty (the three dots), topics, number of questions and mode, with how many questions are available for those filters. If there is an unfinished quiz, it offers to resume it.
-2. **Question:** the dot with the level written next to it, the topic and subtopic, the stem, and the options as answer-sheet bubbles. In study mode, answering marks the correct option and shows each option's rationale, the explanation and the sources. On a computer, keys 1 to 4 (or A to D) choose and Enter moves on. The language can be switched mid-quiz without losing progress.
+2. **Question:** the dot with the level written next to it, the type of reasoning, the topic and subtopic, the stem, and the options as answer-sheet bubbles. In study mode, answering marks the correct option and shows each option's rationale, the explanation and the sources. On a computer, keys 1 to 4 (or A to D) choose and Enter moves on. The language can be switched mid-quiz without losing progress.
 3. **Results:** score, correct answers by difficulty and by topic, the message to share, Ko-fi and the review of mistakes, with the option to retry only the missed questions.
 
 ## Sharing on LinkedIn

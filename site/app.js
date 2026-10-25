@@ -54,6 +54,10 @@ const STRINGS = {
     kofiFoot: "☕ Support on Ko-fi",
     githubFoot: "Open source on GitHub",
     level: { easy: "Easy", medium: "Medium", hard: "Hard" },
+    // The type of reasoning (Bloom's revised taxonomy), shown apart from the difficulty.
+    bloom: { remember: "Remember", understand: "Understand", apply: "Apply", analyze: "Analyze", evaluate: "Evaluate" },
+    bloomLabel: "Reasoning",
+    bloomTitle: "Type of reasoning the question asks for, from Bloom's taxonomy",
     kind: { paper: "Paper", book: "Book", docs: "Docs", post: "Post", experiment: "Experiment", article: "Article" },
     bankSize: (n, t) => `${n} ${n === 1 ? "question" : "questions"} · ${t} ${t === 1 ? "topic" : "topics"}`,
     available: (n) => (n ? `${n} available with these filters` : "No questions match these filters"),
@@ -130,6 +134,9 @@ const STRINGS = {
     kofiFoot: "☕ Apoyar en Ko-fi",
     githubFoot: "Código abierto en GitHub",
     level: { easy: "Fácil", medium: "Medio", hard: "Difícil" },
+    bloom: { remember: "Recordar", understand: "Comprender", apply: "Aplicar", analyze: "Analizar", evaluate: "Evaluar" },
+    bloomLabel: "Razonamiento",
+    bloomTitle: "Tipo de razonamiento que pide la pregunta, según la taxonomía de Bloom",
     kind: { paper: "Paper", book: "Libro", docs: "Docs", post: "Post", experiment: "Experimento", article: "Artículo" },
     bankSize: (n, t) => `${n} ${n === 1 ? "pregunta" : "preguntas"} · ${t} ${t === 1 ? "contenido" : "contenidos"}`,
     available: (n) =>
@@ -458,6 +465,15 @@ function reportLink(q) {
   return `<a href="${esc(url)}" target="_blank" rel="noopener">${T.report}</a>`;
 }
 
+/* Difficulty and type of reasoning are shown apart: Bloom says what kind of thinking a question
+   asks for, the level how many people get it right (docs/difficulty.md). */
+const levelTag = (q, withTitle = false) =>
+  `<span class="level-tag"${withTitle ? ` title="${T.levelTitle}"` : ""}><span class="dot ${q.level}" aria-hidden="true"></span><span class="visually-hidden">${T.difficulty}: </span>${T.level[q.level]}</span>`;
+const bloomTag = (q, withTitle = false) =>
+  T.bloom[q.bloom]
+    ? `<span class="bloom-tag"${withTitle ? ` title="${T.bloomTitle}"` : ""}><span class="visually-hidden">${T.bloomLabel}: </span>${T.bloom[q.bloom]}</span>`
+    : "";
+
 function verdictText(q, item) {
   if (q.answer.includes(item.choice)) return T.correct;
   return T.wrong(LETTERS[item.order.indexOf(q.answer[0])]);
@@ -511,7 +527,7 @@ function renderQuestion(focusPrompt) {
   const subtopic = bank.subtopicName.get(`${q.area}/${q.subtopic}`);
   $("#question").innerHTML = `
     <div class="q-meta">
-      <span class="level-tag" title="${T.levelTitle}"><span class="dot ${q.level}" aria-hidden="true"></span>${T.level[q.level]}</span>
+      ${levelTag(q, true)} ${bloomTag(q, true)}
       <span class="q-topic">${esc(tx(topic?.name))} · ${esc(tx(subtopic))}</span>
     </div>
     <h2 class="q-prompt" id="q-prompt" tabindex="-1">${rich(tx(q.prompt))}</h2>
@@ -669,7 +685,7 @@ function reviewItem({ item, q, ok }) {
         <p><b>${T.rightAnswer}:</b> ${letter(right.id)}. ${rich(tx(right.text))}</p>
         <p>${rich(tx(q.explanation))}</p>
         <div class="q-foot">
-          <span class="level-tag"><span class="dot ${q.level}" aria-hidden="true"></span>${T.level[q.level]}</span>
+          ${levelTag(q)} ${bloomTag(q)}
           <span>${q.id}</span>
         </div>
       </div>

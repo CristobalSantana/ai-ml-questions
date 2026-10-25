@@ -65,3 +65,4 @@ Everything in the repository is in English: code, comments, prompts, the schema,
 - The bank grew from 22 to 103 questions, starting with the context window and prompting.
 - The site records each answer anonymously in Cloudflare D1, and `scripts/item_stats.py` computes the difficulty, discrimination and distractor statistics of each question.
 - Length limits for stems and options, more writing rules in the validator, tests for it, and a check on GitHub for every pull request.
+- Each question shows its type of reasoning (Bloom) next to its difficulty, without mixing the two.

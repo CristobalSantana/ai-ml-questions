@@ -370,6 +370,14 @@ main { flex: 1; min-width: 0; }
   color: var(--muted);
 }
 .level-tag { display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 600; color: var(--ink); }
+/* The type of reasoning (Bloom), outlined so it does not read as part of the difficulty. */
+.bloom-tag {
+  padding: 0.0625rem 0.5rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: 999px;
+  color: var(--ink);
+  white-space: nowrap;
+}
 .q-topic { min-width: 0; }
 
 .q-prompt {

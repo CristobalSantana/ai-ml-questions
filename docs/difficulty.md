@@ -30,6 +30,14 @@ The sixth level, `create`, does not fit a multiple-choice question and is left o
 
 The current 103 questions break down into `remember` 3, `understand` 45, `apply` 29, `analyze` 16 and `evaluate` 10.
 
+## Difficulty is not the Bloom level
+
+The site shows both on each question: the dot with the level, which is the difficulty, and next to it an outlined tag with the type of reasoning: Remember, Understand, Apply, Analyze or Evaluate (Recordar, Comprender, Aplicar, Analizar or Evaluar in Spanish).
+
+They measure different things. Bloom says what kind of thinking a question asks for; difficulty says how many people get it right. The two are related but not the same: a niche fact (`remember`) can be very hard, and an `evaluate` case with an obvious best option can be easy. That is why Bloom is one of the four parts of the rubric and not the level itself, and why real answers correct the level ([below](#after-the-fact-bayesian-update)).
+
+The revised taxonomy numbers its levels from 1 (`remember`) to 6 (`create`), so `evaluate` is level 5. In Bloom's original taxonomy (1956), evaluation was the sixth level, after synthesis. Mixing the two numberings is a common source of confusion, so the site shows names, not numbers.
+
 ## The difficulty index
 
 Difficulty is expressed with the classical difficulty index: the proportion of people who answer the question correctly, p. Each color corresponds to a band of p:

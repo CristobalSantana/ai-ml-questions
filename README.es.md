@@ -8,7 +8,7 @@ Preguntas de opción múltiple gratuitas para aprender inteligencia artificial y
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/images/question-es-dark.png">
-  <img src="docs/images/question-es-light.png" width="600" alt="Una pregunta de nivel medio sobre la temperatura de muestreo, respondida en modo estudio. La alternativa elegida, 0,73, aparece marcada como incorrecta y 0,98 como correcta; bajo cada alternativa, una línea explica por qué, y después vienen la explicación y la fuente.">
+  <img src="docs/images/question-es-light.png" width="600" alt="Una pregunta de nivel medio y de tipo Aplicar sobre la temperatura de muestreo, respondida en modo estudio. La alternativa elegida, 0,73, aparece marcada como incorrecta y 0,98 como correcta; bajo cada alternativa, una línea explica por qué, y después vienen la explicación y la fuente.">
 </picture>
 
 - **103 preguntas en inglés y en español**, en 8 contenidos y tres niveles. El modo estudio muestra la explicación después de cada respuesta; el modo examen, el resultado al final.
@@ -34,7 +34,7 @@ Preguntas de opción múltiple gratuitas para aprender inteligencia artificial y
 
 ## Cómo se hacen las preguntas
 
-Cada pregunta declara su nivel en la taxonomía de Bloom y recibe una dificultad estimada con una rúbrica. Un validador revisa el formato y las reglas de redacción, y un segundo modelo revisa los hechos, las fuentes y la traducción antes de que una persona apruebe la pregunta. Cuando una pregunta reúne suficientes respuestas, estas también muestran si distingue a quienes saben más. El detalle está en [`docs/`](docs/README.md), en inglés.
+Cada pregunta declara su nivel en la taxonomía de Bloom, que el sitio muestra como el tipo de razonamiento que pide (de Recordar a Evaluar), y recibe una dificultad estimada con una rúbrica. Un validador revisa el formato y las reglas de redacción, y un segundo modelo revisa los hechos, las fuentes y la traducción antes de que una persona apruebe la pregunta. Cuando una pregunta reúne suficientes respuestas, estas también muestran si distingue a quienes saben más. El detalle está en [`docs/`](docs/README.md), en inglés.
 
 ## Cómo aportar
 
