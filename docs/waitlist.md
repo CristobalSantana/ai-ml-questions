@@ -4,7 +4,7 @@ Three paid products are planned and not built yet: **Interview**, questions like
 
 ## What people see
 
-- **On the home screen**, under the modes, a "Coming soon" row with one dashed card per product: its name, a (?) and a tag with a gold outline. The tag shows what those who sign up now will pay, with the launch price after it (Interview: US$10, then US$15; Enterprise: US$100, then US$120), or, for the book, which has no price yet, "−40% if you sign up now".
+- **On the home screen**, under the modes, a "Coming soon" row with one card per product, with a gold border that shines softly: its name, a (?) and what those who sign up now will pay, with the launch price after it (Interview: US$10, then US$15; Enterprise: US$100, then US$120), or, for the book, which has no price yet, "−40% if you sign up now".
 - **The (?)** shows what the product is, on hover, on keyboard focus or on a tap: "A set of interview questions for ML/AI Engineers", "A set of AI/ML questions for recruiters" and "An online book of 200 multiple-choice questions for ML/AI roles".
 - **Tapping a card** does not start a quiz: below the row it opens what the product is, its price, the email field and the "Notify me" button. Tapping it again, or another card, closes it.
 - **On the results screen**, under the score by topic, a one-line invitation to Interview with the same field. It does not appear in a browser that has already signed up for Interview.

@@ -74,4 +74,4 @@ Everything in the repository is in English: code, comments, prompts, the schema,
 - Each question shows its type of reasoning (Bloom) next to its difficulty, without mixing the two.
 - The home screen lists the latest updates, from `updates.json`.
 - A waitlist for the Interview mode, with its price, a privacy page and a database of its own.
-- Waitlists for two more products coming soon, Enterprise and an online book, each with a (?) that says what it is and a gold tag with the price or discount for those who sign up now.
+- Waitlists for two more products coming soon, Enterprise and an online book, each in a card with a gold border, a (?) that says what it is, and the price or discount for those who sign up now.

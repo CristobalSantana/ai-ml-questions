@@ -11,7 +11,10 @@
   --graphite: #2B303B;
   --on-graphite: #FFFFFF;
   --gold: #C9A227;
-  --gold-ink: #7F6000;
+  --gold-light: #F3DC8C;
+  --gold-dark: #9C7A1A;
+  --gold-glow: rgb(201 162 39 / 0.22);
+  --gold-glow-strong: rgb(201 162 39 / 0.38);
   --easy: #1E9A55;
   --medium: #E2A400;
   --hard: #D33F3F;
@@ -53,7 +56,10 @@
     --graphite: #E7E9EE;
     --on-graphite: #0F1116;
     --gold: #D9B44A;
-    --gold-ink: #E8C766;
+    --gold-light: #FBE7A6;
+    --gold-dark: #A07A1E;
+    --gold-glow: rgb(217 180 74 / 0.28);
+    --gold-glow-strong: rgb(217 180 74 / 0.45);
     --easy: #3BC27A;
     --medium: #F2C232;
     --hard: #F06666;
@@ -80,7 +86,10 @@
   --graphite: #E7E9EE;
   --on-graphite: #0F1116;
   --gold: #D9B44A;
-  --gold-ink: #E8C766;
+  --gold-light: #FBE7A6;
+  --gold-dark: #A07A1E;
+  --gold-glow: rgb(217 180 74 / 0.28);
+  --gold-glow-strong: rgb(217 180 74 / 0.45);
   --easy: #3BC27A;
   --medium: #F2C232;
   --hard: #F06666;
@@ -353,8 +362,17 @@ main { flex: 1; min-width: 0; }
 /* The products that do not exist yet: dashed cards, each with a (?) and a price tag, that open
    their waitlist below the row. */
 .soon-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: 0.5rem; }
-.soon-card { position: relative; border: 1px dashed var(--rule-strong); border-radius: var(--radius); }
-.soon-card.open { border-style: solid; border-color: var(--graphite); box-shadow: inset 0 0 0 1px var(--graphite); }
+.soon-card {
+  position: relative;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  /* A gold border with a metallic sheen: a gradient behind the card, showing only in the border. */
+  background:
+    linear-gradient(var(--paper), var(--paper)) padding-box,
+    linear-gradient(135deg, var(--gold-dark), var(--gold-light) 35%, var(--gold) 55%, var(--gold-light) 80%, var(--gold-dark)) border-box;
+  box-shadow: 0 0 14px var(--gold-glow);
+}
+.soon-card.open { box-shadow: inset 0 0 0 1px var(--gold), 0 0 22px var(--gold-glow-strong); }
 .soon-head {
   display: grid;
   align-content: start;
@@ -373,14 +391,8 @@ main { flex: 1; min-width: 0; }
 }
 .soon-head b { font-weight: 600; }
 .soon-deal { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 0.5rem; }
-/* The price for those who sign up now, or the discount, in a gold outline. */
-.deal {
-  padding: 0.125rem 0.5rem;
-  border: 1.5px solid var(--gold);
-  border-radius: 999px;
-  color: var(--gold-ink);
-  font: 600 0.8125rem/1.35 var(--font-mono);
-}
+/* The price for those who sign up now, or the discount. */
+.deal { color: var(--ink); font: 600 0.875rem/1.35 var(--font-mono); }
 .deal-note { font-size: 0.8125rem; color: var(--muted); }
 .info {
   position: absolute;
