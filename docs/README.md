@@ -31,7 +31,8 @@ taxonomy.json                8 topics, 17 areas and 203 subtopics, in English an
 updates.json                 the updates listed on the site's home screen, in English and Spanish
 schema/question.schema.json  the format of a question (JSON Schema 2020-12)
 questions/<area>.json        the questions, one file per area
-scripts/validate.py          validates the bank, the writing rules, the length limits and coverage (pip install jsonschema)
+scripts/validate.py          validates the bank, the writing rules, the length limits and coverage (pip install jsonschema);
+                             --root checks another bank in the same format against the same rules
 tests/                       tests of the validator, updates.json and the waitlist script (pip install pytest)
 .github/workflows/check.yml  runs the validator and the tests on every push and pull request
 scripts/build_site.py        generates site/data, the counts in the header, site/precache.json and the service worker version

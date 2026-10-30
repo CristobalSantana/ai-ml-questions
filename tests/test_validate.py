@@ -262,3 +262,27 @@ def test_every_question_in_the_bank_passes():
             if not schema_errors:
                 validate.check_question(q, path, AREAS, seen, errors, [])
     assert errors == []
+
+
+def test_another_bank_can_be_checked_with_root(tmp_path):
+    """--root checks a bank in another folder, with its own taxonomy, against these rules."""
+    import json
+    import subprocess
+    import sys
+
+    taxonomy = {
+        "groups": [{"id": "other", "name": {"en": "Other"}, "areas": ["other-bank"]}],
+        "areas": [{"id": "other-bank", "name": {"en": "Other bank"}, "subtopics": [{"id": "basics", "name": {"en": "Basics"}}]}],
+    }
+    q = question(id="other-bank-0001", area="other-bank", subtopic="basics")
+    (tmp_path / "questions").mkdir()
+    (tmp_path / "taxonomy.json").write_text(json.dumps(taxonomy), encoding="utf-8")
+    (tmp_path / "questions" / "other-bank.json").write_text(json.dumps([q]), encoding="utf-8")
+    run = lambda: subprocess.run([sys.executable, str(ROOT / "scripts" / "validate.py"), "--root", str(tmp_path)], capture_output=True, text=True)
+    good = run()
+    assert good.returncode == 0 and "Questions: 1 in 1 of 1 areas" in good.stdout, good.stdout
+
+    q["subtopic"] = "missing"
+    (tmp_path / "questions" / "other-bank.json").write_text(json.dumps([q]), encoding="utf-8")
+    bad = run()
+    assert bad.returncode == 1 and "subtopic 'missing' does not exist" in bad.stdout, bad.stdout

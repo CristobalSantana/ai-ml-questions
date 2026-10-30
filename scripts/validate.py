@@ -2,8 +2,10 @@
 """Validates the question bank against the schema, the taxonomy and the writing rules.
 
 Usage:
-    python scripts/validate.py            # checks everything and prints a summary
-    python scripts/validate.py --publish  # also fails if any draft is left (origin: llm_draft)
+    python scripts/validate.py                 # checks everything and prints a summary
+    python scripts/validate.py --publish       # also fails if any draft is left (origin: llm_draft)
+    python scripts/validate.py --root ../other # checks another bank in the same format, with its own
+                                               # taxonomy.json and questions/, against these rules
 
 Requires: pip install jsonschema
 
@@ -28,6 +30,9 @@ except ImportError:
     sys.exit("jsonschema is missing. Install it with: pip install jsonschema")
 
 ROOT = Path(__file__).resolve().parent.parent
+# The bank being checked: this repository, or another folder given with --root. The schema and the
+# rules are always this repository's.
+BANK = ROOT
 LEVELS = ["easy", "medium", "hard"]
 BLOOM = ["remember", "understand", "apply", "analyze", "evaluate"]
 BLOOM_SCORE = {"remember": 0, "understand": 0, "apply": 1, "analyze": 2, "evaluate": 2}
@@ -326,7 +331,7 @@ def github_location(message):
     if not found:
         name = message.split(":", 1)[0]
         return f"file={name}" if name.endswith(".json") and " " not in name else ""
-    path = ROOT / "questions" / found.group(1)
+    path = BANK / "questions" / found.group(1)
     needle = f'"id": "{found.group(2)}"'
     lines = path.read_text(encoding="utf-8").splitlines() if path.exists() else []
     line = next((n for n, text in enumerate(lines, 1) if needle in text), 1)
@@ -345,17 +350,20 @@ def report(kind, message):
 def main():
     parser = argparse.ArgumentParser(description="Validates the question bank.")
     parser.add_argument("--publish", action="store_true", help="fail if any unreviewed draft is left")
+    parser.add_argument("--root", type=Path, help="folder of another bank, with its own taxonomy.json and questions/")
     args = parser.parse_args()
+    global BANK
+    BANK = args.root.resolve() if args.root else ROOT
 
     errors, warnings, drafts, questions = [], [], [], []
     schema = load_json(ROOT / "schema" / "question.schema.json")
-    taxonomy = load_json(ROOT / "taxonomy.json")
+    taxonomy = load_json(BANK / "taxonomy.json")
     areas, group_of = check_taxonomy(taxonomy, errors)
     validator = Draft202012Validator(schema)
 
     seen_ids = {}
     total_bytes = 0
-    for path in sorted((ROOT / "questions").glob("*.json")):
+    for path in sorted((BANK / "questions").glob("*.json")):
         total_bytes += path.stat().st_size
         data = load_json(path)
         if not isinstance(data, list):
