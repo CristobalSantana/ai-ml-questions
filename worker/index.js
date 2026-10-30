@@ -5,9 +5,10 @@
 
    - /api/answers: each answer, stored anonymously in D1 (migrations/0001_answers.sql) for the
      statistics of each question (docs/statistics.md).
-   - /api/waitlist: an email for the waitlist of the Interview mode, stored in a database of its
-     own (migrations-waitlist/0001_waitlist.sql), apart from the answers (docs/waitlist.md).
-   - /api/interest: one more browser that opened the Interview card today, as a bare count.
+   - /api/waitlist: an email for the waitlist of a product coming soon (Interview, Enterprise or
+     the online book), stored in a database of its own (migrations-waitlist/), apart from the
+     answers (docs/waitlist.md).
+   - /api/interest: one more browser that opened a product's card today, as a bare count.
 
    It stores no IP address and sets no cookie. */
 
@@ -18,7 +19,7 @@ const LANGUAGES = new Set(["en", "es"]);
 const MODES = new Set(["study", "exam"]);
 const PLACES = new Set(["home", "results"]);
 const PRODUCTS = new Set(["interview", "enterprise", "book"]); // CONFIG.products in site/app.js
-// Something, an @ and a domain with a dot. Whether the address works shows when Interview opens.
+// Something, an @ and a domain with a dot. Whether the address works shows when the product opens.
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_EMAIL = 254;
 
