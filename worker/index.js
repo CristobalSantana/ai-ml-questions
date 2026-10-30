@@ -17,6 +17,7 @@ const QUIZ_ID = /^[0-9a-f]{16}$/;
 const LANGUAGES = new Set(["en", "es"]);
 const MODES = new Set(["study", "exam"]);
 const PLACES = new Set(["home", "results"]);
+const PRODUCTS = new Set(["interview", "enterprise", "book"]); // CONFIG.products in site/app.js
 // Something, an @ and a domain with a dot. Whether the address works shows when Interview opens.
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_EMAIL = 254;
@@ -87,15 +88,18 @@ async function saveAnswer(request, env) {
 async function joinWaitlist(request, env) {
   const body = await readBody(request);
   if (body instanceof Response) return body;
-  const { email, lang, place, website } = body;
+  // A page cached from before there were several products sends no product: it meant Interview.
+  const { email, lang, place, website, product = "interview" } = body;
   // A field people do not see, which only bots fill in. They get the same reply as everyone.
   if (website) return reply(204);
   const address = typeof email === "string" ? email.trim().toLowerCase() : "";
-  if (address.length > MAX_EMAIL || !EMAIL.test(address) || !LANGUAGES.has(lang) || !PLACES.has(place)) return reply(400);
-  // An email already on the list stays as it was, and the reply does not change, so the form
-  // cannot be used to find out whether someone signed up.
-  await env.WAITLIST.prepare("INSERT INTO waitlist (email, lang, place) VALUES (?, ?, ?) ON CONFLICT (email) DO NOTHING")
-    .bind(address, lang, place)
+  if (address.length > MAX_EMAIL || !EMAIL.test(address) || !LANGUAGES.has(lang) || !PLACES.has(place) || !PRODUCTS.has(product)) return reply(400);
+  // An email already on that product's list stays as it was, and the reply does not change, so the
+  // form cannot be used to find out whether someone signed up.
+  await env.WAITLIST.prepare(
+    "INSERT INTO signups (email, product, lang, place) VALUES (?, ?, ?, ?) ON CONFLICT (email, product) DO NOTHING",
+  )
+    .bind(address, product, lang, place)
     .run();
   return reply(204);
 }
@@ -103,11 +107,12 @@ async function joinWaitlist(request, env) {
 async function countInterest(request, env) {
   const body = await readBody(request);
   if (body instanceof Response) return body;
-  if (!LANGUAGES.has(body.lang)) return reply(400);
+  const product = body.product ?? "interview";
+  if (!LANGUAGES.has(body.lang) || !PRODUCTS.has(product)) return reply(400);
   await env.WAITLIST.prepare(
-    "INSERT INTO interest (day, lang, opens) VALUES (strftime('%Y-%m-%d', 'now'), ?, 1) ON CONFLICT (day, lang) DO UPDATE SET opens = opens + 1",
+    "INSERT INTO opens (day, lang, product, opens) VALUES (strftime('%Y-%m-%d', 'now'), ?, ?, 1) ON CONFLICT (day, lang, product) DO UPDATE SET opens = opens + 1",
   )
-    .bind(body.lang)
+    .bind(body.lang, product)
     .run();
   return reply(204);
 }

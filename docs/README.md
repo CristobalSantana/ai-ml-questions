@@ -10,7 +10,7 @@ The specification of [AI/ML Questions](../README.md): what the question bank con
 | [Spanish style](spanish-style.md) | Terminology and style for the Spanish version of each question |
 | [Difficulty](difficulty.md) | Levels, Bloom's taxonomy, the difficulty rubric and how it is calibrated with real answers |
 | [Statistics](statistics.md) | What is recorded about each answer, how to get the data, and the difficulty, discrimination and distractors of each question |
-| [Waitlist](waitlist.md) | The waitlist of the Interview mode: what people see, what is stored, how to see the data and how to keep the privacy promise |
+| [Waitlist](waitlist.md) | The waitlists of the products coming soon, Interview, Enterprise and the online book: what people see, what is stored, how to see the data and how to keep the privacy promise |
 | [Workflow](workflow.md) | How questions are generated, checked and published at scale |
 | [Website](site.md) | Quiz rules, screens, updates, sharing, offline use and languages |
 | [Hosting](hosting.md) | Where the questions live, building the site, publishing on Cloudflare and visit analytics |
@@ -74,3 +74,4 @@ Everything in the repository is in English: code, comments, prompts, the schema,
 - Each question shows its type of reasoning (Bloom) next to its difficulty, without mixing the two.
 - The home screen lists the latest updates, from `updates.json`.
 - A waitlist for the Interview mode, with its price, a privacy page and a database of its own.
+- Waitlists for two more products coming soon, Enterprise and an online book, each with a (?) that says what it is and a gold tag with the price or discount for those who sign up now.

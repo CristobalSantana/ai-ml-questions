@@ -11,13 +11,17 @@ const CONFIG = {
   // Where each answer is sent, anonymously, for the statistics of each question; worker/index.js
   // stores it (docs/statistics.md). Empty stops sending.
   answersUrl: "api/answers",
-  // The waitlist of the Interview mode (docs/waitlist.md): where the emails go, where the count of
-  // opened Interview cards goes, and the prices shown, in US$. Empty waitlistUrl hides the card and
-  // the invitation; earlyPrice null shows only the full price.
+  // The waitlists of the products that do not exist yet (docs/waitlist.md): where the emails go,
+  // where the count of opened cards goes, and one card per product. Prices are in US$: price is the
+  // launch price and early what those who sign up now will pay; a product without a price can show
+  // discount, the percentage off for them. Empty waitlistUrl hides the cards and the invitation.
   waitlistUrl: "api/waitlist",
   interestUrl: "api/interest",
-  interviewPrice: 15,
-  earlyPrice: 10,
+  products: [
+    { id: "interview", price: 15, early: 10 },
+    { id: "enterprise", price: 120, early: 100 },
+    { id: "book", discount: 40 },
+  ],
   privacyUrl: "privacy", // site/privacy.html; Cloudflare serves pages without .html
   languages: ["en", "es"],
   defaultLanguage: "en",
@@ -32,8 +36,8 @@ const KEY = {
   prefs: "aiml:prefs",
   quiz: "aiml:quiz",
   seen: "aiml:seen",
-  waitlist: "aiml:waitlist", // this browser signed up: the date, nothing else
-  interest: "aiml:interest", // this browser was already counted as opening the Interview card
+  waitlist: "aiml:waitlist", // the products this browser signed up for, each with the date, nothing else
+  interest: "aiml:interest", // the product cards this browser was already counted as opening
 };
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // the same check as the Worker
 const SEEN_LIMIT = 3000;
@@ -74,12 +78,32 @@ const STRINGS = {
     olderUpdates: (n) => `Earlier updates (${n})`,
     day: (y, m, d) => `${m}/${d}/${y}`,
     privacy: "Privacy",
-    interview: "Interview",
+    soonTitle: "Coming soon",
     soon: "coming soon",
-    interviewHint: "Practice for machine learning job interviews.",
-    interviewWhat:
-      "Questions like those in an ML interview: debugging models, reading code, production and databases. Every option explains why it is right or wrong.",
-    interviewPrice: (full, early) => `US$${full}, one-time payment.${early ? ` US$${early} if you sign up now.` : ""}`,
+    interview: "Interview",
+    enterprise: "Enterprise",
+    book: "Online book",
+    // What the (?) next to each product says, on hover, focus or tap.
+    tip: {
+      interview: "A set of interview questions for ML/AI Engineers",
+      enterprise: "A set of AI/ML questions for recruiters",
+      book: "An online book of 200 multiple-choice questions for ML/AI roles",
+    },
+    tipLabel: (name) => `What is ${name}?`,
+    what: {
+      interview:
+        "Questions like those in an ML interview: debugging models, reading code, production and databases. Every option explains why it is right or wrong.",
+      enterprise: "Sets of AI/ML questions for recruiters, to assess candidates for ML and AI roles in a hiring process.",
+      book: "An online book of 200 multiple-choice questions for ML and AI roles, written with Haladyna's item-writing rules, with why each option is right or wrong.",
+    },
+    price: {
+      interview: (p) => `US$${p.price}, one-time payment.${p.early ? ` US$${p.early} if you sign up now.` : ""}`,
+      enterprise: (p) => `US$${p.price} per hiring process.${p.early ? ` US$${p.early} if you sign up now.` : ""}`,
+      book: (p) => `${p.discount}% off if you sign up now.`,
+    },
+    then: (full) => `then US$${full}`,
+    off: (pct) => `−${pct}%`,
+    offNote: "if you sign up now",
     resultsInterview: "Preparing for an ML interview? Interview mode is coming soon.",
     emailLabel: "Your email",
     emailPlaceholder: "you@example.com",
@@ -174,12 +198,31 @@ const STRINGS = {
     olderUpdates: (n) => `Actualizaciones anteriores (${n})`,
     day: (y, m, d) => `${d}/${m}/${y}`,
     privacy: "Privacidad",
-    interview: "Entrevista",
+    soonTitle: "Próximamente",
     soon: "próximamente",
-    interviewHint: "Práctica para entrevistas de trabajo en machine learning.",
-    interviewWhat:
-      "Preguntas como las de una entrevista de ML: depurar modelos, leer código, producción y bases de datos. Cada alternativa explica por qué es correcta o incorrecta.",
-    interviewPrice: (full, early) => `US$${full}, pago único.${early ? ` Si te anotas ahora, US$${early}.` : ""}`,
+    interview: "Entrevista",
+    enterprise: "Empresas",
+    book: "Libro online",
+    tip: {
+      interview: "Set de preguntas de ML/IA Engineer para entrevistas",
+      enterprise: "Set de preguntas de IA/ML para reclutadores",
+      book: "Libro online con 200 preguntas de alternativas para cargos de ML/IA",
+    },
+    tipLabel: (name) => `¿Qué es ${name}?`,
+    what: {
+      interview:
+        "Preguntas como las de una entrevista de ML: depurar modelos, leer código, producción y bases de datos. Cada alternativa explica por qué es correcta o incorrecta.",
+      enterprise: "Sets de preguntas de IA/ML para reclutadores, para evaluar a candidatos a cargos de ML e IA en un proceso de selección.",
+      book: "Un libro online con 200 preguntas de alternativas para cargos de ML e IA, escritas con las reglas de Haladyna y con el porqué de cada alternativa.",
+    },
+    price: {
+      interview: (p) => `US$${p.price}, pago único.${p.early ? ` Si te anotas ahora, US$${p.early}.` : ""}`,
+      enterprise: (p) => `US$${p.price} por proceso de selección.${p.early ? ` Si te anotas ahora, US$${p.early}.` : ""}`,
+      book: (p) => `${p.discount}% de descuento si te anotas ahora.`,
+    },
+    then: (full) => `luego US$${full}`,
+    off: (pct) => `−${pct}%`,
+    offNote: "si te anotas ahora",
     resultsInterview: "¿Te preparas para una entrevista de ML? El modo Entrevista viene pronto.",
     emailLabel: "Tu correo",
     emailPlaceholder: "tu@correo.com",
@@ -850,14 +893,29 @@ function finish() {
   $("#results-title").focus({ preventScroll: true });
 }
 
-/* Waitlist of the Interview mode (docs/waitlist.md). The email goes to the Worker and the browser
-   only remembers that it signed up; the reply is the same whether or not the email was already
-   on the list. */
-const joined = () => Boolean(store.get(KEY.waitlist, null));
+/* The waitlists of the products that do not exist yet (docs/waitlist.md): Interview, Enterprise
+   and the online book. The email goes to the Worker with the product, and the browser only
+   remembers which products it signed up for; the reply is the same whether or not the email was
+   already on that list. */
+const PRODUCT = new Map(CONFIG.products.map((p) => [p.id, p]));
+let soonOpen = null; // the product whose card is open on the home screen
+
+/* What this browser remembers per product, such as { interview: "2026-10-30" }. Before there were
+   several products it kept a single date, which meant Interview. */
+function remembered(key) {
+  const value = store.get(key, null);
+  if (typeof value === "string") return { interview: value };
+  return value && typeof value === "object" ? value : {};
+}
+function remember(key, product) {
+  store.set(key, { ...remembered(key), [product]: new Date().toISOString().slice(0, 10) });
+}
+const joined = (product) => Boolean(remembered(KEY.waitlist)[product]);
 const privacyHref = () => `${CONFIG.privacyUrl}#${lang}`;
+const priceText = (id) => T.price[id](PRODUCT.get(id));
 
 /* The fields belong to an empty form outside (#waitlist-home, #waitlist-results) through their
-   form attribute, because the home card sits inside the setup form and forms cannot nest. */
+   form attribute, because the home cards sit inside the setup form and forms cannot nest. */
 function waitlistFields(place) {
   const form = `waitlist-${place}`;
   return `<div class="waitlist-row">
@@ -870,42 +928,77 @@ function waitlistFields(place) {
     <p class="waitlist-status" id="${form}-status" role="status"></p>`;
 }
 
-const priceLine = () => T.interviewPrice(CONFIG.interviewPrice, CONFIG.earlyPrice);
-
-function renderInterview() {
-  $("#interview").hidden = !CONFIG.waitlistUrl;
-  const typed = $("#waitlist-home-email")?.value ?? "";
-  $("#interview-panel").innerHTML = joined()
-    ? `<p class="waitlist-done">${T.waitlistJoined}</p>`
-    : `<p>${T.interviewWhat}</p><p class="price">${priceLine()}</p>${waitlistFields("home")}`;
-  const input = $("#waitlist-home-email");
-  if (input) input.value = typed; // switching the language keeps what was typed
+/* The tag on each card: what those who sign up now will pay, in a gold outline, with the launch
+   price after it; or, for a product without a price yet, the discount. */
+function dealTag(p) {
+  if (p.early) return `<span class="deal">US$${p.early}</span><span class="deal-note">${T.then(p.price)}</span>`;
+  if (p.discount) return `<span class="deal">${T.off(p.discount)}</span><span class="deal-note">${T.offNote}</span>`;
+  return p.price ? `<span class="deal-note">US$${p.price}</span>` : "";
 }
 
-/* On the results screen, under the score, unless this browser already signed up. */
+/* One card per product; the open one shows what it is, its price and the email field below the row. */
+function renderSoon() {
+  $("#soon").hidden = !CONFIG.waitlistUrl || !CONFIG.products.length;
+  const typed = $("#waitlist-home-email")?.value ?? "";
+  $("#soon-row").innerHTML = CONFIG.products
+    .map((p) => {
+      const name = T[p.id];
+      return `<div class="soon-card${soonOpen === p.id ? " open" : ""}" data-product="${p.id}">
+        <button type="button" class="soon-head" id="soon-${p.id}" aria-expanded="${soonOpen === p.id}" aria-controls="soon-panel">
+          <b>${name}</b><span class="soon-deal">${dealTag(p)}</span>
+        </button>
+        <button type="button" class="info" aria-label="${esc(T.tipLabel(name))}" aria-describedby="tip-${p.id}">?</button>
+        <span class="tip" role="tooltip" id="tip-${p.id}">${T.tip[p.id]}</span>
+      </div>`;
+    })
+    .join("");
+  const panel = $("#soon-panel");
+  panel.hidden = !soonOpen;
+  if (!soonOpen) return;
+  $("#waitlist-home").dataset.product = soonOpen;
+  panel.setAttribute("aria-labelledby", `soon-${soonOpen}`);
+  panel.innerHTML = joined(soonOpen)
+    ? `<p class="waitlist-done">${T.waitlistJoined}</p>`
+    : `<p>${T.what[soonOpen]}</p><p class="price">${priceText(soonOpen)}</p>${waitlistFields("home")}`;
+  const input = $("#waitlist-home-email");
+  if (input) input.value = typed; // switching the language or the card keeps what was typed
+}
+
+function toggleSoon(product) {
+  soonOpen = soonOpen === product ? null : product;
+  renderSoon();
+  $(`#soon-${product}`).focus();
+  if (soonOpen) countInterest(product);
+}
+
+/* The (?) shows its tip on hover and on focus, in CSS; a tap toggles it, and a tap elsewhere or
+   Escape closes it. */
+function toggleTip(card) {
+  const open = !card.classList.contains("tip-open");
+  closeTips();
+  card.classList.toggle("tip-open", open);
+}
+function closeTips() {
+  for (const card of document.querySelectorAll(".soon-card.tip-open")) card.classList.remove("tip-open");
+}
+
+/* On the results screen, under the score, unless this browser already signed up for Interview. */
 function interviewInvite() {
-  if (!CONFIG.waitlistUrl || joined()) return "";
+  if (!CONFIG.waitlistUrl || !PRODUCT.has("interview") || joined("interview")) return "";
   return `<section class="panel invite" id="r-interview" aria-labelledby="r-interview-title">
       <h2 class="label" id="r-interview-title">${T.interview} · ${T.soon}</h2>
-      <p>${T.resultsInterview} ${priceLine()}</p>
-      <form id="waitlist-results" data-waitlist="results" novalidate></form>
+      <p>${T.resultsInterview} ${priceText("interview")}</p>
+      <form id="waitlist-results" data-waitlist="results" data-product="interview" novalidate></form>
       ${waitlistFields("results")}
     </section>`;
 }
 
-function toggleInterview() {
-  const button = $("#interview-toggle");
-  const open = button.getAttribute("aria-expanded") !== "true";
-  button.setAttribute("aria-expanded", String(open));
-  $("#interview-panel").hidden = !open;
-  if (open) countInterest();
-}
-
-/* One count per browser, the first time it opens the Interview card: the language and nothing else. */
-function countInterest() {
-  if (!CONFIG.interestUrl || store.get(KEY.interest, null) || navigator.onLine === false) return;
-  store.set(KEY.interest, new Date().toISOString().slice(0, 10));
-  const body = JSON.stringify({ lang });
+/* One count per browser and product, the first time it opens that card: the language, the product
+   and nothing else. */
+function countInterest(product) {
+  if (!CONFIG.interestUrl || remembered(KEY.interest)[product] || navigator.onLine === false) return;
+  remember(KEY.interest, product);
+  const body = JSON.stringify({ lang, product });
   try {
     if (!navigator.sendBeacon(CONFIG.interestUrl, body)) throw new Error("beacon refused");
   } catch {
@@ -915,6 +1008,7 @@ function countInterest() {
 
 async function joinWaitlist(form) {
   const place = form.dataset.waitlist;
+  const product = form.dataset.product || "interview";
   const fields = [...form.elements];
   const input = fields.find((el) => el.name === "email");
   const button = fields.find((el) => el.type === "submit");
@@ -931,7 +1025,7 @@ async function joinWaitlist(form) {
   status.textContent = T.waitlistSending;
   try {
     const website = fields.find((el) => el.name === "website")?.value ?? "";
-    const res = await fetch(CONFIG.waitlistUrl, { method: "POST", body: JSON.stringify({ email, lang, place, website }) });
+    const res = await fetch(CONFIG.waitlistUrl, { method: "POST", body: JSON.stringify({ email, lang, place, product, website }) });
     if (res.status === 400) {
       input.setAttribute("aria-invalid", "true");
       status.textContent = T.waitlistInvalid;
@@ -944,13 +1038,13 @@ async function joinWaitlist(form) {
     button.disabled = false;
     return;
   }
-  store.set(KEY.waitlist, new Date().toISOString().slice(0, 10));
+  remember(KEY.waitlist, product);
   const done = `<p class="waitlist-done">${T.waitlistDone}</p>`;
   if (place === "results") {
     $("#r-interview").innerHTML = done;
-    renderInterview(); // the home card no longer asks
+    renderSoon(); // the home card no longer asks
   } else {
-    $("#interview-panel").innerHTML = done;
+    $("#soon-panel").innerHTML = done;
   }
   announce(T.waitlistDone);
 }
@@ -1008,7 +1102,7 @@ function applyStaticText() {
   $("#github-foot").href = CONFIG.repoUrl;
   $("#github-foot").hidden = !CONFIG.repoUrl;
   $("#privacy-foot").href = privacyHref();
-  renderInterview();
+  renderSoon();
   // Before the data arrives, the counts written into index.html by build_site.py keep the header from changing size.
   const size = $("#bank-size");
   const total = bank.total || Number(size.dataset.total);
@@ -1122,7 +1216,18 @@ function wireEvents() {
   $("#resume-go").addEventListener("click", resume);
   $("#resume-drop").addEventListener("click", discardQuiz);
 
-  $("#interview-toggle").addEventListener("click", toggleInterview);
+  $("#soon-row").addEventListener("click", (e) => {
+    const card = e.target.closest(".soon-card");
+    if (!card) return;
+    if (e.target.closest(".info")) toggleTip(card);
+    else if (e.target.closest(".soon-head")) toggleSoon(card.dataset.product);
+  });
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".info")) closeTips();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeTips();
+  });
   // The waitlist forms on the home screen and on the results screen.
   document.addEventListener("submit", (e) => {
     const form = e.target;

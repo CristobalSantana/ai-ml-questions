@@ -32,7 +32,7 @@ To end the alpha, delete the `<span class="badge">` from `site/index.html`.
 
 ## Screens
 
-1. **Home:** the name, the language switch (EN/ES) and the site's goal. Then difficulty (the three dots), topics, number of questions and mode, with how many questions are available for those filters. Under the two modes, an "Interview · coming soon" card that opens the [waitlist](waitlist.md). If there is an unfinished quiz, it offers to resume it. Under the start button, the latest [updates](#updates).
+1. **Home:** the name, the language switch (EN/ES) and the site's goal. Then difficulty (the three dots), topics, number of questions and mode, with how many questions are available for those filters. Under the two modes, a "Coming soon" row with a card for each planned product, Interview, Enterprise and the online book, each with a (?) and its price tag; a card opens its [waitlist](waitlist.md). If there is an unfinished quiz, it offers to resume it. Under the start button, the latest [updates](#updates).
 2. **Question:** the dot with the level written next to it, the type of reasoning, the topic and subtopic, the stem, and the options as answer-sheet bubbles. In study mode, answering marks the correct option and shows each option's rationale, the explanation and the sources. On a computer, keys 1 to 4 (or A to D) choose and Enter moves on. The language can be switched mid-quiz without losing progress.
 3. **Results:** score, correct answers by difficulty and by topic, the invitation to the Interview waitlist, the message to share, Ko-fi and the review of mistakes, with the option to retry only the missed questions.
 

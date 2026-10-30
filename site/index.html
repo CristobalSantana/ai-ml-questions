@@ -104,17 +104,16 @@
               <input type="radio" name="mode" value="exam" id="mode-exam">
               <span><b data-i18n="exam">Exam</b><small data-i18n="examHint">See your score and the explanations at the end.</small></span>
             </label>
-            <!-- Not a mode yet: it opens the waitlist (docs/waitlist.md). Its fields belong to the
-                 form #waitlist-home, outside this one, through their form attribute. -->
-            <div class="mode soon" id="interview">
-              <button type="button" class="soon-head" id="interview-toggle" aria-expanded="false" aria-controls="interview-panel">
-                <span class="soon-title"><b data-i18n="interview">Interview</b><span class="badge" data-i18n="soon">coming soon</span></span>
-                <small data-i18n="interviewHint">Practice for machine learning job interviews.</small>
-                <span class="soon-arrow" aria-hidden="true"></span>
-              </button>
-              <div class="soon-panel" id="interview-panel" hidden></div>
-            </div>
           </div>
+        </section>
+
+        <!-- Not modes yet: each card opens the waitlist of a product that does not exist yet
+             (docs/waitlist.md); app.js writes them from CONFIG.products. The email fields belong
+             to the form #waitlist-home, outside this one, through their form attribute. -->
+        <section class="field" id="soon" aria-labelledby="f-soon" hidden>
+          <h2 class="label" id="f-soon" data-i18n="soonTitle">Coming soon</h2>
+          <div class="soon-row" id="soon-row"></div>
+          <div class="soon-panel" id="soon-panel" role="region" hidden></div>
         </section>
 
         <div class="start-row">
