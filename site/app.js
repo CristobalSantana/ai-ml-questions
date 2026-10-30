@@ -92,7 +92,7 @@ const STRINGS = {
     tipLabel: (name) => `What is ${name}?`,
     what: {
       interview:
-        "Questions like those in an ML interview: debugging models, reading code, production and databases. Every option explains why it is right or wrong.",
+        "Questions like those in an ML interview: models, LLMs, RAG, agents, evaluation, databases, production and handling sensitive data. Every option explains why it is right or wrong.",
       enterprise: "Sets of AI/ML questions for recruiters, to assess candidates for ML and AI roles in a hiring process.",
       book: "An online book of 200 multiple-choice questions for ML and AI roles, written with Haladyna's item-writing rules, with why each option is right or wrong.",
     },
@@ -211,7 +211,7 @@ const STRINGS = {
     tipLabel: (name) => `¿Qué es ${name}?`,
     what: {
       interview:
-        "Preguntas como las de una entrevista de ML: depurar modelos, leer código, producción y bases de datos. Cada alternativa explica por qué es correcta o incorrecta.",
+        "Preguntas como las de una entrevista de ML: modelos, LLMs, RAG, agentes, evaluación, bases de datos, producción y manejo de datos sensibles. Cada alternativa explica por qué es correcta o incorrecta.",
       enterprise: "Sets de preguntas de IA/ML para reclutadores, para evaluar a candidatos a cargos de ML e IA en un proceso de selección.",
       book: "Un libro online con 200 preguntas de alternativas para cargos de ML e IA, escritas con las reglas de Haladyna y con el porqué de cada alternativa.",
     },
